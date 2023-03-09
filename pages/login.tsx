@@ -18,10 +18,7 @@ export default function Login() {
   const [loginMethod, setLoginMethod] = useState<LoginMethod>("Email");
   const { register, handleSubmit } = useForm<LoginForm>();
 
-  const [createAccount, { loading, data, error }] = useMutation<
-    LoginResult,
-    LoginForm
-  >({
+  const [createAccount, { loading, data, error }] = useMutation<LoginResult>({
     method: "POST",
     url: "/api/login",
   });
@@ -33,7 +30,6 @@ export default function Login() {
   const onLoginValid = (data: LoginForm) => {
     console.log(data);
     createAccount(data);
-    createAccount({});
     //email 보내고 token 생성.
   };
 

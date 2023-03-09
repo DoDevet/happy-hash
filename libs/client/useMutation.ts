@@ -11,19 +11,19 @@ interface UseMutationState<T> {
   error?: object;
 }
 
-type UseMutationResult<T, V> = [(data: V) => void, UseMutationState<T>];
+type UseMutationResult<T> = [(data: any) => void, UseMutationState<T>];
 
-export default function useMutation<T, V>({
+export default function useMutation<T>({
   url,
   method,
-}: UseMutationProps): UseMutationResult<T, V> {
+}: UseMutationProps): UseMutationResult<T> {
   const [state, setState] = useState<UseMutationState<T>>({
     loading: false,
     data: undefined,
     error: undefined,
   });
 
-  const fn = (data: V) => {
+  const fn = (data: any) => {
     setState((prev) => ({ ...prev, loading: true }));
     fetch(url, {
       method,
@@ -40,28 +40,3 @@ export default function useMutation<T, V>({
   };
   return [fn, state];
 }
-
-/**
- *
- *
- * interface ProductProps{
- *  ok:boolean;
- *  product: Product[];
- * }
- * 
-    interface CommunityPost{
-        ok:booelan;
-        posts:Post[];
-    }
- *
- * const [fn, {data, error, loading}] =  useMutation<ProductProps>({url:sdf, method:"POST"});
- *
- *  data{
- *  ok:...;
- *  product: ...;
- * }
- * 
- *  createAccount({phone:123-123-132, email:123@123.23})
- * 
- *
- */

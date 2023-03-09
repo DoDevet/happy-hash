@@ -1,4 +1,5 @@
 import Input from "@/components/input";
+import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -9,25 +10,39 @@ interface LoginForm {
   email?: string;
   phone?: string;
 }
+interface LoginResult {
+  ok: boolean;
+}
 
 export default function Login() {
   const [loginMethod, setLoginMethod] = useState<LoginMethod>("Email");
   const { register, handleSubmit } = useForm<LoginForm>();
+
+  const [createAccount, { loading, data, error }] = useMutation<
+    LoginResult,
+    LoginForm
+  >({
+    method: "POST",
+    url: "/api/login",
+  });
+
   const onClickMethod = (method: LoginMethod) => {
     setLoginMethod(method);
   };
 
   const onLoginValid = (data: LoginForm) => {
     console.log(data);
+    createAccount(data);
+    createAccount({});
     //email 보내고 token 생성.
   };
 
   return (
     <div className="mt-16">
-      <h1 className="m-10 text-center text-4xl font-semibold text-sky-500">
-        #happy_hash
-      </h1>
       <div className="mx-3 mt-10 flex flex-col items-center rounded-md border-2 border-gray-300 px-5 shadow-md">
+        <h1 className="typed-out mt-10 text-center text-4xl font-semibold text-sky-500">
+          #happy_hash
+        </h1>
         <span className="my-10 block text-center text-gray-700">
           Login with
         </span>
@@ -38,8 +53,10 @@ export default function Login() {
         >
           <span
             className={cls(
-              "w-full cursor-pointer border-b-2 pb-4 text-center text-gray-400 transition-colors",
-              loginMethod === "Email" ? "border-b-sky-500 text-sky-500" : ""
+              "w-full cursor-pointer border-b-2 pb-4 text-center",
+              loginMethod === "Email"
+                ? "border-b-sky-500 text-sky-500"
+                : "text-gray-700 transition-colors hover:text-gray-400"
             )}
             onClick={() => onClickMethod("Email")}
           >
@@ -47,8 +64,10 @@ export default function Login() {
           </span>
           <span
             className={cls(
-              "w-full cursor-pointer border-b-2 pb-4 text-center text-gray-400 transition-colors",
-              loginMethod === "Phone" ? "border-b-sky-500 text-sky-500" : ""
+              "w-full cursor-pointer border-b-2 pb-4 text-center text-gray-700 transition-colors hover:text-gray-400",
+              loginMethod === "Phone"
+                ? "border-b-sky-500 text-sky-500"
+                : "text-gray-700 transition-colors hover:text-gray-400"
             )}
             onClick={() => onClickMethod("Phone")}
           >

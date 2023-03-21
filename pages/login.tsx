@@ -35,7 +35,7 @@ export default function Login() {
 
   return (
     <div className="mt-16">
-      <div className="mx-3 mt-10 flex flex-col items-center rounded-md border-2 border-gray-300 px-5 shadow-md">
+      <div className="mx-3 mt-10 flex flex-col items-center rounded-md border-gray-300 px-5 shadow-md">
         <h1 className="typed-out mt-10 text-center text-4xl font-semibold text-sky-500">
           #happy_hash
         </h1>
@@ -49,7 +49,7 @@ export default function Login() {
         >
           <span
             className={cls(
-              "w-full cursor-pointer border-b-2 pb-4 text-center",
+              "w-full cursor-pointer border-b pb-4 text-center",
               loginMethod === "Email"
                 ? "border-b-sky-500 text-sky-500"
                 : "text-gray-700 transition-colors hover:text-gray-400"
@@ -60,7 +60,7 @@ export default function Login() {
           </span>
           <span
             className={cls(
-              "w-full cursor-pointer border-b-2 pb-4 text-center text-gray-700 transition-colors hover:text-gray-400",
+              "w-full cursor-pointer border-b pb-4 text-center text-gray-700 transition-colors hover:text-gray-400",
               loginMethod === "Phone"
                 ? "border-b-sky-500 text-sky-500"
                 : "text-gray-700 transition-colors hover:text-gray-400"

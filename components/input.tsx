@@ -23,7 +23,7 @@ export default function Input({
       </label>
       <input
         id={name}
-        className="w-full rounded-md border-2 py-2 px-2 shadow-sm transition-colors focus:border-sky-500 focus:outline-none"
+        className="w-full rounded-md border py-2 px-2 shadow-sm transition-colors focus:border-sky-500 focus:outline-none"
         placeholder={placeholder}
         {...register}
         type={type}

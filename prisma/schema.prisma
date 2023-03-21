@@ -12,11 +12,68 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  phone     String?  @unique
-  email     String?  @unique
+  id        Int       @id @default(autoincrement())
+  phone     String?   @unique
+  email     String?   @unique
   name      String
   avatar    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Token     Token[]
+  Post      Post[]
+  Comment   Comment[]
+}
+
+model Token {
+  id        Int      @id @default(autoincrement())
+  token     String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Post {
+  id Int @id @default(autoincrement())
+
+  views     Int       @default(0)
+  title     String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comment   Comment[]
+  userId    Int
+  payload   String
+  image     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  hashtag   hashtag?  @relation(fields: [hashtagId], references: [id], onDelete: Cascade)
+  hashtagId Int?
+
+  @@index([userId])
+  @@index([hashtagId])
+}
+
+model Comment {
+  id      Int    @id @default(autoincrement())
+  post    Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId  Int
+  message String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([postId])
+  @@index([userId])
+}
+
+model hashtag {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  post Post[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

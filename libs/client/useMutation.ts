@@ -1,17 +1,16 @@
 import { useState } from "react";
 
-interface UseMutationProps {
-  url: string;
-  method: "POST" | "PUT" | "DELETE";
-}
-
 interface UseMutationState<T> {
   loading: boolean;
   data?: T;
   error?: object;
 }
+interface UseMutationProps {
+  url: string;
+  method: "POST" | "GET" | "DELETE" | "PUT" | "PATCH";
+}
 
-type UseMutationResult<T> = [(data: any) => void, UseMutationState<T>];
+type UseMutationResult<T> = [(data: any) => any, UseMutationState<T>];
 
 export default function useMutation<T>({
   url,
@@ -23,20 +22,19 @@ export default function useMutation<T>({
     error: undefined,
   });
 
-  const fn = (data: any) => {
+  function mutation(data: any) {
     setState((prev) => ({ ...prev, loading: true }));
     fetch(url, {
-      method,
-      headers: {
-        "Content-Type": "applications/json",
-      },
+      method: method,
       body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
-      .then((res) => res.json())
-      .catch(() => {})
+      .then((res) => res.json().catch(() => {}))
       .then((data) => setState((prev) => ({ ...prev, data })))
       .catch((error) => setState((prev) => ({ ...prev, error })))
       .finally(() => setState((prev) => ({ ...prev, loading: false })));
-  };
-  return [fn, state];
+  }
+  return [mutation, state];
 }

@@ -1,10 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900;1000&display=swap");
 
-body {
-  padding-top: 17px;
-  padding-bottom: 67px;
-}
 .typed-out {
   width: 15rem;
   animation: typing 1s steps(13), blink 0.7s step-end infinite alternate;

@@ -12,16 +12,18 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  phone     String?   @unique
-  email     String?   @unique
-  name      String
-  avatar    String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  Token     Token[]
-  Post      Post[]
-  Comment   Comment[]
+  id           Int           @id @default(autoincrement())
+  phone        String?       @unique
+  email        String?       @unique
+  name         String
+  avatar       String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  token        Token[]
+  posts        Post[]
+  comments     Comment[]
+  shortcutTags shortcutTag[]
+  Like         Like[]
 }
 
 model Token {
@@ -41,7 +43,8 @@ model Post {
   views     Int       @default(0)
   title     String
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  comment   Comment[]
+  likes     Like[]
+  comments  Comment[]
   userId    Int
   payload   String
   image     String
@@ -57,9 +60,9 @@ model Post {
 model Comment {
   id      Int    @id @default(autoincrement())
   post    Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId  Int
-  message String
   user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  message String
+  postId  Int
   userId  Int
 
   createdAt DateTime @default(now())
@@ -70,10 +73,38 @@ model Comment {
 }
 
 model hashtag {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-  post Post[]
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  posts       Post[]
+  shortcutTag shortcutTag[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model shortcutTag {
+  id         Int       @id @default(autoincrement())
+  name       String
+  customName String?
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  hashtags   hashtag[]
+  userId     Int
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model Like {
+  id Int @id @default(autoincrement())
+
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId Int
+  postId Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([postId])
 }

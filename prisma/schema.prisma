@@ -38,8 +38,7 @@ model Token {
 }
 
 model Post {
-  id Int @id @default(autoincrement())
-
+  id        Int       @id @default(autoincrement())
   views     Int       @default(0)
   title     String
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)

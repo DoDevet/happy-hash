@@ -1,3 +1,4 @@
+import { cls } from "@/libs/client/utils";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
@@ -5,6 +6,7 @@ interface LayoutProps {
   hasTabbar?: boolean;
   title?: string | string[] | undefined | null;
   hasBackArrow?: boolean;
+  hashTitle?: string | undefined | null;
   [key: string]: any;
 }
 
@@ -13,6 +15,7 @@ export default function Layout({
   hasTabbar,
   children,
   hasBackArrow,
+  bottomTab,
 }: LayoutProps) {
   const router = useRouter();
   const onClickBackArrow = () => {
@@ -20,8 +23,11 @@ export default function Layout({
   };
   return (
     <div className="mx-auto w-full max-w-xl">
+      <Head>
+        <title>{`${title} | #happy_hash`}</title>
+      </Head>
       {hasTabbar ? (
-        <div className="relative flex w-full items-center justify-center border-b py-5 text-lg font-semibold">
+        <div className="fixed z-10 flex w-full max-w-xl items-center justify-center border-b bg-white py-5 pb-3 text-lg font-semibold">
           {hasBackArrow ? (
             <button className="absolute left-4" onClick={onClickBackArrow}>
               <svg
@@ -40,11 +46,20 @@ export default function Layout({
               </svg>
             </button>
           ) : null}
-          <h1 className="">{title}</h1>
+          <span className="">{title}</span>
         </div>
       ) : null}
-
-      {children}
+      {bottomTab ? (
+        <nav className="fixed bottom-0 z-10 flex w-full max-w-xl justify-between space-x-2 border-t bg-white px-2 pb-5 text-xs text-gray-700">
+          <button className="flex-1 border-t-2 border-blue-400 bg-white pt-3 text-center">
+            ALL
+          </button>
+          <button className="flex-1 border-t-2 border-gray-200 bg-white pt-3 text-center">
+            POPULAR
+          </button>
+        </nav>
+      ) : null}
+      <div className={cls("pt-16", bottomTab ? "pb-16" : "")}>{children}</div>
     </div>
   );
 }

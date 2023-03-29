@@ -5,28 +5,30 @@ import client from "@/libs/server/client";
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     const {
-      session: { user },
-      query: { comuId },
+      query: { id },
     } = req;
-
-    const scHash = await client.shortcutTag.findUnique({
-      where: {
-        id: +comuId!,
-      },
-      select: {
-        userId: true,
-        hashtags: {
+    const post = await client.post.findUnique({
+      where: {},
+      include: {
+        hashtag: {
           select: {
             name: true,
           },
         },
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
+          },
+        },
+        user: true,
       },
     });
-    if (!scHash || user?.id !== scHash?.userId) {
-      res.status(401).send("BAD REQUEST");
+
+    if (!post) {
+      return res.status(401).end();
     }
-    const hashArr = scHash?.hashtags.map((hash) => hash.name);
-    res.json({ ok: true, hashArr });
+    res.json({ ok: true, post });
   }
 }
 

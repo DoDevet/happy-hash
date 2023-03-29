@@ -62,7 +62,7 @@ export default function Login() {
   };
 
   return (
-    <div className="mt-16">
+    <div className="mx-auto mt-16 max-w-xl">
       <div className="mx-3 mt-10 flex flex-col items-center rounded-md border-gray-300 px-5 shadow-md">
         <h1 className="typed-out mt-10 text-center text-4xl font-semibold text-sky-500">
           #happy_hash

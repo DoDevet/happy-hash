@@ -22,6 +22,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         userId: true,
         customName: true,
         name: true,
+        id: true,
       },
     });
     if (scTag?.userId !== user?.id) {
@@ -63,7 +64,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     res.json({
       ok: true,
       posts,
-      title: { customName: scTag?.customName, name: scTag?.name },
+      title: {
+        customName: scTag?.customName,
+        name: scTag?.name,
+      },
+      comuId: scTag?.id,
     });
   }
 

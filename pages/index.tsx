@@ -2,6 +2,7 @@ import Modal from "@/components/home/modal";
 import TagFeed from "@/components/home/tagFeed";
 import { shortcutTag } from "@prisma/client";
 import Head from "next/head";
+import Link from "next/link";
 import { useState } from "react";
 import useSWR from "swr";
 

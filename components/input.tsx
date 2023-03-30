@@ -26,10 +26,10 @@ export default function Input({
       </label>
       {type === "textArea" ? (
         <textarea
-          id="payload"
+          id={name}
           placeholder="Write...."
           className={cls(
-            "h-28 w-full resize-none rounded-md border-2 p-2 shadow-sm outline-none transition-colors",
+            "h-28 w-full resize-none whitespace-pre-line rounded-md border-2 p-2 shadow-sm outline-none transition-colors",
             errorMessage
               ? "border-red-400 focus:border-red-400"
               : "focus:border-sky-500"

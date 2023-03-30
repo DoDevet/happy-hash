@@ -8,7 +8,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       session: { user },
       body: { postId },
     } = req;
-    console.log(postId);
+
     const isLiked = await client.like.findFirst({
       where: {
         user: {

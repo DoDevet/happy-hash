@@ -34,6 +34,7 @@ export default function WritePost() {
     query: { comuId },
   } = router;
 
+  const [imageLoading, setImageLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState("");
   const imageFile = watch("image");
 
@@ -72,6 +73,7 @@ export default function WritePost() {
   }, [data, router]);
 
   const onValid = async ({ image, payload, title }: PostForm) => {
+    setImageLoading(true);
     const { uploadURL } = await (await fetch(`/api/files`)).json();
     const form = new FormData();
     if (image && image.length > 0) {
@@ -85,6 +87,7 @@ export default function WritePost() {
         })
       ).json();
       writePost({ image: imageURL, payload, title, selectedHash });
+      setImageLoading(false);
     }
   };
 
@@ -201,7 +204,7 @@ export default function WritePost() {
         </div>
         <Button
           btnText="Write Post"
-          isLoading={loading}
+          isLoading={loading || imageLoading}
           className="w-full rounded-md bg-sky-500 py-3 text-white shadow-md outline-none transition-colors hover:bg-sky-600"
         />
       </form>

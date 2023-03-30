@@ -96,7 +96,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           },
         },
         image: image,
-        payload: payload,
+        payload: payload.replaceAll("\r\n", "<br>"),
         title: title,
       },
       select: {

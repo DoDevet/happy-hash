@@ -84,7 +84,7 @@ export default function HashCommunity() {
               <ComuFeed
                 comments={post?._count?.comments}
                 title={post?.title}
-                createdAt={post?.createdAt}
+                createdAt={post.createdAt}
                 hashtag={post?.hashtag?.name}
                 id={post?.id}
                 likes={post?._count?.likes}

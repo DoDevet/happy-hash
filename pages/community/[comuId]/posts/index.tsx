@@ -25,6 +25,9 @@ interface PostProps {
         comments: number;
         likes: number;
       };
+      likes: {
+        length: number;
+      };
     }
   ];
   error?: string;
@@ -76,7 +79,7 @@ export default function HashCommunity() {
                 pathname: `/community/${data?.comuId}/posts`,
                 query: { postId: post.id },
               }}
-              //as={`/community/${data?.comuId}/posts/${post.id}`}
+              as={`/community/${data?.comuId}/posts/${post.id}`}
             >
               <ComuFeed
                 comments={post?._count?.comments}
@@ -86,13 +89,14 @@ export default function HashCommunity() {
                 id={post?.id}
                 likes={post?._count?.likes}
                 username={post?.user?.name}
+                isLiked={post.likes.length === 1}
               />
             </Link>
           ))}
           <FixedButton comuId={+comuId!}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              fill="none"
+              fill={"none"}
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="currentColor"

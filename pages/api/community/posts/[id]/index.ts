@@ -6,7 +6,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     const {
       query: { id },
+      session: { user },
     } = req;
+
     const post = await client.post.findUnique({
       where: {
         id: +id!,
@@ -23,14 +25,26 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             likes: true,
           },
         },
+        likes: true,
         user: true,
       },
     });
 
+    const isFav = Boolean(
+      await client.like.findFirst({
+        where: {
+          user: {
+            id: +user?.id!,
+          },
+          postId: +id!,
+        },
+      })
+    );
+
     if (!post) {
       return res.status(401).end();
     }
-    res.json({ ok: true, post });
+    res.json({ ok: true, post, isFav });
   }
 }
 

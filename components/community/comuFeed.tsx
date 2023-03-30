@@ -1,3 +1,4 @@
+import { cls } from "@/libs/client/utils";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Modal from "react-modal";
@@ -11,6 +12,7 @@ interface ComuFeedProps {
   likes: number;
   comments: number;
   params?: string;
+  isLiked: boolean;
 }
 
 export default function ComuFeed({
@@ -21,6 +23,7 @@ export default function ComuFeed({
   likes,
   comments,
   id,
+  isLiked,
 }: ComuFeedProps) {
   return (
     <div className="flex items-center justify-between px-4 py-2">
@@ -35,11 +38,11 @@ export default function ComuFeed({
         <div className="flex items-center justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            fill="none"
+            fill={isLiked ? "currentColor" : "none"}
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className="h-5 w-5"
+            className={cls("h-5 w-5", isLiked ? "text-red-400" : "")}
           >
             <path
               strokeLinecap="round"

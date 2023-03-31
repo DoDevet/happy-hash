@@ -3,10 +3,13 @@ import FixedButton from "@/components/fixed-btn";
 import Layout from "@/components/layout";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
-import useSWR from "swr";
+import useSWR, { SWRConfig } from "swr";
 import Modal from "react-modal";
 import PostDetail from "@/components/community/post-detail";
 import { useEffect, useState } from "react";
+import { NextPageContext } from "next";
+import { withSsrSession } from "@/libs/server/withSession";
+import client from "@/libs/server/client";
 
 interface PostProps {
   ok: boolean;
@@ -38,7 +41,7 @@ interface PostProps {
   comuId: number;
 }
 
-export default function HashCommunity() {
+function HashCommunity() {
   const router = useRouter();
   const { comuId, postId } = router.query;
   const { data } = useSWR<PostProps>(`/api/community/posts?comuId=${comuId}`);
@@ -73,7 +76,6 @@ export default function HashCommunity() {
         <ul className="relative flex h-full flex-col divide-y">
           {data?.posts?.map((post) => (
             <Link
-              scroll={false}
               key={post.id}
               href={{
                 pathname: `/community/${data?.comuId}/posts`,
@@ -89,7 +91,7 @@ export default function HashCommunity() {
                 id={post?.id}
                 likes={post?._count?.likes}
                 username={post?.user?.name}
-                isLiked={post.likes.length === 1}
+                isLiked={post.likes.length !== 0}
               />
             </Link>
           ))}
@@ -114,3 +116,96 @@ export default function HashCommunity() {
     </div>
   );
 }
+
+export default function Page({ comuId, title, posts }: PostProps) {
+  return (
+    <SWRConfig
+      value={{
+        fallback: {
+          [`/api/community/posts?comuId=${comuId}`]: {
+            ok: true,
+            comuId,
+            title,
+            posts,
+          },
+        },
+      }}
+    >
+      <HashCommunity />
+    </SWRConfig>
+  );
+}
+
+export const getServerSideProps = withSsrSession(
+  async (ctx: NextPageContext) => {
+    const {
+      query: { comuId },
+    } = ctx;
+    const user = ctx?.req?.session?.user;
+    const scTag = await client.shortcutTag.findUnique({
+      where: {
+        id: +comuId!,
+      },
+      select: {
+        hashtags: {
+          select: {
+            name: true,
+          },
+        },
+        userId: true,
+        customName: true,
+        name: true,
+        id: true,
+      },
+    });
+
+    const hashs = scTag?.hashtags.map((hash) => ({ hashtag: hash }));
+    const posts = await client.post.findMany({
+      where: {
+        OR: hashs,
+      },
+      select: {
+        id: true,
+        title: true,
+        createdAt: true,
+        user: {
+          select: {
+            name: true,
+            id: true,
+            avatar: true,
+          },
+        },
+        hashtag: {
+          select: {
+            name: true,
+          },
+        },
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
+          },
+        },
+        likes: {
+          where: {
+            userId: +user?.id!,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return {
+      props: {
+        posts: JSON.parse(JSON.stringify(posts)),
+        title: {
+          customName: JSON.parse(JSON.stringify(scTag?.customName)),
+          name: JSON.parse(JSON.stringify(scTag?.name)),
+        },
+        comuId: JSON.parse(JSON.stringify(scTag?.id)),
+      },
+    };
+  }
+);

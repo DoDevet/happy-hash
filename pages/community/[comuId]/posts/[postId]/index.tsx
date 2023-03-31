@@ -5,13 +5,15 @@ import getDateTimeFormat from "@/libs/client/getDateTimeFormat";
 import useImage from "@/libs/client/useImage";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
-import comments from "@/pages/api/community/posts/[id]/comments";
+import client from "@/libs/server/client";
+import { withSsrSession } from "@/libs/server/withSession";
 import { Comment, Like, Post, User } from "@prisma/client";
+import { NextApiRequest, NextPageContext } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import useSWR from "swr";
+import useSWR, { SWRConfig } from "swr";
 
 interface PostWithHashtag extends Post {
   hashtag: {
@@ -52,7 +54,7 @@ interface CreateResponse {
   ok: boolean;
 }
 
-export default function PostDetail() {
+function PostDetail() {
   const router = useRouter();
   const {
     query: { postId },
@@ -70,7 +72,7 @@ export default function PostDetail() {
       url: `/api/community/posts/${postId}/comments`,
       method: "POST",
     });
-  const [toggleFav] = useMutation<ToggleResponse>({
+  const [toggleFav, { loading: toggleLoading }] = useMutation<ToggleResponse>({
     url: `/api/community/posts/${postId}/fav`,
     method: "POST",
   });
@@ -104,14 +106,16 @@ export default function PostDetail() {
         },
       false
     );
-    toggleFav({ postId });
+    if (!toggleLoading) {
+      toggleFav({ postId });
+    }
   };
 
   const onCreateComments = (data: CreateCommentsForm) => {
     if (loading) return;
     createComments(data);
   };
-
+  const imageURL = useImage({ imageId: data?.post?.image });
   return (
     <div className="pb-20">
       <Layout
@@ -120,18 +124,18 @@ export default function PostDetail() {
         hasTabbar
         hasBackArrow
       >
-        {data?.post?.image ? (
+        {imageURL ? (
           <Image
             alt="postImage"
-            src={useImage({ imageId: data?.post?.image })}
+            src={imageURL}
             width={1024}
-            height={1024}
-            className="w-full object-contain"
+            height={600}
+            className="h-auto w-full object-contain"
           />
         ) : (
-          <div className="h-96 w-full rounded-md bg-slate-500" />
+          <div className="h-96 w-full border bg-slate-500" />
         )}
-        <div className="-mt-2 w-full rounded-md border border-t-0 border-gray-300 pt-2 shadow-sm">
+        <div className="-mt-2 w-full border border-t-0 border-gray-300 pt-2 shadow-sm">
           <div className=" flex items-center justify-between border-b p-2">
             <div className="flex">
               <div className="h-6 w-6 rounded-full bg-slate-400" />
@@ -172,7 +176,12 @@ export default function PostDetail() {
         {/** Comments */}
         <div className="mt-4 rounded-md border shadow-sm">
           <div className="flex items-center space-x-2 border-b p-2 font-semibold">
-            <span>{commentsData?.comments?.length} Comments</span>
+            <span>
+              {commentsData?.comments?.length
+                ? commentsData?.comments?.length
+                : 0}{" "}
+              Comments
+            </span>
             {/**새로고침 기능 */}
             <svg
               onClick={onCommentsRefreshBtn}
@@ -193,9 +202,9 @@ export default function PostDetail() {
               />
             </svg>
           </div>
-          <div className="divide-y">
+          <div className="divide-y shadow-sm">
             {commentsData?.comments?.map((comment) => (
-              <div className="flex " key={comment?.id}>
+              <div className="flex" key={comment?.id}>
                 <div className="flex items-center justify-center border-r p-2">
                   <div className="h-6 w-6 rounded-full bg-gray-500" />
                   <span className="ml-2 text-sm">{comment?.user?.name}</span>
@@ -210,10 +219,10 @@ export default function PostDetail() {
             ))}
           </div>
         </div>
-        <div className="mt-7 rounded-md border px-2 py-1 shadow-md">
+        <div className="mt-7 rounded-md border px-2 py-1 shadow-sm">
           <form
             onSubmit={handleSubmit(onCreateComments)}
-            className="flex flex-col"
+            className="flex flex-col p-2"
           >
             <Input
               placeholder="Write Comments"
@@ -233,3 +242,44 @@ export default function PostDetail() {
     </div>
   );
 }
+
+export default function Page({ post }: { post: PostWithHashtag }) {
+  return (
+    <SWRConfig
+      value={{
+        fallback: {
+          [`/api/community/posts/${post.id}`]: { ok: true, post },
+        },
+      }}
+    >
+      <PostDetail />
+    </SWRConfig>
+  );
+}
+
+export const getServerSideProps = async (ctx: NextPageContext) => {
+  const post = await client.post.findUnique({
+    where: {
+      id: +ctx.query.postId!,
+    },
+    include: {
+      hashtag: {
+        select: {
+          name: true,
+        },
+      },
+      _count: {
+        select: {
+          comments: true,
+          likes: true,
+        },
+      },
+      likes: true,
+      user: true,
+    },
+  });
+
+  return {
+    props: { post: JSON.parse(JSON.stringify(post)) },
+  };
+};

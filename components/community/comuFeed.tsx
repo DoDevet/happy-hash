@@ -23,7 +23,6 @@ export default function ComuFeed({
   createdAt,
   likes,
   comments,
-  id,
   isLiked,
 }: ComuFeedProps) {
   return (
@@ -43,7 +42,7 @@ export default function ComuFeed({
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className={cls("h-5 w-5", isLiked ? "text-red-400" : "")}
+            className={cls("h-6 w-6", isLiked ? "text-red-400" : "")}
           >
             <path
               strokeLinecap="round"
@@ -60,7 +59,7 @@ export default function ComuFeed({
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className="h-5 w-5"
+            className="h-6 w-6"
           >
             <path
               strokeLinecap="round"

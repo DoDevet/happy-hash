@@ -21,6 +21,6 @@ export function withApiSession(
   return withIronSessionApiRoute(fn, cookieOptions);
 }
 
-export function withSsrSession(fn: () => Promise<any>) {
-  return withIronSessionSsr(fn, cookieOptions);
+export function withSsrSession(handler: any) {
+  return withIronSessionSsr(handler, cookieOptions);
 }

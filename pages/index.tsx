@@ -16,7 +16,7 @@ export default function Home() {
   const { data } = useSWR<HashForm>("/api/hashs");
 
   return (
-    <>
+    <div>
       <Head>
         <title>Home | #happy_hash</title>
       </Head>
@@ -30,7 +30,11 @@ export default function Home() {
           <li className="text-sky-500">Home</li>
           <li>Search</li>
           <li>Q&A</li>
-          <li>Profile</li>
+          <li>
+            <Link href="profile" as="/34">
+              Profile
+            </Link>
+          </li>
         </nav>
 
         <div>
@@ -65,6 +69,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

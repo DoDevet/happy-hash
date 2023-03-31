@@ -26,15 +26,12 @@ export default function Home() {
           #happy_hash
         </h1>
 
-        <nav className="my-9 flex list-none space-x-5 px-4 font-semibold text-gray-600">
-          <li className="text-sky-500">Home</li>
+        <nav className="relative my-9 flex w-full list-none space-x-5 px-4 font-semibold text-gray-600">
+          <li className="border-b-2 border-sky-400 px-2 text-sky-500">Home</li>
           <li>Search</li>
           <li>Q&A</li>
-          <li>
-            <Link href="profile" as="/34">
-              Profile
-            </Link>
-          </li>
+          <li>Profile</li>
+          <li className="">Logout</li>
         </nav>
 
         <div>

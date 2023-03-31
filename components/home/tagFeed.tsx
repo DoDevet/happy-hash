@@ -50,19 +50,33 @@ export default function TagFeed({ customName, id, tags_name }: TagFeedProps) {
       {customName ? (
         <>
           <span className="block">{customName}</span>
-          <div className="px my-2 space-y-1 text-xs">
+          <div className="my-2 space-y-1 text-xs">
             <span>Hashs : </span>
-            <span className="block">{tags_name}</span>
+            <div className="grid gap-2 text-center">
+              {tags_name.split(",").map((hash) => (
+                <span className="rounded-md bg-sky-400 py-1 text-center shadow-md hover:scale-105">
+                  #{hash}
+                </span>
+              ))}
+            </div>
           </div>
         </>
       ) : (
         <>
           <span>Hashs : </span>
-          <span className="block">{tags_name}</span>
+          <span className="block">
+            <div className="grid gap-2 text-center">
+              {tags_name.split(",").map((hash) => (
+                <span className="rounded-md bg-sky-400 py-1 text-center shadow-md hover:scale-110">
+                  #{hash}
+                </span>
+              ))}
+            </div>
+          </span>
         </>
       )}
       <Link href={`/community/${id}/posts`}>
-        <div className="rounded-md bg-gray-100 py-1 text-center text-sky-400 shadow-lg">
+        <div className="rounded-md bg-gray-100 py-1 text-center text-sky-400 shadow-lg hover:scale-105">
           Enter
         </div>
       </Link>

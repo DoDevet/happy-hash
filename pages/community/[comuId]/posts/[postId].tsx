@@ -6,14 +6,13 @@ import useImage from "@/libs/client/useImage";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
 import client from "@/libs/server/client";
-import { withSsrSession } from "@/libs/server/withSession";
 import { Comment, Like, Post, User } from "@prisma/client";
-import { NextApiRequest, NextPageContext } from "next";
+import { NextPageContext } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import useSWR, { SWRConfig } from "swr";
+import useSWR, { SWRConfig, useSWRConfig } from "swr";
 
 interface PostWithHashtag extends Post {
   hashtag: {
@@ -57,11 +56,11 @@ interface CreateResponse {
 function PostDetail() {
   const router = useRouter();
   const {
-    query: { postId },
+    query: { postId, comuId },
   } = router;
-
   const { register, handleSubmit, reset } = useForm<CreateCommentsForm>();
   const { data, mutate } = useSWR<PostForm>(`/api/community/posts/${postId}`);
+  const { mutate: unboundMutate } = useSWRConfig();
   const {
     data: commentsData,
     mutate: commentsMutate,
@@ -79,8 +78,8 @@ function PostDetail() {
 
   useEffect(() => {
     if (createCommentsRespose && createCommentsRespose.ok) {
-      reset();
       commentsMutate();
+      reset();
     }
   }, [createCommentsRespose, commentsMutate]);
 
@@ -106,6 +105,7 @@ function PostDetail() {
         },
       false
     );
+
     if (!toggleLoading) {
       toggleFav({ postId });
     }
@@ -117,7 +117,7 @@ function PostDetail() {
   };
   const imageURL = useImage({ imageId: data?.post?.image });
   return (
-    <div className="pb-20">
+    <div className="bg-slate-50 pb-20">
       <Layout
         title={`${data?.post?.title}`}
         hashTitle={data?.post?.hashtag?.name}
@@ -135,7 +135,7 @@ function PostDetail() {
         ) : (
           <div className="h-96 w-full border bg-slate-500" />
         )}
-        <div className="-mt-2 w-full border border-t-0 border-gray-300 pt-2 shadow-sm">
+        <div className="-mt-2 w-full border border-t-0 border-gray-300 bg-white pt-2 shadow-sm">
           <div className=" flex items-center justify-between border-b p-2">
             <div className="flex">
               <div className="h-6 w-6 rounded-full bg-slate-400" />
@@ -174,7 +174,7 @@ function PostDetail() {
           </div>
         </div>
         {/** Comments */}
-        <div className="mt-4 rounded-md border shadow-sm">
+        <div className="mt-4 rounded-md border bg-white shadow-sm">
           <div className="flex items-center space-x-2 border-b p-2 font-semibold">
             <span>
               {commentsData?.comments?.length
@@ -202,7 +202,7 @@ function PostDetail() {
               />
             </svg>
           </div>
-          <div className="divide-y shadow-sm">
+          <div className="divide-y shadow-sm ">
             {commentsData?.comments?.map((comment) => (
               <div className="flex" key={comment?.id}>
                 <div className="flex items-center justify-center border-r p-2">
@@ -219,7 +219,7 @@ function PostDetail() {
             ))}
           </div>
         </div>
-        <div className="mt-7 rounded-md border px-2 py-1 shadow-sm">
+        <div className="mt-7 rounded-md border bg-white px-2 py-1 shadow-sm">
           <form
             onSubmit={handleSubmit(onCreateComments)}
             className="flex flex-col p-2"

@@ -75,25 +75,19 @@ function HashCommunity() {
 
         <ul className="relative flex h-full flex-col divide-y">
           {data?.posts?.map((post) => (
-            <Link
-              key={post.id}
-              href={{
-                pathname: `/community/${data?.comuId}/posts`,
-                query: { postId: post.id },
-              }}
-              as={`/community/${data?.comuId}/posts/${post.id}`}
-            >
+            <li key={post.id}>
               <ComuFeed
                 comments={post?._count?.comments}
                 title={post?.title}
                 createdAt={post.createdAt}
                 hashtag={post?.hashtag?.name}
-                id={post?.id}
+                postId={post?.id}
+                comuId={comuId}
                 likes={post?._count?.likes}
                 username={post?.user?.name}
                 isLiked={post.likes.length !== 0}
               />
-            </Link>
+            </li>
           ))}
           <FixedButton comuId={+comuId!}>
             <svg
@@ -117,13 +111,13 @@ function HashCommunity() {
   );
 }
 
-export default function Page({ comuId, title, posts }: PostProps) {
+export default function Page({ ok, comuId, title, posts }: PostProps) {
   return (
     <SWRConfig
       value={{
         fallback: {
           [`/api/community/posts?comuId=${comuId}`]: {
-            ok: true,
+            ok,
             comuId,
             title,
             posts,
@@ -199,6 +193,7 @@ export const getServerSideProps = withSsrSession(
 
     return {
       props: {
+        ok: true,
         posts: JSON.parse(JSON.stringify(posts)),
         title: {
           customName: JSON.parse(JSON.stringify(scTag?.customName)),

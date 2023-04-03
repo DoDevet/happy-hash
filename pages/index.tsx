@@ -1,9 +1,13 @@
+import HomeLayout from "@/components/home/homeLayout";
 import Modal from "@/components/home/modal";
 import TagFeed from "@/components/home/tagFeed";
+import useMutation from "@/libs/client/useMutation";
+
 import { shortcutTag } from "@prisma/client";
 import Head from "next/head";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 
 interface HashForm {
@@ -16,27 +20,12 @@ export default function Home() {
   const { data } = useSWR<HashForm>("/api/hashs");
 
   return (
-    <div>
-      <Head>
-        <title>Home | #happy_hash</title>
-      </Head>
-      <Modal open={modalBtn} setOpen={setModalBtn} />
-      <div className="mx-auto max-w-xl px-4 py-8">
-        <h1 className="text-center text-3xl font-semibold text-sky-500">
-          #happy_hash
-        </h1>
-
-        <nav className="relative my-9 flex w-full list-none space-x-5 px-4 font-semibold text-gray-600">
-          <li className="border-b-2 border-sky-400 px-2 text-sky-500">Home</li>
-          <li>Search</li>
-          <li>Q&A</li>
-          <li>Profile</li>
-          <li className="">Logout</li>
-        </nav>
-
+    <>
+      {modalBtn ? <Modal open={modalBtn} setOpen={setModalBtn} /> : null}
+      <HomeLayout title={"Home"}>
         <div>
           <h1 className="mb-5 text-3xl font-semibold text-sky-500">#My Hash</h1>
-          <div className="grid grid-cols-3 gap-3 rounded-md">
+          <div className="grid grid-cols-3 gap-3 overflow-y-auto rounded-md ">
             {data?.tags?.map((tag) => (
               <TagFeed
                 key={tag?.id}
@@ -65,7 +54,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </HomeLayout>
+    </>
   );
 }

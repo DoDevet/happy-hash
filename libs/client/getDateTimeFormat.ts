@@ -15,7 +15,7 @@ export default function getDateTimeFormat(
     hour: "numeric",
     minute: "numeric",
     second: "numeric",
-    hourCycle: "h24",
+    hourCycle: "h23",
   };
   const mOptions: Intl.DateTimeFormatOptions = {
     year: "2-digit",
@@ -24,7 +24,7 @@ export default function getDateTimeFormat(
     day: "numeric",
     hour: "numeric",
     minute: "numeric",
-    hourCycle: "h24",
+    hourCycle: "h23",
   };
   const sOption: Intl.DateTimeFormatOptions = {
     month: "2-digit",
@@ -32,7 +32,7 @@ export default function getDateTimeFormat(
     hour: "numeric",
     minute: "numeric",
     second: "2-digit",
-    hourCycle: "h24",
+    hourCycle: "h23",
   };
 
   return new Intl.DateTimeFormat(

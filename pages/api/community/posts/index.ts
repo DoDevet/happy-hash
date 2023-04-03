@@ -9,10 +9,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       session: { user },
     } = req;
 
-    const scTag = await client.shortcutTag.findUnique({
-      where: {
-        id: +comuId!,
-      },
+    const scTag = await client.shortcutTag.findFirst({
+      where: { AND: [{ id: +comuId! }, { user: { id: +user?.id! } }] },
       select: {
         hashtags: {
           select: {
@@ -25,56 +23,57 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         id: true,
       },
     });
-    if (scTag?.userId !== user?.id) {
-      return res.status(401).send("BadRequest");
-    }
 
-    const hashs = scTag?.hashtags.map((hash) => ({ hashtag: hash }));
-    const posts = await client.post.findMany({
-      where: {
-        OR: hashs,
-      },
-      select: {
-        id: true,
-        title: true,
-        createdAt: true,
-        user: {
-          select: {
-            name: true,
-            id: true,
-            avatar: true,
+    if (scTag === undefined || scTag?.userId !== user?.id) {
+      return res.status(401).json({ ok: false });
+    } else {
+      const hashs = scTag?.hashtags.map((hash) => ({ hashtag: hash }));
+      const posts = await client.post.findMany({
+        where: {
+          OR: hashs,
+        },
+        select: {
+          id: true,
+          title: true,
+          createdAt: true,
+          user: {
+            select: {
+              name: true,
+              id: true,
+              avatar: true,
+            },
+          },
+          hashtag: {
+            select: {
+              name: true,
+            },
+          },
+          _count: {
+            select: {
+              comments: true,
+              likes: true,
+            },
+          },
+          likes: {
+            where: {
+              userId: +user?.id!,
+            },
           },
         },
-        hashtag: {
-          select: {
-            name: true,
-          },
+        orderBy: {
+          createdAt: "desc",
         },
-        _count: {
-          select: {
-            comments: true,
-            likes: true,
-          },
+      });
+      res.json({
+        ok: true,
+        posts,
+        title: {
+          customName: scTag?.customName,
+          name: scTag?.name,
         },
-        likes: {
-          where: {
-            userId: +user?.id!,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-    res.json({
-      ok: true,
-      posts,
-      title: {
-        customName: scTag?.customName,
-        name: scTag?.name,
-      },
-      comuId: scTag?.id,
-    });
+        comuId: scTag?.id,
+      });
+    }
   }
 
   if (req.method === "POST") {

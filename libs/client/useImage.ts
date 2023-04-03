@@ -8,6 +8,6 @@ export default function useImage({
   method = "public",
 }: useImageProps) {
   return imageId === undefined
-    ? null
+    ? ""
     : `https://imagedelivery.net/x2vrVGmUfxi_qt-pjNxZ6g/${imageId}/${method}`;
 }

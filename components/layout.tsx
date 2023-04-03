@@ -7,6 +7,7 @@ interface LayoutProps {
   title?: string | string[] | undefined | null;
   hasBackArrow?: boolean;
   hashTitle?: string | undefined | null;
+  hasBackHome?: boolean;
   [key: string]: any;
 }
 

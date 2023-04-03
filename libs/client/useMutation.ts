@@ -25,7 +25,7 @@ export default function useMutation<T>({
   function mutation(data: any) {
     setState((prev) => ({ ...prev, loading: true }));
     fetch(url, {
-      method: method,
+      method,
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",

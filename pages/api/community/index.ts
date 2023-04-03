@@ -9,10 +9,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       query: { comuId },
     } = req;
 
-    const scHash = await client.shortcutTag.findUnique({
-      where: {
-        id: +comuId!,
-      },
+    const scHash = await client.shortcutTag.findFirst({
+      where: { AND: [{ id: +comuId! }, { userId: +user?.id! }] },
       select: {
         userId: true,
         hashtags: {

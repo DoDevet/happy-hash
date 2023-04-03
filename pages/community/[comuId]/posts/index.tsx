@@ -56,6 +56,12 @@ function HashCommunity() {
     }
   }, [router, setPostIdState]);
 
+  useEffect(() => {
+    if (data && data.ok === false) {
+      router.replace("/");
+    }
+  }, [data]);
+
   return (
     <div>
       {postIdState && (
@@ -136,9 +142,10 @@ export const getServerSideProps = withSsrSession(
       query: { comuId },
     } = ctx;
     const user = ctx?.req?.session?.user;
-    const scTag = await client.shortcutTag.findUnique({
+
+    const scTag = await client.shortcutTag.findFirst({
       where: {
-        id: +comuId!,
+        AND: [{ user: { id: +user?.id! } }, { id: +comuId! }],
       },
       select: {
         hashtags: {
@@ -152,6 +159,14 @@ export const getServerSideProps = withSsrSession(
         id: true,
       },
     });
+    if (!scTag) {
+      return {
+        props: {
+          ok: false,
+          error: "Unauthorized access",
+        },
+      };
+    }
 
     const hashs = scTag?.hashtags.map((hash) => ({ hashtag: hash }));
     const posts = await client.post.findMany({

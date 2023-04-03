@@ -9,6 +9,7 @@ import client from "@/libs/server/client";
 import { Comment, Like, Post, User } from "@prisma/client";
 import { NextPageContext } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -117,7 +118,7 @@ function PostDetail() {
   };
   const imageURL = useImage({ imageId: data?.post?.image });
   return (
-    <div className="bg-slate-50 pb-20">
+    <div className="h-screen overflow-auto pb-20">
       <Layout
         title={`${data?.post?.title}`}
         hashTitle={data?.post?.hashtag?.name}
@@ -205,14 +206,30 @@ function PostDetail() {
           <div className="divide-y shadow-sm ">
             {commentsData?.comments?.map((comment) => (
               <div className="flex" key={comment?.id}>
-                <div className="flex items-center justify-center border-r p-2">
-                  <div className="h-6 w-6 rounded-full bg-gray-500" />
-                  <span className="ml-2 text-sm">{comment?.user?.name}</span>
+                <div className="flex max-w-[25%] flex-1 items-center  border-r px-2">
+                  {comment?.user.avatar ? (
+                    <Image
+                      alt="Avatar"
+                      width={500}
+                      height={500}
+                      className="h-7 w-7 rounded-full object-cover"
+                      src={useImage({
+                        imageId: comment?.user?.avatar,
+                        method: "avatar",
+                      })}
+                    />
+                  ) : (
+                    <div className="h-7 w-7 rounded-full bg-slate-400" />
+                  )}
+
+                  <span className="ml-2 text-ellipsis text-sm">
+                    {comment?.user?.name}
+                  </span>
                 </div>
-                <div className="relative flex w-full max-w-xl flex-col justify-center break-all py-1 pb-5">
+                <div className="relative flex w-full max-w-xl flex-1 flex-col justify-center break-all py-1 pb-5">
                   <span className="px-1 text-sm">{comment?.message}</span>
                   <span className="absolute bottom-0 left-0 w-full border-t bg-gray-100 px-1 text-xs text-gray-600">
-                    {getDateTimeFormat(data?.post?.createdAt, "short")}
+                    {getDateTimeFormat(comment?.createdAt, "short")}
                   </span>
                 </div>
               </div>

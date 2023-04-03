@@ -2,8 +2,8 @@ import { cls } from "@/libs/client/utils";
 import type { UseFormRegisterReturn } from "react-hook-form";
 
 interface InputProps {
-  label: string;
-  name: string;
+  label?: string;
+  name?: string;
   placeholder: string;
   register?: UseFormRegisterReturn;
   type: "text" | "number" | "email" | "textArea";
@@ -21,9 +21,12 @@ export default function Input({
 }: InputProps) {
   return (
     <div className="">
-      <label htmlFor={name} className="ml-1 block">
-        {label}
-      </label>
+      {label && (
+        <label htmlFor={name} className="ml-1 block">
+          {label}
+        </label>
+      )}
+
       {type === "textArea" ? (
         <textarea
           id={name}
@@ -51,7 +54,7 @@ export default function Input({
         />
       )}
       {errorMessage ? (
-        <span className="mt-1 ml-1 block font-semibold text-red-500">
+        <span className="ml-1 mt-1 block font-semibold text-red-500">
           {errorMessage}
         </span>
       ) : null}

@@ -52,9 +52,12 @@ export default function TagFeed({ customName, id, tags_name }: TagFeedProps) {
           <span className="block">{customName}</span>
           <div className="my-2 space-y-1 text-xs">
             <span>Hashs : </span>
-            <div className="grid gap-2 text-center">
-              {tags_name.split(",").map((hash) => (
-                <span className="rounded-md bg-sky-400 py-1 text-center shadow-md hover:scale-105">
+            <div className="grid grid-cols-3 gap-2 text-center ">
+              {tags_name?.split(",")?.map((hash, index) => (
+                <span
+                  key={index}
+                  className="rounded-md bg-sky-400 py-1 text-center shadow-md hover:scale-105"
+                >
                   #{hash}
                 </span>
               ))}
@@ -65,9 +68,12 @@ export default function TagFeed({ customName, id, tags_name }: TagFeedProps) {
         <>
           <span>Hashs : </span>
           <span className="block">
-            <div className="grid gap-2 text-center">
-              {tags_name.split(",").map((hash) => (
-                <span className="rounded-md bg-sky-400 py-1 text-center shadow-md hover:scale-110">
+            <div className="grid grid-cols-3 gap-2 text-center">
+              {tags_name.split(",").map((hash, index) => (
+                <span
+                  key={index}
+                  className="rounded-md bg-sky-400 py-1 text-center text-xs shadow-md hover:scale-110"
+                >
                   #{hash}
                 </span>
               ))}

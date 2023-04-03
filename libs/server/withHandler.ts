@@ -4,7 +4,7 @@ export interface ResponseType {
   [key: string]: any;
 }
 
-type method = "GET" | "POST" | "DELETE";
+type method = "GET" | "POST" | "DELETE" | "PATCH" | "PUT";
 interface ConfigType {
   methods: method[];
   handler: (req: NextApiRequest, res: NextApiResponse) => void;

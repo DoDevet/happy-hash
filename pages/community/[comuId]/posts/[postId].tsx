@@ -61,7 +61,7 @@ function PostDetail() {
   } = router;
   const { register, handleSubmit, reset } = useForm<CreateCommentsForm>();
   const { data, mutate } = useSWR<PostForm>(`/api/community/posts/${postId}`);
-  const { mutate: unboundMutate } = useSWRConfig();
+
   const {
     data: commentsData,
     mutate: commentsMutate,
@@ -138,9 +138,15 @@ function PostDetail() {
         )}
         <div className="-mt-2 w-full border border-t-0 border-gray-300 bg-white pt-2 shadow-sm">
           <div className=" flex items-center justify-between border-b p-2">
-            <div className="flex">
-              <div className="h-6 w-6 rounded-full bg-slate-400" />
-              <span className="ml-1">{data?.post?.user.name}</span>
+            <div className="flex items-center">
+              <Image
+                alt="avatar"
+                width={256}
+                height={256}
+                src={useImage({ imageId: data?.post?.user?.avatar })}
+                className="h-7 w-7 rounded-full"
+              />
+              <span className="ml-2">{data?.post?.user.name}</span>
             </div>
             <span className="text-xs text-gray-700">
               {getDateTimeFormat(data?.post?.createdAt, "long")}
@@ -148,7 +154,9 @@ function PostDetail() {
           </div>
 
           <div className="p-2">
-            <p>{data?.post?.payload}</p>
+            <span className="block whitespace-pre-wrap">
+              {data?.post.payload}
+            </span>
             <span className="cursor-pointer text-sm text-sky-500">
               #{data?.post?.hashtag?.name}
             </span>

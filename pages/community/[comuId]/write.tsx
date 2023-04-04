@@ -105,7 +105,7 @@ export default function WritePost() {
             />
             <div
               onClick={onClearImagePreview}
-              className="absolute top-5 right-5 text-red-400"
+              className="absolute right-5 top-5 text-red-400"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -184,7 +184,7 @@ export default function WritePost() {
           />
         </div>
         <div>
-          <p className="ml-1 mb-4 text-xl font-semibold">Select Hashtag</p>
+          <p className="mb-4 ml-1 text-xl font-semibold">Select Hashtag</p>
           <div className="grid grid-cols-5 place-items-center">
             {hashArr?.map((hash, index) => (
               <div

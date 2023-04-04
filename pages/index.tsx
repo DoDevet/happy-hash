@@ -1,6 +1,7 @@
 import HomeLayout from "@/components/home/homeLayout";
 import Modal from "@/components/home/modal";
 import TagFeed from "@/components/home/tagFeed";
+import { isOpen } from "@/libs/client/useAtoms";
 import useMutation from "@/libs/client/useMutation";
 
 import { shortcutTag } from "@prisma/client";
@@ -8,6 +9,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import useSWR from "swr";
 
 interface HashForm {
@@ -16,12 +18,11 @@ interface HashForm {
 }
 
 export default function Home() {
-  const [modalBtn, setModalBtn] = useState(false);
   const { data } = useSWR<HashForm>("/api/hashs");
-
+  const [open, setOpen] = useRecoilState(isOpen);
   return (
     <>
-      {modalBtn ? <Modal open={modalBtn} setOpen={setModalBtn} /> : null}
+      <Modal open={open} />
       <HomeLayout title={"Home"}>
         <div>
           <h1 className="mb-5 text-3xl font-semibold text-sky-500">#My Hash</h1>
@@ -35,7 +36,7 @@ export default function Home() {
               />
             ))}
             <div className="flex h-full w-full items-center justify-center">
-              <button onClick={() => setModalBtn((prev) => !prev)}>
+              <button onClick={() => setOpen((prev) => !prev)}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

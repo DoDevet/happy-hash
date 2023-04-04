@@ -7,12 +7,13 @@ import useHashTags from "@/libs/client/useHashtags";
 import useMutation from "@/libs/client/useMutation";
 import Button from "../button";
 
-import useSWR, { useSWRConfig } from "swr";
+import { useSWRConfig } from "swr";
 import { shortcutTag } from "@prisma/client";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { hashInfo, isOpen } from "@/libs/client/useAtoms";
 
 interface ModalProps {
   open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 interface HashForm {
@@ -25,7 +26,11 @@ interface MutationResponse {
   tag: shortcutTag;
 }
 
-export default function Modal({ open, setOpen }: ModalProps) {
+interface DeleteResponse {
+  ok: boolean;
+}
+
+export default function Modal({ open }: ModalProps) {
   const {
     register,
     handleSubmit,
@@ -33,31 +38,31 @@ export default function Modal({ open, setOpen }: ModalProps) {
     formState: { errors },
     setError,
     setFocus,
+    setValue,
   } = useForm<HashForm>();
 
-  const [createHash, { data, loading }] = useMutation<MutationResponse>({
-    url: "/api/hashs",
-    method: "POST",
-  });
+  const { handleSubmit: handleDeleteSubmit } = useForm();
 
   const { mutate } = useSWRConfig();
 
-  const onCloseBtn = () => {
-    reset({ hash: "", shName: "" });
-    setOpen((prev) => !prev);
-  };
+  const [useHashInfo, setHashInfo] = useRecoilState(hashInfo);
+  const setOpen = useSetRecoilState(isOpen);
+  const EDIT_MODE = useHashInfo.id !== 0 ? true : false;
 
-  useEffect(() => {
-    if (open) {
-      window.scrollTo({
-        top: 0,
-      });
-      document.body.style.overflow = "hidden";
-    }
-    if (open === false) {
-      document.body.style.overflow = "unset";
-    }
-  }, [open]);
+  const [hashMutation, { data, loading }] = useMutation<MutationResponse>({
+    url: "/api/hashs",
+    method: EDIT_MODE ? "PATCH" : "POST",
+  });
+  const [deleteMutation, { data: deleteResponse, loading: DeleteLoading }] =
+    useMutation<DeleteResponse>({
+      url: "/api/hashs",
+      method: "DELETE",
+    });
+  const onCloseBtn = () => {
+    setOpen(false);
+    reset({ hash: "", shName: "" });
+    setHashInfo({ customName: "", hashs: "", id: 0 });
+  };
 
   useEffect(() => {
     if (errors?.hash) {
@@ -67,28 +72,45 @@ export default function Modal({ open, setOpen }: ModalProps) {
 
   useEffect(() => {
     if (data && data.ok) {
-      mutate("/api/hashs", (prev: any) => {
-        prev && {
-          ...prev,
-          tags: {
-            ...prev.tags.push(data.tag),
-          },
-        };
-      });
+      mutate("/api/hashs");
       onCloseBtn();
     }
   }, [data]);
 
-  const onValid = (data: HashForm) => {
-    const hashs = useHashTags(data.hash);
+  useEffect(() => {
+    if (deleteResponse && deleteResponse.ok) {
+      mutate("/api/hashs");
+      onCloseBtn();
+    }
+  }, [deleteResponse]);
 
+  useEffect(() => {
+    if (useHashInfo.customName) {
+      setValue("shName", useHashInfo.customName);
+    }
+    if (useHashInfo.hashs) {
+      setValue("hash", useHashInfo.hashs);
+    }
+  }, [useHashInfo]);
+
+  const onValid = (data: HashForm) => {
+    if (loading) return;
+    const hashs = useHashTags(data.hash);
     if (hashs.length > 5) {
       setError("hash", { message: "Too many hashtags" });
       return;
     } else {
-      createHash({ hashs, shName: data.shName });
+      EDIT_MODE
+        ? hashMutation({ hashs, shName: data.shName, id: useHashInfo.id })
+        : hashMutation({ hashs, shName: data.shName });
     }
   };
+
+  const onDeleteValid = () => {
+    if (DeleteLoading) return;
+    deleteMutation({ id: useHashInfo.id });
+  };
+
   return (
     <div
       className={cls(
@@ -98,7 +120,9 @@ export default function Modal({ open, setOpen }: ModalProps) {
     >
       <div className="relative h-96 w-2/3 max-w-md rounded-md bg-white px-4 py-5 shadow-md">
         <div className="mb-4 flex w-full items-center justify-between">
-          <h1 className="text-2xl font-semibold text-sky-500">Create hash</h1>
+          <h1 className="text-2xl font-semibold text-sky-500">
+            {EDIT_MODE ? "Edit hash" : "Create hash"}
+          </h1>
           <button onClick={onCloseBtn}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -135,10 +159,19 @@ export default function Modal({ open, setOpen }: ModalProps) {
           />
           <Button
             isLoading={loading}
-            btnText="Save"
-            className="absolute bottom-5 right-6 rounded-md bg-sky-500 px-2 py-2 font-semibold text-white shadow-md transition-colors hover:bg-sky-600"
+            btnText={EDIT_MODE ? "Edit" : "Create"}
+            className="absolute bottom-5 right-6 rounded-md bg-sky-500 px-4 py-2 font-semibold text-white shadow-md ring-sky-500 transition-colors hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2"
           />
         </form>
+        {EDIT_MODE ? (
+          <form onSubmit={handleDeleteSubmit(onDeleteValid)}>
+            <Button
+              isLoading={DeleteLoading}
+              btnText={"Delete"}
+              className="absolute bottom-5 left-6 rounded-md bg-red-400 px-4 py-2 font-semibold text-white shadow-md ring-red-500 transition-colors hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2"
+            />
+          </form>
+        ) : null}
       </div>
     </div>
   );

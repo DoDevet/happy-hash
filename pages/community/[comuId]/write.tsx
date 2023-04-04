@@ -6,7 +6,6 @@ import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
 import Image from "next/image";
 import { useRouter } from "next/router";
-
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -18,7 +17,7 @@ interface PostForm {
 
 interface WritePostResponse {
   ok: boolean;
-  id: number;
+  postId: number;
 }
 
 export default function WritePost() {
@@ -68,7 +67,8 @@ export default function WritePost() {
 
   useEffect(() => {
     if (data && data.ok) {
-      router.back();
+      setImageLoading(false);
+      router.push(`/community/${comuId}/posts/${data.postId}`);
     }
   }, [data, router]);
 
@@ -87,7 +87,6 @@ export default function WritePost() {
         })
       ).json();
       writePost({ image: imageURL, payload, title, selectedHash });
-      setImageLoading(false);
     }
   };
 

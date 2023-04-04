@@ -1,15 +1,8 @@
 import HomeLayout from "@/components/home/homeLayout";
-import Modal from "@/components/home/modal";
 import TagFeed from "@/components/home/tagFeed";
 import { isOpen } from "@/libs/client/useAtoms";
-import useMutation from "@/libs/client/useMutation";
-
 import { shortcutTag } from "@prisma/client";
-import Head from "next/head";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import useSWR from "swr";
 
 interface HashForm {

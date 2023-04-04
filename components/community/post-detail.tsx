@@ -4,7 +4,6 @@ import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
 import { Comment, Like, Post, User } from "@prisma/client";
 import Image from "next/image";
-
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";

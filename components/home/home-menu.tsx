@@ -4,7 +4,7 @@ import { cls } from "@/libs/client/utils";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 interface LogoutResponse {
   ok: boolean;
 }
@@ -19,6 +19,7 @@ export default function HomeMenu() {
   const onLogout = () => {
     setOpen(false);
     logoutMutation({});
+    router.replace("/");
   };
   useEffect(() => {
     if (logoutResponse && logoutResponse.ok) {

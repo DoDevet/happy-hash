@@ -33,19 +33,22 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
       url: "/api/user/logout",
       method: "POST",
     });
+  const open = useRecoilValue(isOpen);
+  const [homeMenu, setHomeMenu] = useRecoilState(homeMenuOpen);
   const onLogout = () => {
     logoutMutation({});
+    router.replace("/");
   };
+
   useEffect(() => {
     if (logoutResponse && logoutResponse.ok) {
       router.replace("/login");
     }
   }, [logoutResponse, router]);
-  const open = useRecoilValue(isOpen);
-  const [homeMenu, setHomeMenu] = useRecoilState(homeMenuOpen);
+
   return (
-    <div className="box-border h-screen w-full overflow-auto">
-      <Modal open={open} />
+    <div className="box-border min-h-screen w-full overflow-auto">
+      {open && <Modal />}
       <Head>
         <title>{`${title} | #happy_hash`}</title>
       </Head>

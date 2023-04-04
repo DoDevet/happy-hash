@@ -1,20 +1,14 @@
 import { cls } from "@/libs/client/utils";
-import { useEffect, useState } from "react";
-import type { Dispatch, SetStateAction } from "react";
+import { useEffect } from "react";
 import Input from "../input";
 import { useForm } from "react-hook-form";
 import useHashTags from "@/libs/client/useHashtags";
 import useMutation from "@/libs/client/useMutation";
 import Button from "../button";
-
 import { useSWRConfig } from "swr";
 import { shortcutTag } from "@prisma/client";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { hashInfo, isOpen } from "@/libs/client/useAtoms";
-
-interface ModalProps {
-  open: boolean;
-}
 
 interface HashForm {
   hash: string;
@@ -30,7 +24,7 @@ interface DeleteResponse {
   ok: boolean;
 }
 
-export default function Modal({ open }: ModalProps) {
+export default function Modal() {
   const {
     register,
     handleSubmit,
@@ -46,7 +40,7 @@ export default function Modal({ open }: ModalProps) {
   const { mutate } = useSWRConfig();
 
   const [useHashInfo, setHashInfo] = useRecoilState(hashInfo);
-  const setOpen = useSetRecoilState(isOpen);
+  const [open, setOpen] = useRecoilState(isOpen);
   const EDIT_MODE = useHashInfo.id !== 0 ? true : false;
 
   const [hashMutation, { data, loading }] = useMutation<MutationResponse>({

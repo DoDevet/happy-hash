@@ -46,6 +46,37 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
     res.json({ ok: true, post, isFav });
   }
+  if (req.method === "DELETE") {
+    const {
+      session: { user },
+      query: { id },
+    } = req;
+    const post = await client.post.findFirst({
+      where: { AND: [{ id: +id! }, { userId: +user?.id! }] },
+      select: {
+        image: true,
+      },
+    });
+    if (post) {
+      await fetch(
+        `https://api.cloudflare.com/client/v4/accounts/${process.env.CF_ID}/images/v1/${post?.image}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${process.env.CF_TOKEN}`,
+          },
+        }
+      );
+      await client.post.delete({
+        where: {
+          id: +id!,
+        },
+      });
+      return res.json({ ok: true });
+    } else return res.json({ ok: false, error: "Validation Error" });
+  }
 }
 
-export default withApiSession(withHandler({ handler, methods: ["GET"] }));
+export default withApiSession(
+  withHandler({ handler, methods: ["GET", "POST", "DELETE"] })
+);

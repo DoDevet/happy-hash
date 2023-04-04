@@ -1,6 +1,6 @@
 import { hashInfo, isOpen } from "@/libs/client/useAtoms";
 import Link from "next/link";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 
 interface TagFeedProps {
   id: number;
@@ -62,11 +62,11 @@ export default function TagFeed({ customName, id, tags_name }: TagFeedProps) {
         <>
           <span>Hashs : </span>
           <span className="block">
-            <div className="grid grid-cols-3 gap-2 text-center">
+            <div className="grid gap-2 text-center">
               {tags_name?.split(",").map((hash, index) => (
                 <span
                   key={index}
-                  className="rounded-md bg-sky-400 py-1 text-center text-xs shadow-md hover:scale-110"
+                  className="my-2 rounded-md bg-sky-400 py-1 text-center text-xs shadow-md hover:scale-110"
                 >
                   #{hash}
                 </span>

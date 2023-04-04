@@ -1,6 +1,9 @@
+import { postMenuOpen } from "@/libs/client/useAtoms";
 import { cls } from "@/libs/client/utils";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import PostMenu from "./community/post-menu";
 
 interface LayoutProps {
   hasTabbar?: boolean;
@@ -8,6 +11,7 @@ interface LayoutProps {
   hasBackArrow?: boolean;
   hashTitle?: string | undefined | null;
   hasBackHome?: boolean;
+  hasPostMenuBar?: boolean;
   [key: string]: any;
 }
 
@@ -18,20 +22,25 @@ export default function Layout({
   hasBackArrow,
   bottomTab,
   hasBackHome,
+  hasPostMenuBar,
 }: LayoutProps) {
   const router = useRouter();
+  const [postMenu, setPostMenu] = useRecoilState(postMenuOpen);
   const onClickBackArrow = () => {
     router.beforePopState((state) => {
       state.options.scroll = false;
       return true;
     });
+    setPostMenu(false);
     router.back();
   };
   const onClickBackHome = () => {
+    setPostMenu(false);
     router.replace("/");
   };
+
   return (
-    <div className="mx-auto w-full max-w-xl">
+    <div className="relative mx-auto w-full max-w-xl">
       <Head>
         <title>{`${title} | #happy_hash`}</title>
       </Head>
@@ -73,7 +82,41 @@ export default function Layout({
               </svg>
             </button>
           ) : null}
-          <span className="">{title}</span>
+          {hasPostMenuBar ? (
+            <div className="absolute right-4">
+              <button
+                onClick={() => setPostMenu((prev) => !prev)}
+                className={cls(
+                  "inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out focus:outline-none",
+                  postMenu ? "bg-slate-200" : ""
+                )}
+              >
+                <svg
+                  className="h-6 w-6"
+                  stroke="currentColor"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    className={cls(postMenu ? "hidden" : "inline-flex")}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
+                  ></path>
+                  <path
+                    className={cls(postMenu ? "inline-flex" : "hidden")}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  ></path>
+                </svg>
+              </button>
+              {hasPostMenuBar && postMenu && <PostMenu />}
+            </div>
+          ) : null}
+          <span>{title}</span>
         </div>
       ) : null}
       {bottomTab ? (
@@ -81,12 +124,17 @@ export default function Layout({
           <button className="flex-1 border-t-2 border-blue-400 bg-white pt-3 text-center">
             ALL
           </button>
-          <button className="flex-1 border-t-2 border-gray-200 bg-white pt-3 text-center">
+          <button className="flex-1 border-t-2 border-gray-200 bg-white pt-3 text-center ">
             POPULAR
           </button>
         </nav>
       ) : null}
-      <div className={cls("pt-16", bottomTab ? "pb-16" : "")}>{children}</div>
+      <div
+        className={cls("pt-16", bottomTab ? "pb-16" : "")}
+        onClick={() => setPostMenu(false)}
+      >
+        {children}
+      </div>
     </div>
   );
 }

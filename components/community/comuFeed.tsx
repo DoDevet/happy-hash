@@ -1,7 +1,5 @@
 import { cls } from "@/libs/client/utils";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import Modal from "react-modal";
 import getDateTimeFormat from "@/libs/client/getDateTimeFormat";
 
 interface ComuFeedProps {

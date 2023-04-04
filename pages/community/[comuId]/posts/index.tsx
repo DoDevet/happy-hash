@@ -1,10 +1,8 @@
 import ComuFeed from "@/components/community/comuFeed";
 import FixedButton from "@/components/fixed-btn";
 import Layout from "@/components/layout";
-import Link from "next/link";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import useSWR, { SWRConfig } from "swr";
-import Modal from "react-modal";
 import PostDetail from "@/components/community/post-detail";
 import { useEffect, useState } from "react";
 import { NextPageContext } from "next";

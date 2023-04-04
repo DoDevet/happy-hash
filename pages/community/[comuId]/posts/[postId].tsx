@@ -4,16 +4,16 @@ import Layout from "@/components/layout";
 import getDateTimeFormat from "@/libs/client/getDateTimeFormat";
 import useImage from "@/libs/client/useImage";
 import useMutation from "@/libs/client/useMutation";
+import useUser from "@/libs/client/useUser";
 import { cls } from "@/libs/client/utils";
 import client from "@/libs/server/client";
 import { Comment, Like, Post, User } from "@prisma/client";
 import { NextPageContext } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import useSWR, { SWRConfig, useSWRConfig } from "swr";
+import useSWR, { SWRConfig } from "swr";
 
 interface PostWithHashtag extends Post {
   hashtag: {
@@ -62,7 +62,6 @@ function PostDetail() {
   } = router;
   const { register, handleSubmit, reset } = useForm<CreateCommentsForm>();
   const { data, mutate } = useSWR<PostForm>(`/api/community/posts/${postId}`);
-
   const {
     data: commentsData,
     mutate: commentsMutate,
@@ -77,6 +76,7 @@ function PostDetail() {
     url: `/api/community/posts/${postId}/fav`,
     method: "POST",
   });
+  const { user } = useUser();
 
   useEffect(() => {
     if (data && !data.ok) {
@@ -118,19 +118,20 @@ function PostDetail() {
       toggleFav({ postId });
     }
   };
-
   const onCreateComments = (data: CreateCommentsForm) => {
     if (loading) return;
     createComments(data);
   };
   const imageURL = useImage({ imageId: data?.post?.image });
+
   return (
-    <div className="h-screen overflow-auto pb-20">
+    <div className="mx-auto h-screen max-w-xl pb-20">
       <Layout
         title={`${data?.post?.title}`}
         hashTitle={data?.post?.hashtag?.name}
         hasTabbar
         hasBackArrow
+        hasPostMenuBar={data?.post?.userId === user?.id}
       >
         {imageURL ? (
           <Image

@@ -114,7 +114,7 @@ export default function Modal({ open }: ModalProps) {
   return (
     <div
       className={cls(
-        "absolute z-20 flex h-full w-full items-center justify-center bg-black bg-opacity-30",
+        "absolute z-50 flex h-full w-full items-center justify-center bg-black bg-opacity-30",
         open ? "" : "hidden"
       )}
     >

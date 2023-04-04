@@ -31,6 +31,7 @@ interface PostForm {
   ok: boolean;
   post: PostWithHashtag;
   isFav: boolean;
+  error?: string;
 }
 
 interface ToggleResponse {
@@ -76,6 +77,12 @@ function PostDetail() {
     url: `/api/community/posts/${postId}/fav`,
     method: "POST",
   });
+
+  useEffect(() => {
+    if (data && !data.ok) {
+      router.back();
+    }
+  }, [data]);
 
   useEffect(() => {
     if (createCommentsRespose && createCommentsRespose.ok) {
@@ -155,7 +162,7 @@ function PostDetail() {
 
           <div className="p-2">
             <span className="block whitespace-pre-wrap">
-              {data?.post.payload}
+              {data?.post?.payload}
             </span>
             <span className="cursor-pointer text-sm text-sky-500">
               #{data?.post?.hashtag?.name}
@@ -268,12 +275,12 @@ function PostDetail() {
   );
 }
 
-export default function Page({ post }: { post: PostWithHashtag }) {
+export default function Page({ post, ok, error }: PostForm) {
   return (
     <SWRConfig
       value={{
         fallback: {
-          [`/api/community/posts/${post.id}`]: { ok: true, post },
+          [`/api/community/posts/${post?.id}`]: { ok, post, error },
         },
       }}
     >
@@ -303,8 +310,12 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
       user: true,
     },
   });
-
+  if (!post) {
+    return {
+      props: { ok: false, error: "No post found" },
+    };
+  }
   return {
-    props: { post: JSON.parse(JSON.stringify(post)) },
+    props: { ok: true, post: JSON.parse(JSON.stringify(post)) },
   };
 };

@@ -42,7 +42,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!post) {
-      return res.status(401).end();
+      return res.json({ ok: false, error: "No post found" });
     }
     res.json({ ok: true, post, isFav });
   }

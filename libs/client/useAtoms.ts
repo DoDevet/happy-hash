@@ -13,3 +13,8 @@ export const isOpen = atom({
   key: "modalOpen",
   default: false,
 });
+
+export const homeMenuOpen = atom({
+  key: "homeMenuOpen",
+  default: false,
+});

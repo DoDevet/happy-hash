@@ -21,7 +21,7 @@ export default function TagFeed({ customName, id, tags_name }: TagFeedProps) {
   };
 
   return (
-    <div className="relative z-10 flex h-full flex-col justify-between overflow-hidden rounded-md bg-sky-500 px-4 py-4 font-semibold text-white shadow-xl hover:bg-sky-600 hover:transition-colors">
+    <div className="relative  flex h-full flex-col justify-between overflow-hidden rounded-md bg-sky-500 px-4 py-4 font-semibold text-white shadow-xl hover:bg-sky-600 hover:transition-colors">
       <div className="absolute right-3 space-x-1 font-semibold">
         <button onClick={onEditTag}>
           <svg
@@ -46,7 +46,7 @@ export default function TagFeed({ customName, id, tags_name }: TagFeedProps) {
           <span className="block">{customName}</span>
           <div className="my-2 space-y-1 text-xs">
             <span>Hashs : </span>
-            <div className="grid grid-cols-3 gap-2 text-center ">
+            <div className="grid gap-2 text-center ">
               {tags_name?.split(",")?.map((hash, index) => (
                 <span
                   key={index}

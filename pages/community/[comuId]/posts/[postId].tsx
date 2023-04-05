@@ -4,6 +4,7 @@ import Layout from "@/components/layout";
 import getDateTimeFormat from "@/libs/client/getDateTimeFormat";
 import useImage from "@/libs/client/useImage";
 import useMutation from "@/libs/client/useMutation";
+import usePostInfo from "@/libs/client/usePostInfo";
 import useUser from "@/libs/client/useUser";
 import { cls } from "@/libs/client/utils";
 import client from "@/libs/server/client";
@@ -61,7 +62,7 @@ function PostDetail() {
     query: { postId, comuId },
   } = router;
   const { register, handleSubmit, reset } = useForm<CreateCommentsForm>();
-  const { data, mutate } = useSWR<PostForm>(`/api/community/posts/${postId}`);
+  const { data, mutate } = usePostInfo();
   const {
     data: commentsData,
     mutate: commentsMutate,
@@ -131,7 +132,7 @@ function PostDetail() {
         hashTitle={data?.post?.hashtag?.name}
         hasTabbar
         hasBackArrow
-        hasPostMenuBar={data?.post?.userId === user?.id}
+        hasPostMenuBar={data?.isMine}
       >
         {imageURL ? (
           <Image

@@ -68,7 +68,7 @@ export default function WritePost() {
   useEffect(() => {
     if (data && data.ok) {
       setImageLoading(false);
-      router.push(`/community/${comuId}/posts/${data.postId}`);
+      router.replace(`/community/${comuId}/posts/${data.postId}`);
     }
   }, [data, router]);
 
@@ -86,7 +86,7 @@ export default function WritePost() {
           body: form,
         })
       ).json();
-      writePost({ image: imageURL, payload, title, selectedHash });
+      writePost({ imageURL: imageURL, payload, title, selectedHash });
     }
   };
 

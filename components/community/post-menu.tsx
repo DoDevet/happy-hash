@@ -36,11 +36,10 @@ export default function PostMenu() {
       <div className="divide-y px-2 font-semibold text-gray-600">
         <div className="flex flex-col space-y-3 py-1 outline-none">
           <Link
-            href={`/community/${comuId}/write`}
+            href={`/community/${comuId}/edit?postId=${postId}`}
             className={cls(
               "rounded-md px-2 py-2 text-sm outline-none transition-colors hover:bg-slate-100 hover:text-sky-500"
             )}
-            // onClick={() => setOpen(false)}
           >
             Edit Post
           </Link>

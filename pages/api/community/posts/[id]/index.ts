@@ -44,7 +44,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (!post) {
       return res.json({ ok: false, error: "No post found" });
     }
-    res.json({ ok: true, post, isFav });
+    res.json({ ok: true, post, isFav, isMine: post.userId === user?.id });
   }
   if (req.method === "DELETE") {
     const {

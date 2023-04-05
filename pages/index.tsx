@@ -2,7 +2,8 @@ import HomeLayout from "@/components/home/homeLayout";
 import TagFeed from "@/components/home/tagFeed";
 import { isOpen } from "@/libs/client/useAtoms";
 import { shortcutTag } from "@prisma/client";
-import { useSetRecoilState } from "recoil";
+import { useEffect } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import useSWR from "swr";
 
 interface HashForm {
@@ -12,12 +13,23 @@ interface HashForm {
 
 export default function Home() {
   const { data } = useSWR<HashForm>("/api/hashs");
-  const setOpen = useSetRecoilState(isOpen);
+  const [open, setOpen] = useRecoilState(isOpen);
+  useEffect(() => {
+    if (open) {
+      window.scrollTo({
+        top: 0,
+      });
+      document.body.style.overflow = "hidden";
+    }
+    if (open === false) {
+      document.body.style.overflow = "unset";
+    }
+  }, [open]);
   return (
     <HomeLayout title={"Home"}>
       <div>
         <h1 className="mb-5 text-3xl font-semibold text-sky-500">#My Hash</h1>
-        <div className="grid grid-cols-3 gap-3 overflow-y-auto rounded-md ">
+        <div className="grid grid-cols-3 flex-wrap gap-3 overflow-y-auto rounded-md md:grid-cols-4  ">
           {data?.tags?.map((tag) => (
             <TagFeed
               key={tag?.id}

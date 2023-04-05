@@ -1,20 +1,18 @@
-import Button from "@/components/button";
-import Input from "@/components/input";
+import CommentSection from "@/components/community/comments";
 import Layout from "@/components/layout";
 import getDateTimeFormat from "@/libs/client/getDateTimeFormat";
 import useImage from "@/libs/client/useImage";
 import useMutation from "@/libs/client/useMutation";
 import usePostInfo from "@/libs/client/usePostInfo";
-import useUser from "@/libs/client/useUser";
 import { cls } from "@/libs/client/utils";
 import client from "@/libs/server/client";
-import { Comment, Like, Post, User } from "@prisma/client";
+import { withSsrSession } from "@/libs/server/withSession";
+import { Like, Post, User } from "@prisma/client";
 import { NextPageContext } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import useSWR, { SWRConfig } from "swr";
+import { SWRConfig } from "swr";
 
 interface PostWithHashtag extends Post {
   hashtag: {
@@ -32,6 +30,7 @@ interface PostForm {
   ok: boolean;
   post: PostWithHashtag;
   isFav: boolean;
+  isMine: boolean;
   error?: string;
 }
 
@@ -39,62 +38,24 @@ interface ToggleResponse {
   ok: boolean;
 }
 
-interface CreateCommentsForm {
-  message: string;
-}
-
-interface CommentsWithUser extends Comment {
-  user: User;
-}
-
-interface CommentsForm {
-  comments: CommentsWithUser[];
-  ok: boolean;
-}
-
-interface CreateResponse {
-  ok: boolean;
-}
-
 function PostDetail() {
   const router = useRouter();
   const {
-    query: { postId, comuId },
+    query: { postId },
   } = router;
-  const { register, handleSubmit, reset } = useForm<CreateCommentsForm>();
+
   const { data, mutate } = usePostInfo();
-  const {
-    data: commentsData,
-    mutate: commentsMutate,
-    isLoading: commentsLoading,
-  } = useSWR<CommentsForm>(`/api/community/posts/${postId}/comments`);
-  const [createComments, { data: createCommentsRespose, error, loading }] =
-    useMutation<CreateResponse>({
-      url: `/api/community/posts/${postId}/comments`,
-      method: "POST",
-    });
+
   const [toggleFav, { loading: toggleLoading }] = useMutation<ToggleResponse>({
     url: `/api/community/posts/${postId}/fav`,
     method: "POST",
   });
-  const { user } = useUser();
 
   useEffect(() => {
     if (data && !data.ok) {
       router.back();
     }
   }, [data]);
-
-  useEffect(() => {
-    if (createCommentsRespose && createCommentsRespose.ok) {
-      commentsMutate();
-      reset();
-    }
-  }, [createCommentsRespose, commentsMutate]);
-
-  const onCommentsRefreshBtn = () => {
-    commentsMutate();
-  };
 
   const onClickFavBtn = () => {
     mutate(
@@ -114,15 +75,11 @@ function PostDetail() {
         },
       false
     );
-
     if (!toggleLoading) {
       toggleFav({ postId });
     }
   };
-  const onCreateComments = (data: CreateCommentsForm) => {
-    if (loading) return;
-    createComments(data);
-  };
+
   const imageURL = useImage({ imageId: data?.post?.image });
 
   return (
@@ -153,7 +110,7 @@ function PostDetail() {
                 width={256}
                 height={256}
                 src={useImage({ imageId: data?.post?.user?.avatar })}
-                className="h-7 w-7 rounded-full"
+                className="h-7 w-7 rounded-full object-cover"
               />
               <span className="ml-2">{data?.post?.user.name}</span>
             </div>
@@ -191,98 +148,24 @@ function PostDetail() {
             </div>
           </div>
         </div>
-        {/** Comments */}
-        <div className="mt-4 rounded-md border bg-white shadow-sm">
-          <div className="flex items-center space-x-2 border-b p-2 font-semibold">
-            <span>
-              {commentsData?.comments?.length
-                ? commentsData?.comments?.length
-                : 0}{" "}
-              Comments
-            </span>
-            {/**새로고침 기능 */}
-            <svg
-              onClick={onCommentsRefreshBtn}
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className={cls(
-                "h-4 w-4 cursor-pointer",
-                commentsLoading ? "animate-spin" : ""
-              )}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
-              />
-            </svg>
-          </div>
-          <div className="divide-y shadow-sm ">
-            {commentsData?.comments?.map((comment) => (
-              <div className="flex" key={comment?.id}>
-                <div className="flex max-w-[25%] flex-1 items-center  border-r px-2">
-                  {comment?.user.avatar ? (
-                    <Image
-                      alt="Avatar"
-                      width={500}
-                      height={500}
-                      className="h-7 w-7 rounded-full object-cover"
-                      src={useImage({
-                        imageId: comment?.user?.avatar,
-                        method: "avatar",
-                      })}
-                    />
-                  ) : (
-                    <div className="h-7 w-7 rounded-full bg-slate-400" />
-                  )}
-
-                  <span className="ml-2 text-ellipsis text-sm">
-                    {comment?.user?.name}
-                  </span>
-                </div>
-                <div className="relative flex w-full max-w-xl flex-1 flex-col justify-center break-all py-1 pb-5">
-                  <span className="px-1 text-sm">{comment?.message}</span>
-                  <span className="absolute bottom-0 left-0 w-full border-t bg-gray-100 px-1 text-xs text-gray-600">
-                    {getDateTimeFormat(comment?.createdAt, "short")}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="mt-7 rounded-md border bg-white px-2 py-1 shadow-sm">
-          <form
-            onSubmit={handleSubmit(onCreateComments)}
-            className="flex flex-col p-2"
-          >
-            <Input
-              placeholder="Write Comments"
-              name="comments"
-              type="textArea"
-              label="Write Comments"
-              register={register("message", { required: true })}
-            />
-            <Button
-              btnText="Create Comments"
-              className="my-3 w-full rounded-md bg-sky-500 py-2 font-semibold text-white transition-colors hover:bg-sky-600"
-              isLoading={loading}
-            />
-          </form>
-        </div>
+        <CommentSection />
       </Layout>
     </div>
   );
 }
 
-export default function Page({ post, ok, error }: PostForm) {
+export default function Page({ post, ok, error, isMine, isFav }: PostForm) {
   return (
     <SWRConfig
       value={{
         fallback: {
-          [`/api/community/posts/${post?.id}`]: { ok, post, error },
+          [`/api/community/posts/${post?.id}`]: {
+            ok,
+            post,
+            error,
+            isMine,
+            isFav,
+          },
         },
       }}
     >
@@ -291,33 +174,52 @@ export default function Page({ post, ok, error }: PostForm) {
   );
 }
 
-export const getServerSideProps = async (ctx: NextPageContext) => {
-  const post = await client.post.findUnique({
-    where: {
-      id: +ctx.query.postId!,
-    },
-    include: {
-      hashtag: {
-        select: {
-          name: true,
-        },
+export const getServerSideProps = withSsrSession(
+  async (ctx: NextPageContext) => {
+    const user = ctx?.req?.session?.user;
+    const post = await client.post.findUnique({
+      where: {
+        id: +ctx.query.postId!,
       },
-      _count: {
-        select: {
-          comments: true,
-          likes: true,
+      include: {
+        hashtag: {
+          select: {
+            name: true,
+          },
         },
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
+          },
+        },
+        likes: true,
+        user: true,
       },
-      likes: true,
-      user: true,
-    },
-  });
-  if (!post) {
+    });
+    const isFav = Boolean(
+      await client.like.findFirst({
+        where: {
+          user: {
+            id: +user?.id!,
+          },
+          postId: +ctx.query.postId!,
+        },
+      })
+    );
+    if (!post) {
+      return {
+        props: { ok: false, error: "No post found" },
+      };
+    }
+
     return {
-      props: { ok: false, error: "No post found" },
+      props: {
+        ok: true,
+        post: JSON.parse(JSON.stringify(post)),
+        isMine: user?.id === post.userId,
+        isFav,
+      },
     };
   }
-  return {
-    props: { ok: true, post: JSON.parse(JSON.stringify(post)) },
-  };
-};
+);

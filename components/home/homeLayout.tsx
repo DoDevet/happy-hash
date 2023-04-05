@@ -47,7 +47,7 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
   }, [logoutResponse, router]);
 
   return (
-    <div className="box-border min-h-screen w-full overflow-auto">
+    <div className={cls("box-border min-h-screen w-full overflow-auto")}>
       {open && <Modal />}
       <Head>
         <title>{`${title} | #happy_hash`}</title>

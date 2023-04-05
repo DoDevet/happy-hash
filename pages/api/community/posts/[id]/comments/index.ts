@@ -52,8 +52,22 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       res.json({ ok: true, comments });
     }
   }
+  if (req.method === "DELETE") {
+    const {
+      session: { user },
+      body: { commentsId },
+    } = req;
+    await client.comment.delete({
+      where: {
+        id: commentsId,
+      },
+    });
+    res.json({ ok: true });
+  }
+  if (req.method === "PATCH") {
+  }
 }
 
 export default withApiSession(
-  withHandler({ handler, methods: ["GET", "POST"] })
+  withHandler({ handler, methods: ["GET", "POST", "DELETE"] })
 );

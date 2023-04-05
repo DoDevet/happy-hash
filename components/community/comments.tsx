@@ -4,10 +4,12 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Button from "../button";
 import Input from "../input";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { useEffect, useState } from "react";
 import { cls } from "@/libs/client/utils";
 import CommentsFeed from "./comments-feed";
+import useUser from "@/libs/client/useUser";
+import useComments from "@/libs/client/useComments";
 interface CreateCommentsForm {
   message: string;
 }
@@ -27,23 +29,20 @@ interface CreateResponse {
 
 export default function CommentSection() {
   const router = useRouter();
+
   const {
     query: { postId },
   } = router;
   const [refreshComments, setRefreshComments] = useState(false);
   const { register, handleSubmit, reset } = useForm<CreateCommentsForm>();
-  const {
-    data: commentsData,
-    mutate: commentsMutate,
-    isLoading: commentsLoading,
-  } = useSWR<CommentsForm>(`/api/community/posts/${postId}/comments`);
 
+  const { commentsData, commentsMutate, commentsLoading } = useComments();
   const [createComments, { data: createCommentsRespose, error, loading }] =
     useMutation<CreateResponse>({
       url: `/api/community/posts/${postId}/comments`,
       method: "POST",
     });
-
+  const { user } = useUser();
   useEffect(() => {
     if (createCommentsRespose && createCommentsRespose.ok) {
       commentsMutate();
@@ -97,10 +96,13 @@ export default function CommentSection() {
         <div className="divide-y shadow-sm ">
           {commentsData?.comments?.map((comment) => (
             <CommentsFeed
+              key={comment.id}
+              commentsId={comment.id}
               createdAt={comment.createdAt}
               imageId={comment?.user?.avatar}
               message={comment.message}
               username={comment.user.name}
+              isMine={comment.userId === user?.id}
             />
           ))}
         </div>

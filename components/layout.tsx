@@ -1,4 +1,4 @@
-import { postMenuOpen } from "@/libs/client/useAtoms";
+import { commentsMenuOpen, postMenuOpen } from "@/libs/client/useAtoms";
 import { cls } from "@/libs/client/utils";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -26,6 +26,7 @@ export default function Layout({
 }: LayoutProps) {
   const router = useRouter();
   const [postMenu, setPostMenu] = useRecoilState(postMenuOpen);
+
   const onClickBackArrow = () => {
     router.beforePopState((state) => {
       state.options.scroll = false;
@@ -131,7 +132,9 @@ export default function Layout({
       ) : null}
       <div
         className={cls("pt-16", bottomTab ? "pb-16" : "")}
-        onClick={() => setPostMenu(false)}
+        onClick={() => {
+          setPostMenu(false);
+        }}
       >
         {children}
       </div>

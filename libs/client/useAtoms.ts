@@ -1,4 +1,11 @@
-import { atom } from "recoil";
+import { atom, selector } from "recoil";
+
+interface ICommentsInfo {
+  commentsId: number;
+  message: string;
+  menuOpen: boolean;
+  editModalOpen: boolean;
+}
 
 export const hashInfo = atom({
   key: "hashInfo",
@@ -24,10 +31,42 @@ export const postMenuOpen = atom({
   default: false,
 });
 
-export const commentsMenuOpen = atom({
-  key: "commentsMenuOpen",
+export const commentsMenuState = atom<ICommentsInfo>({
+  key: "commentsMenu",
   default: {
-    open: false,
     commentsId: 0,
+    message: "",
+    menuOpen: false,
+    editModalOpen: false,
+  },
+});
+
+export const commentsSelector = selector({
+  key: "commentsSelector",
+  get: ({ get }) => {
+    const info = get(commentsMenuState);
+    return {
+      commentsId: info.commentsId,
+      menuOpen: info.menuOpen,
+      message: info.message,
+      editModalOpen: info.editModalOpen,
+    };
+  },
+  set: ({ set }, newValue) => {
+    set(commentsMenuState, (prev) => ({ ...prev, ...newValue }));
+  },
+});
+
+export const commentsEditSelector = selector({
+  key: "commentsEditSelector",
+  get: ({ get }) => {
+    const editOpen = get(commentsMenuState);
+    return {
+      editModalOpen: editOpen.editModalOpen,
+      menuOpen: editOpen.menuOpen,
+    };
+  },
+  set: ({ set }, newValue) => {
+    set(commentsMenuState, (prev) => ({ ...prev, ...newValue }));
   },
 });

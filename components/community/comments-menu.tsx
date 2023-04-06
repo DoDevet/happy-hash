@@ -1,11 +1,10 @@
-import { commentsMenuOpen } from "@/libs/client/useAtoms";
-import useComments from "@/libs/client/useComments";
+import { commentsMenuState, commentsSelector } from "@/libs/client/useAtoms";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
 
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useSWRConfig } from "swr";
 
 interface DeleteMutation {
@@ -18,7 +17,7 @@ export default function CommentsMenu() {
   const {
     query: { postId },
   } = router;
-  const [comments, setComments] = useRecoilState(commentsMenuOpen);
+  const [comments, setComments] = useRecoilState(commentsMenuState);
   const { mutate } = useSWRConfig();
   const [deleteComments, { data, loading }] = useMutation<DeleteMutation>({
     url: `/api/community/posts/${postId}/comments`,
@@ -30,10 +29,19 @@ export default function CommentsMenu() {
     deleteComments({ commentsId: comments.commentsId });
   };
 
+  const onEditValid = () => {
+    setComments((prev) => ({ ...prev, menuOpen: false, editModalOpen: true }));
+  };
+
   useEffect(() => {
     if (data && data.ok) {
       mutate(`/api/community/posts/${postId}/comments`);
-      setComments({ open: false, commentsId: 0 });
+      setComments((prev) => ({
+        ...prev,
+        menuOpen: false,
+        commentsId: 0,
+        message: "",
+      }));
     }
   }, [data, mutate]);
 
@@ -45,7 +53,7 @@ export default function CommentsMenu() {
             className={cls(
               "rounded-md px-2 py-2 text-sm outline-none transition-colors hover:bg-slate-100 hover:text-sky-500"
             )}
-            onClick={() => console.log("Edit")}
+            onClick={onEditValid}
           >
             Edit
           </button>

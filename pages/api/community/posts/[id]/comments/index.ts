@@ -65,9 +65,34 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     res.json({ ok: true });
   }
   if (req.method === "PATCH") {
+    const {
+      session: { user },
+      body: { message, commentsId },
+    } = req;
+
+    const comments = Boolean(
+      await client.comment.findFirst({
+        where: {
+          userId: +user?.id!,
+          id: commentsId,
+        },
+      })
+    );
+
+    if (comments) {
+      await client.comment.update({
+        where: {
+          id: commentsId,
+        },
+        data: {
+          message,
+        },
+      });
+      return res.json({ ok: true });
+    } else return res.json({ ok: false, erorr: "Invalid" });
   }
 }
 
 export default withApiSession(
-  withHandler({ handler, methods: ["GET", "POST", "DELETE"] })
+  withHandler({ handler, methods: ["GET", "POST", "DELETE", "PATCH"] })
 );

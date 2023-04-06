@@ -1,7 +1,10 @@
-import { homeMenuOpen, isOpen } from "@/libs/client/useAtoms";
+import { homeMenuOpen, isOpen, userMenuOpen } from "@/libs/client/useAtoms";
+import useImage from "@/libs/client/useImage";
 import useMutation from "@/libs/client/useMutation";
+import useUser from "@/libs/client/useUser";
 import { cls } from "@/libs/client/utils";
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactNode, useEffect } from "react";
@@ -9,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue } from "recoil";
 import Input from "../input";
 import HomeMenu from "./home-menu";
+import UserMenu from "./home-usermenu";
 import Modal from "./modal";
 
 interface SearchForm {
@@ -24,6 +28,8 @@ interface LogoutResponse {
 }
 export default function HomeLayout({ children, title }: HomeLayoutProps) {
   const router = useRouter();
+  const { user } = useUser();
+  const avatarURL = useImage({ imageId: user?.avatar, method: "avatar" });
   const { register, handleSubmit, getValues, reset } = useForm<SearchForm>();
   const onSearchValid = (data: SearchForm) => {
     reset();
@@ -39,6 +45,7 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
     });
   const open = useRecoilValue(isOpen);
   const [homeMenu, setHomeMenu] = useRecoilState(homeMenuOpen);
+  const [homeUserMenu, setHomeUserMenu] = useRecoilState(userMenuOpen);
   const onLogout = () => {
     logoutMutation({});
     router.replace("/");
@@ -90,7 +97,17 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
             </button>
           </div>
           {/** Notification icon */}
-          <div className="absolute right-7 top-2 text-gray-400">
+          <div className="absolute right-7 top-0 z-50 flex items-center justify-center space-x-5 text-gray-400">
+            <Image
+              alt="userAvatar"
+              src={avatarURL}
+              width={256}
+              height={256}
+              className="h-10 w-10 cursor-pointer rounded-full object-cover shadow-md"
+              onClick={() => setHomeUserMenu((prev) => !prev)}
+            />
+
+            {homeUserMenu && <UserMenu />}
             <svg
               className="h-5 w-5 dark:text-gray-400"
               fill="currentColor"

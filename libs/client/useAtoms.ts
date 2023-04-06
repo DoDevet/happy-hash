@@ -26,6 +26,11 @@ export const homeMenuOpen = atom({
   default: false,
 });
 
+export const userMenuOpen = atom({
+  key: "userMenuOpen",
+  default: false,
+});
+
 export const postMenuOpen = atom({
   key: "postMenuOpen",
   default: false,

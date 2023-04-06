@@ -130,6 +130,9 @@ export default function EditPost({ isMine, post }: EditProps) {
       );
     }
   }, [editResponse, router]);
+  useEffect(() => {
+    document.body.style.overflow = "unset";
+  }, []);
 
   const onClickHash = (hash: string) => {
     setSelectedHash(hash);

@@ -131,7 +131,7 @@ export default function Layout({
         </nav>
       ) : null}
       <div
-        className={cls("pt-14", bottomTab ? "pb-16" : "")}
+        className={cls("pt-16", bottomTab ? "pb-16" : "")}
         onClick={() => {
           setPostMenu(false);
         }}

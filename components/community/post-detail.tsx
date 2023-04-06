@@ -73,7 +73,7 @@ export default function PostModalDetail() {
 
   const imageURL = useImage({ imageId: data?.post?.image });
   return (
-    <div className="no-scroll h-full w-full overflow-auto rounded-md xl:h-[90%]">
+    <div className="no-scroll h-full  w-full overflow-auto rounded-md xl:h-[90%]">
       {data && data?.ok && (
         <Layout
           title={`${data?.post?.title}`}
@@ -82,7 +82,7 @@ export default function PostModalDetail() {
           hasBackArrow
           hasPostMenuBar={data?.isMine}
         >
-          <div className="rounded-md bg-white p-2">
+          <div className="-mt-2 rounded-md bg-white p-2">
             {imageURL ? (
               <Image
                 alt="postImage"

@@ -43,9 +43,7 @@ function PostDetail() {
   const {
     query: { postId },
   } = router;
-
   const { data, mutate } = usePostInfo();
-
   const [toggleFav, { loading: toggleLoading }] = useMutation<ToggleResponse>({
     url: `/api/community/posts/${postId}/fav`,
     method: "POST",
@@ -79,11 +77,9 @@ function PostDetail() {
       toggleFav({ postId });
     }
   };
-
   const imageURL = useImage({ imageId: data?.post?.image });
-
   return (
-    <div className="mx-auto h-screen max-w-xl pb-20">
+    <div className="mx-auto h-screen max-w-xl pb-20 xl:max-w-2xl">
       {data && data?.ok && (
         <Layout
           title={`${data?.post?.title}`}

@@ -1,13 +1,13 @@
-import ComuFeed from "@/components/community/comuFeed";
 import FixedButton from "@/components/fixed-btn";
 import Layout from "@/components/layout";
 import { useRouter } from "next/router";
 import useSWR, { SWRConfig } from "swr";
-import PostDetail from "@/components/community/post-detail";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { NextPageContext } from "next";
 import { withSsrSession } from "@/libs/server/withSession";
 import client from "@/libs/server/client";
+import PostModalDetail from "@/components/community/post-detail";
+import PostFeed from "@/components/community/post-Feed";
 
 interface PostProps {
   ok: boolean;
@@ -44,21 +44,21 @@ function HashCommunity() {
   const router = useRouter();
   const { comuId, postId, hashId } = router.query;
   const url = comuId ? `?comuId=${comuId}` : `?hashId=${hashId}`;
-  const { data } = useSWR<PostProps>(`/api/community/posts${url}`);
-  const [postIdState, setPostIdState] = useState("");
+  const { data, mutate } = useSWR<PostProps>(`/api/community/posts${url}`);
+  useEffect(() => {
+    if (!postId) {
+      document.body.style.overflow = "unset";
+      mutate();
+    }
+    if (postId) {
+      document.body.style.overflow = "hidden";
+    }
+  }, [postId, mutate]);
   useEffect(() => {
     if (data && data.ok === false) {
       router.replace("/");
     }
   }, [data]);
-  useEffect(() => {
-    if (router.query && router.query.postId) {
-      setPostIdState(router.query.postId.toString());
-    }
-    if (router.query && !router.query.postId) {
-      setPostIdState("");
-    }
-  }, [router, setPostIdState]);
 
   useEffect(() => {
     if (data && data.ok === false) {
@@ -68,9 +68,9 @@ function HashCommunity() {
 
   return (
     <div>
-      {postIdState && (
-        <div className="fixed z-30 flex h-screen w-full items-center justify-center bg-black bg-opacity-60 px-8 ">
-          <PostDetail />
+      {postId && (
+        <div className="fixed z-40 flex h-screen w-full items-center justify-center bg-black bg-opacity-60 ">
+          <PostModalDetail />
         </div>
       )}
       {data && data.ok && (
@@ -89,7 +89,7 @@ function HashCommunity() {
           <ul className="relative flex h-full flex-col divide-y">
             {data?.posts?.map((post) => (
               <li key={post.id}>
-                <ComuFeed
+                <PostFeed
                   comments={post?._count?.comments}
                   title={post?.title}
                   createdAt={post.createdAt}

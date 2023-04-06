@@ -3,7 +3,7 @@ import Link from "next/link";
 import getDateTimeFormat from "@/libs/client/getDateTimeFormat";
 import getQueryUrl from "@/libs/client/getQueryUrl";
 
-interface ComuFeedProps {
+interface PostFeedProps {
   title: string;
   hashtag: string;
   username: string;
@@ -15,7 +15,7 @@ interface ComuFeedProps {
   [key: string]: any;
 }
 
-export default function ComuFeed({
+export default function PostFeed({
   title,
   hashtag,
   username,
@@ -26,11 +26,15 @@ export default function ComuFeed({
   comuId,
   hashId,
   postId,
-}: ComuFeedProps) {
+}: PostFeedProps) {
   const queryUrl = getQueryUrl({ comuId, hashId });
 
   return (
-    <Link href={`/community/posts/${postId}?${queryUrl}`}>
+    <Link
+      scroll={false}
+      href={`/community/posts?${queryUrl}&postId=${postId}`}
+      as={`/community/posts/${postId}/?${queryUrl}`}
+    >
       <div className="flex items-center justify-between px-4 py-2">
         <div>
           <span className="text-base font-semibold text-sky-500">

@@ -41,12 +41,12 @@ export default function Layout({
   };
 
   return (
-    <div className="relative mx-auto w-full max-w-xl">
+    <div className="relative mx-auto w-full max-w-xl xl:max-w-2xl">
       <Head>
         <title>{`${title} | #happy_hash`}</title>
       </Head>
       {hasTabbar ? (
-        <div className="fixed z-10 flex w-full max-w-xl items-center justify-center border-b bg-white py-5 pb-3 text-lg font-semibold">
+        <div className="fixed z-10 flex w-full max-w-xl items-center justify-center border-b bg-white py-5 pb-3 text-lg font-semibold xl:max-w-2xl">
           {hasBackArrow ? (
             <button className="absolute left-4" onClick={onClickBackArrow}>
               <svg
@@ -121,7 +121,7 @@ export default function Layout({
         </div>
       ) : null}
       {bottomTab ? (
-        <nav className="fixed bottom-0 z-10 flex w-full max-w-xl justify-between space-x-2 border-t bg-white px-2 pb-5 text-xs text-gray-700">
+        <nav className="fixed bottom-0 z-10 flex w-full max-w-xl justify-between space-x-2 border-t bg-white px-2 pb-5 text-xs text-gray-700 xl:max-w-2xl">
           <button className="flex-1 border-t-2 border-blue-400 bg-white pt-3 text-center">
             ALL
           </button>
@@ -131,7 +131,7 @@ export default function Layout({
         </nav>
       ) : null}
       <div
-        className={cls("pt-16", bottomTab ? "pb-16" : "")}
+        className={cls("pt-14", bottomTab ? "pb-16" : "")}
         onClick={() => {
           setPostMenu(false);
         }}

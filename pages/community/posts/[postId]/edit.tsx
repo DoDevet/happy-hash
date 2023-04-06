@@ -43,7 +43,7 @@ interface EditResponseData {
 export default function EditPost({ isMine, post }: EditProps) {
   const router = useRouter();
   const {
-    query: { comuId, postId },
+    query: { comuId, postId, hashId },
   } = router;
   const {
     register,
@@ -54,7 +54,7 @@ export default function EditPost({ isMine, post }: EditProps) {
     formState: { errors },
   } = useForm<PostForm>();
 
-  const hashArr = getHashTags({ comuId: +comuId! });
+  const hashArr = getHashTags({ comuId: +comuId!, hashId: +hashId! });
 
   const [imagePreview, setImagePreview] = useState("");
   const [selectedHash, setSelectedHash] = useState("");
@@ -123,7 +123,11 @@ export default function EditPost({ isMine, post }: EditProps) {
   }, [image]);
   useEffect(() => {
     if (editResponse && editResponse.ok) {
-      router.replace(`/community/${comuId}/posts/${postId}`);
+      router.replace(
+        `/community/posts/${postId}?${
+          comuId ? `comuId=${comuId}` : `hashId=${hashId}`
+        }`
+      );
     }
   }, [editResponse, router]);
 

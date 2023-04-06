@@ -24,9 +24,13 @@ interface LogoutResponse {
 }
 export default function HomeLayout({ children, title }: HomeLayoutProps) {
   const router = useRouter();
-  const { register, handleSubmit } = useForm<SearchForm>();
+  const { register, handleSubmit, getValues, reset } = useForm<SearchForm>();
   const onSearchValid = (data: SearchForm) => {
-    console.log(data);
+    reset();
+    router.push({
+      pathname: "/search",
+      query: { params: data.search },
+    });
   };
   const [logoutMutation, { data: logoutResponse }] =
     useMutation<LogoutResponse>({
@@ -144,7 +148,7 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
           className="mx-auto mt-5 flex max-w-2xl justify-center"
           onSubmit={handleSubmit(onSearchValid)}
         >
-          <div className="relative w-11/12">
+          <div className="relative w-11/12 ">
             <Input
               type="text"
               placeholder="Search #hash OR Post"
@@ -152,7 +156,7 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
                 required: true,
               })}
             />
-            <button className="">
+            <button>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

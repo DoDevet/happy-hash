@@ -30,7 +30,7 @@ export default function WritePost() {
   } = useForm<PostForm>();
 
   const {
-    query: { comuId },
+    query: { comuId, hashId },
   } = router;
 
   const [imageLoading, setImageLoading] = useState(false);
@@ -38,7 +38,7 @@ export default function WritePost() {
   const imageFile = watch("image");
 
   const [selectedHash, setSelectedHash] = useState("");
-  const hashArr = getHashTags({ comuId: +comuId! });
+  const hashArr = getHashTags({ comuId: +comuId!, hashId: +hashId! });
 
   const [writePost, { data, loading, error }] = useMutation<WritePostResponse>({
     url: "/api/community/posts",
@@ -68,7 +68,11 @@ export default function WritePost() {
   useEffect(() => {
     if (data && data.ok) {
       setImageLoading(false);
-      router.replace(`/community/${comuId}/posts/${data.postId}`);
+      router.replace(
+        `/community/posts/${data.postId}?${
+          comuId ? `comuId=${comuId}` : `hashId=${hashId}`
+        }`
+      );
     }
   }, [data, router]);
 

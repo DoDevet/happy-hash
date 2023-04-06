@@ -6,9 +6,20 @@ interface TagFeedProps {
   id: number;
   tags_name: string;
   customName: string | null | undefined;
+  hashtags: [
+    {
+      id: number;
+      name: string;
+    }
+  ];
 }
 
-export default function TagFeed({ customName, id, tags_name }: TagFeedProps) {
+export default function TagFeed({
+  customName,
+  id,
+  tags_name,
+  hashtags,
+}: TagFeedProps) {
   const setOpen = useSetRecoilState(isOpen);
   const setHashInfo = useSetRecoilState(hashInfo);
   const onEditTag = () => {
@@ -42,40 +53,36 @@ export default function TagFeed({ customName, id, tags_name }: TagFeedProps) {
       </div>
 
       {customName ? (
-        <>
-          <span className="block">{customName}</span>
-          <div className="my-2 space-y-1 text-xs">
-            <span>Hashs : </span>
-            <div className="grid w-fit gap-2 text-center ">
-              {tags_name?.split(",")?.map((hash, index) => (
-                <span
-                  key={index}
-                  className="rounded-md bg-sky-400 px-2 py-1 text-center shadow-md hover:scale-105"
-                >
-                  #{hash}
-                </span>
-              ))}
-            </div>
-          </div>
-        </>
+        <span className="block">{customName}</span>
       ) : (
-        <>
-          <span>Hashs : </span>
-          <span className="block">
-            <div className="grid w-fit gap-2 text-center">
-              {tags_name?.split(",").map((hash, index) => (
-                <span
-                  key={index}
-                  className="my-2 rounded-md bg-sky-400 px-2 py-1 text-center text-xs shadow-md hover:scale-110"
-                >
-                  #{hash}
-                </span>
-              ))}
-            </div>
-          </span>
-        </>
+        <span className="block">Hashs:</span>
       )}
-      <Link href={`/community/${id}/posts`}>
+      <div className="my-2 space-y-1 text-xs">
+        {customName && <span>Hashs : </span>}
+        <div className="grid w-fit gap-2 text-center ">
+          {hashtags?.map((hash, index) => (
+            <Link
+              key={index}
+              className="rounded-md bg-sky-400 px-2 py-1 text-center shadow-md hover:scale-105"
+              href={{
+                pathname: `/community/posts`,
+                query: { hashId: hash.id },
+              }}
+            >
+              #{hash.name}
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <Link
+        href={{
+          pathname: `/community/posts`,
+          query: {
+            comuId: id,
+          },
+        }}
+      >
         <div className="rounded-md bg-gray-100 py-1 text-center text-sky-400 shadow-lg hover:scale-105">
           Enter
         </div>

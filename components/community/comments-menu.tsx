@@ -1,10 +1,10 @@
-import { commentsMenuState, commentsSelector } from "@/libs/client/useAtoms";
+import { commentsMenuState } from "@/libs/client/useAtoms";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
 
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { useSWRConfig } from "swr";
 
 interface DeleteMutation {

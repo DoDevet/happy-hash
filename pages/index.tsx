@@ -6,9 +6,18 @@ import { useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import useSWR from "swr";
 
+interface shorcutWithHashTag extends shortcutTag {
+  hashtags: [
+    {
+      id: number;
+      name: string;
+    }
+  ];
+}
+
 interface HashForm {
   ok: true;
-  tags: shortcutTag[];
+  tags: shorcutWithHashTag[];
 }
 
 export default function Home() {
@@ -36,6 +45,7 @@ export default function Home() {
               id={tag?.id}
               customName={tag?.customName}
               tags_name={tag?.name}
+              hashtags={tag.hashtags}
             />
           ))}
           <div className="flex h-full w-full items-center justify-center">

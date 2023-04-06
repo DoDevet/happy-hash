@@ -1,6 +1,7 @@
 import { cls } from "@/libs/client/utils";
 import Link from "next/link";
 import getDateTimeFormat from "@/libs/client/getDateTimeFormat";
+import getQueryUrl from "@/libs/client/getQueryUrl";
 
 interface ComuFeedProps {
   title: string;
@@ -23,10 +24,13 @@ export default function ComuFeed({
   comments,
   isLiked,
   comuId,
+  hashId,
   postId,
 }: ComuFeedProps) {
+  const queryUrl = getQueryUrl({ comuId, hashId });
+
   return (
-    <Link href={`/community/${comuId}/posts/${postId}`}>
+    <Link href={`/community/posts/${postId}?${queryUrl}`}>
       <div className="flex items-center justify-between px-4 py-2">
         <div>
           <span className="text-base font-semibold text-sky-500">

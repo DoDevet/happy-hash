@@ -12,7 +12,7 @@ interface DeleteMutation {
 export default function PostMenu() {
   const router = useRouter();
   const {
-    query: { comuId, postId },
+    query: { comuId, postId, hashId },
   } = router;
 
   const [deletePost, { data: deleteResponse, loading: DeleteLoading }] =
@@ -28,7 +28,9 @@ export default function PostMenu() {
 
   useEffect(() => {
     if (deleteResponse && deleteResponse.ok) {
-      router.replace(`/community/${comuId}/posts`);
+      router.replace(
+        `/community/posts?${comuId ? `comuId=${comuId}` : `hashId=${hashId}`}`
+      );
     }
   }, [deleteResponse, router]);
   return (
@@ -36,7 +38,9 @@ export default function PostMenu() {
       <div className="divide-y px-2 font-semibold text-gray-600">
         <div className="flex flex-col space-y-3 py-1 outline-none">
           <Link
-            href={`/community/${comuId}/edit?postId=${postId}`}
+            href={`/community/posts/${postId}/edit?${
+              comuId ? `comuId=${comuId}` : `hashId=${hashId}`
+            }`}
             className={cls(
               "rounded-md px-2 py-2 text-sm outline-none transition-colors hover:bg-slate-100 hover:text-sky-500"
             )}

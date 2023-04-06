@@ -4,7 +4,6 @@ import useImage from "@/libs/client/useImage";
 import { cls } from "@/libs/client/utils";
 import Image from "next/image";
 import { useRecoilState, useRecoilValue } from "recoil";
-import Input from "../input";
 import EditComments from "./comments-editForm";
 import CommentsMenu from "./comments-menu";
 

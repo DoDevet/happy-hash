@@ -13,6 +13,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       where: {
         userId: user?.id,
       },
+      include: {
+        hashtags: {
+          select: { id: true, name: true },
+        },
+      },
     });
 
     res.json({

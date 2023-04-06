@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Button from "../button";
 import Input from "../input";
-import useSWR, { useSWRConfig } from "swr";
 import { useEffect, useState } from "react";
 import { cls } from "@/libs/client/utils";
 import CommentsFeed from "./comments-feed";

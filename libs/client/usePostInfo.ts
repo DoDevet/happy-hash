@@ -5,6 +5,7 @@ import useSWR from "swr";
 interface PostWithHashtag extends Post {
   hashtag: {
     name: string;
+    id: number;
   };
   likes: Like[];
   _count: {

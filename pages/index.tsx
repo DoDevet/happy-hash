@@ -36,9 +36,9 @@ export default function Home() {
   }, [open]);
   return (
     <HomeLayout title={"Home"}>
-      <div>
+      <div className="px-4">
         <h1 className="mb-5 text-3xl font-semibold text-sky-500">#My Hash</h1>
-        <div className="grid grid-cols-3 flex-wrap gap-3 overflow-y-auto rounded-md md:grid-cols-4  ">
+        <div className="2xl:grid-col grid grid-cols-2 flex-wrap gap-3 overflow-y-auto rounded-md sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {data?.tags?.map((tag) => (
             <TagFeed
               key={tag?.id}

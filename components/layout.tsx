@@ -41,7 +41,7 @@ export default function Layout({
   };
 
   return (
-    <div className="relative mx-auto w-full max-w-xl xl:max-w-2xl">
+    <div className="dark relative mx-auto w-full max-w-xl dark:bg-black xl:max-w-2xl ">
       <Head>
         <title>{`${title} | #happy_hash`}</title>
       </Head>

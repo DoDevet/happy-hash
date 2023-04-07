@@ -10,12 +10,14 @@ import { withSsrSession } from "@/libs/server/withSession";
 import { Like, Post, User } from "@prisma/client";
 import { NextPageContext } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { SWRConfig } from "swr";
 
 interface PostWithHashtag extends Post {
   hashtag: {
+    id: number;
     name: string;
   };
   likes: Like[];
@@ -120,9 +122,13 @@ function PostDetail() {
               <span className="block whitespace-pre-wrap">
                 {data?.post?.payload}
               </span>
-              <span className="cursor-pointer text-sm text-sky-500">
-                #{data?.post?.hashtag?.name}
-              </span>
+              <Link
+                href={`/community/posts/?hashId=${data?.post?.hashtag?.id}`}
+              >
+                <span className="cursor-pointer text-sm text-sky-500">
+                  #{data?.post?.hashtag?.name}
+                </span>
+              </Link>
 
               <div className="mt-4 flex items-center">
                 <button onClick={onClickFavBtn}>
@@ -186,6 +192,7 @@ export const getServerSideProps = withSsrSession(
         hashtag: {
           select: {
             name: true,
+            id: true,
           },
         },
         _count: {

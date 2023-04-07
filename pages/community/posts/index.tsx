@@ -9,7 +9,7 @@ import client from "@/libs/server/client";
 import PostModalDetail from "@/components/community/post-detail";
 import PostFeed from "@/components/community/post-Feed";
 
-interface PostProps {
+export interface PostProps {
   ok: boolean;
   posts: [
     {

@@ -108,7 +108,7 @@ export default function WritePost() {
             />
             <div
               onClick={onClearImagePreview}
-              className="absolute right-5 top-5 text-red-400"
+              className="absolute right-5 top-5 cursor-pointer text-white"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -116,7 +116,7 @@ export default function WritePost() {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="h-8 w-8"
+                className="h-8 w-8 rounded-md bg-sky-500"
               >
                 <path
                   strokeLinecap="round"

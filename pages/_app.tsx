@@ -12,7 +12,7 @@ export default function App({ Component, pageProps }: AppProps) {
             fetch(resource, init).then((res) => res.json()),
         }}
       >
-        <div className="h-full w-full font-nunito">
+        <div className="NanumSqure h-full w-full font-nunito">
           <Component {...pageProps} />
         </div>
       </SWRConfig>

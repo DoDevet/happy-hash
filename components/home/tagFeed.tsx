@@ -32,7 +32,7 @@ export default function TagFeed({
   };
 
   return (
-    <div className="relative flex h-fit w-full flex-col justify-between overflow-hidden rounded-md bg-sky-500 px-4 py-4 font-semibold text-white shadow-xl hover:bg-sky-600 hover:transition-colors">
+    <div className="relative box-border flex w-full flex-col justify-between overflow-hidden rounded-md bg-sky-500 p-4 font-semibold text-white shadow-xl hover:bg-sky-600 hover:transition-colors">
       <div className="absolute right-3 space-x-1 font-semibold">
         <button onClick={onEditTag}>
           <svg
@@ -57,13 +57,13 @@ export default function TagFeed({
       ) : (
         <span className="block">Hashs:</span>
       )}
-      <div className="my-2 space-y-1 text-xs">
-        {customName && <span>Hashs : </span>}
-        <div className="grid w-fit gap-2 text-center ">
+      <div className="my-2 text-sm">
+        {customName && <span className="">Hashs : </span>}
+        <div className="flex flex-wrap space-x-1">
           {hashtags?.map((hash, index) => (
             <Link
               key={index}
-              className="rounded-md bg-sky-400 px-2 py-1 text-center shadow-md hover:scale-105"
+              className="my-1 rounded-md bg-sky-400 px-2 py-1 text-center shadow-md  hover:scale-105"
               href={{
                 pathname: `/community/posts`,
                 query: { hashId: hash.id },

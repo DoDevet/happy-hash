@@ -58,14 +58,16 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
   }, [logoutResponse, router]);
 
   return (
-    <div className={cls("box-border min-h-screen w-full overflow-auto")}>
+    <div
+      className={cls("box-border min-h-screen w-full overflow-auto bg-white")}
+    >
       {open && <Modal />}
       <Head>
         <title>{`${title} | #happy_hash`}</title>
       </Head>
-      <header className="fixed top-0 z-10 w-full bg-white pt-8 shadow">
-        <div className="relative mx-auto flex max-w-4xl items-center justify-center">
-          <div className="absolute left-5 top-0 z-50 sm:hidden">
+      <header className="fixed top-0 z-10 w-full bg-inherit pt-8 shadow dark:bg-black">
+        <div className="relative mx-auto flex max-w-7xl items-center justify-center">
+          <div className="absolute -top-2 left-5 z-50 lg:hidden">
             <button
               onClick={() => setHomeMenu((prev) => !prev)}
               className={cls(
@@ -96,16 +98,30 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
               </svg>
             </button>
           </div>
-          {/** Notification icon */}
-          <div className="absolute right-7 top-0 z-50 flex items-center justify-center space-x-5 text-gray-400">
-            <Image
-              alt="userAvatar"
-              src={avatarURL}
-              width={256}
-              height={256}
-              className="h-10 w-10 cursor-pointer rounded-full object-cover shadow-md"
-              onClick={() => setHomeUserMenu((prev) => !prev)}
-            />
+          {/** darkMode, notification icon */}
+
+          <div className="absolute -top-1 right-7 z-50 flex items-center justify-center space-x-5 text-gray-400 lg:right-1/4">
+            {/*  <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="h-5 w-5"
+            >
+              <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z" />
+            </svg> */}
+
+            {avatarURL ? (
+              <Image
+                alt="userAvatar"
+                src={avatarURL}
+                width={256}
+                height={256}
+                className="h-7 w-7 cursor-pointer rounded-full object-cover shadow-md"
+                onClick={() => setHomeUserMenu((prev) => !prev)}
+              />
+            ) : (
+              <div className="h-10 w-10 animate-pulse cursor-pointer rounded-full bg-slate-400 object-cover shadow-md" />
+            )}
 
             {homeUserMenu && <UserMenu />}
             <svg
@@ -118,11 +134,11 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
             </svg>
           </div>
           <h1 className="text-center font-semibold text-sky-500 sm:px-10">
-            <Link href={"/"} className="text-3xl">
+            <Link href={"/"} className="text-xl md:text-2xl lg:text-3xl">
               #happy_hash
             </Link>
           </h1>
-          <nav className="relative hidden w-full list-none space-x-5 px-4 font-semibold text-gray-600 sm:flex">
+          <nav className="relative hidden w-full list-none space-x-5 px-4 font-semibold text-gray-600 lg:flex">
             <Link
               href="/"
               className={cls(
@@ -192,7 +208,7 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
           </div>
         </form>
       </header>
-      <div className="mx-auto mt-40 w-full max-w-2xl px-2 py-8">{children}</div>
+      <div className="mx-auto mt-40 w-full max-w-7xl  py-8">{children}</div>
     </div>
   );
 }

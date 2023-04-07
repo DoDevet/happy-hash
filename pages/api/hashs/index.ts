@@ -25,7 +25,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       tags,
     });
   }
-
   if (req.method === "POST") {
     const {
       session: { user },

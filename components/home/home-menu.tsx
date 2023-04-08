@@ -28,7 +28,7 @@ export default function HomeMenu() {
   }, [logoutResponse, router]);
 
   return (
-    <div className="absolute z-30 w-full bg-white py-5 shadow-md dark:bg-black">
+    <div className="absolute z-30 w-full bg-white py-5 shadow-md dark:bg-[#1e272e]">
       <div className="divide-y px-4 font-semibold text-gray-600">
         <div className="flex flex-col space-y-3 py-1 outline-none">
           <Link
@@ -36,8 +36,8 @@ export default function HomeMenu() {
             className={cls(
               "outline-none",
               router.pathname === "/"
-                ? "px-2 py-2 text-sky-500"
-                : "rounded-md px-2 py-2 transition-colors hover:bg-slate-100 hover:text-sky-500"
+                ? "px-2 py-2 text-[#3b62a5]"
+                : "rounded-md px-2 py-2 transition-colors hover:bg-slate-100 hover:text-[#3b62a5] dark:text-gray-400"
             )}
             onClick={() => setOpen(false)}
           >
@@ -47,8 +47,8 @@ export default function HomeMenu() {
             className={cls(
               "outline-none",
               router.pathname === "/guide"
-                ? "px-2 py-2 text-sky-500"
-                : "rounded-md px-2 py-2 transition-colors hover:bg-slate-100 hover:text-sky-500"
+                ? "px-2 py-2 text-[#3b62a5]"
+                : "rounded-md px-2 py-2 transition-colors hover:bg-slate-100 hover:text-[#3b62a5] dark:text-gray-400 dark:hover:bg-slate-900"
             )}
             onClick={() => setOpen(false)}
             href="/guide"
@@ -61,8 +61,8 @@ export default function HomeMenu() {
             className={cls(
               "outline-none",
               router.pathname === "/profile"
-                ? "px-2 py-2 text-sky-500"
-                : "rounded-md px-2 py-2 transition-colors hover:bg-slate-100 hover:text-sky-500"
+                ? "px-2 py-2 text-[#3b62a5]"
+                : "rounded-md px-2 py-2 transition-colors hover:text-[#3b62a5] dark:text-gray-400 dark:hover:bg-slate-900"
             )}
           >
             Profile
@@ -70,7 +70,7 @@ export default function HomeMenu() {
         </div>
         <div className="py-1">
           <div
-            className="cursor-pointer rounded-md px-2 py-2 text-red-400 transition-colors hover:bg-red-100"
+            className="cursor-pointer rounded-md px-2 py-2 text-red-400 transition-colors hover:bg-red-100 dark:hover:bg-slate-900"
             onClick={onLogout}
           >
             Logout

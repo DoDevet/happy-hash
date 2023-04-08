@@ -8,7 +8,7 @@ export default function Profile() {
   const { user } = useUser();
   return (
     <Layout title="Profile" hasTabbar hashTitle={"Profile"} hasBackHome>
-      <div className="px-4">
+      <div className="mx-auto w-full max-w-3xl px-4">
         <div className="mt-4">
           <div className="flex items-center space-x-3">
             {user?.avatar ? (
@@ -40,7 +40,7 @@ export default function Profile() {
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="currentColor"
-              className="h-10 w-10 rounded-full bg-sky-400 px-2 text-white shadow-sm"
+              className="bg-darkblue h-10 w-10 rounded-full px-2 text-white shadow-sm"
             >
               <path
                 strokeLinecap="round"
@@ -59,7 +59,7 @@ export default function Profile() {
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="currentColor"
-              className="h-10 w-10 rounded-full bg-sky-400 px-2 text-white shadow-sm"
+              className="bg-darkblue h-10 w-10 rounded-full px-2 text-white shadow-sm"
             >
               <path
                 strokeLinecap="round"

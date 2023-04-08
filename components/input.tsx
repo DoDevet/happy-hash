@@ -20,7 +20,7 @@ export default function Input({
   errorMessage,
 }: InputProps) {
   return (
-    <div className="">
+    <div className="dark:bg-[#1e272e]">
       {label && (
         <label htmlFor={name} className="ml-1 block">
           {label}
@@ -32,10 +32,10 @@ export default function Input({
           id={name}
           placeholder="Write...."
           className={cls(
-            "h-28 w-full resize-none whitespace-pre-line rounded-md border-2 p-2 shadow-sm outline-none transition-colors",
+            "h-28 w-full resize-none whitespace-pre-line rounded-md border-2 p-2 shadow-sm outline-none transition-colors dark:border-gray-500 dark:bg-gray-800",
             errorMessage
               ? "border-red-400 focus:border-red-400"
-              : "focus:border-sky-500"
+              : "focus:border-[#3b62a5] dark:focus:border-[#2c5398]"
           )}
           {...register}
         />
@@ -43,10 +43,10 @@ export default function Input({
         <input
           id={name}
           className={cls(
-            "w-full rounded-md border-2 p-2 shadow-sm transition-colors focus:outline-none",
+            "w-full rounded-md border-2 p-2 shadow-sm transition-colors focus:outline-none dark:border-gray-500 dark:bg-gray-800",
             errorMessage
               ? "border-red-400 focus:border-red-400"
-              : "focus:border-sky-500"
+              : "focus:border-[#3b62a5]"
           )}
           placeholder={placeholder}
           {...register}
@@ -54,7 +54,7 @@ export default function Input({
         />
       )}
       {errorMessage ? (
-        <span className="ml-1 mt-1 block font-semibold text-red-500">
+        <span className="ml-1 mt-1 block font-semibold  text-red-500">
           {errorMessage}
         </span>
       ) : null}

@@ -6,8 +6,9 @@ import { useEffect } from "react";
 import { NextPageContext } from "next";
 import { withSsrSession } from "@/libs/server/withSession";
 import client from "@/libs/server/client";
-import PostModalDetail from "@/components/community/post-detail";
+
 import PostFeed from "@/components/community/post-Feed";
+import PostModalDetail from "@/components/community/post-modal";
 
 export interface PostProps {
   ok: boolean;
@@ -17,6 +18,7 @@ export interface PostProps {
       id: number;
       title: string;
       createdAt: string;
+      views: number;
       user: {
         name: string;
         id: number;
@@ -45,6 +47,7 @@ function HashCommunity() {
   const { comuId, postId, hashId } = router.query;
   const url = comuId ? `?comuId=${comuId}` : `?hashId=${hashId}`;
   const { data, mutate } = useSWR<PostProps>(`/api/community/posts${url}`);
+
   useEffect(() => {
     if (!postId) {
       document.body.style.overflow = "unset";
@@ -67,9 +70,9 @@ function HashCommunity() {
   }, [data]);
 
   return (
-    <div>
+    <div className="bg-white">
       {postId && (
-        <div className="fixed z-40 flex h-screen w-full items-center justify-center bg-black bg-opacity-60 ">
+        <div className="fixed z-50 mx-auto flex h-screen w-full items-center justify-center bg-black bg-opacity-60 ">
           <PostModalDetail />
         </div>
       )}
@@ -84,42 +87,44 @@ function HashCommunity() {
           hasBackHome
           bottomTab
         >
-          {data?.error ? <span>{data.error.toString()}</span> : ""}
-
-          <ul className="relative flex h-full flex-col divide-y">
-            {data?.posts?.map((post) => (
-              <li key={post.id}>
-                <PostFeed
-                  comments={post?._count?.comments}
-                  title={post?.title}
-                  createdAt={post.createdAt}
-                  hashtag={post?.hashtag?.name}
-                  hashId={hashId}
-                  postId={post?.id}
-                  comuId={comuId}
-                  likes={post?._count?.likes}
-                  username={post?.user?.name}
-                  isLiked={post.likes.length !== 0}
-                />
-              </li>
-            ))}
-            <FixedButton comuId={+comuId!}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill={"none"}
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="h-6 w-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
-                />
-              </svg>
-            </FixedButton>
-          </ul>
+          <div className="min-h-screen w-full dark:bg-[#1e272e] dark:text-gray-200">
+            {data?.error ? <span>{data.error.toString()}</span> : ""}
+            <ul className="relative mx-auto flex h-full w-full max-w-3xl flex-col divide-y dark:divide-gray-500">
+              {data?.posts?.map((post) => (
+                <li key={post.id}>
+                  <PostFeed
+                    comments={post?._count?.comments}
+                    title={post?.title}
+                    createdAt={post.createdAt}
+                    hashtag={post?.hashtag?.name}
+                    hashId={hashId?.toString()}
+                    postId={post?.id}
+                    comuId={comuId?.toString()}
+                    likes={post?._count?.likes}
+                    username={post?.user?.name}
+                    isLiked={post.likes.length !== 0}
+                    views={post.views}
+                  />
+                </li>
+              ))}
+              <FixedButton comuId={+comuId!}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill={"none"}
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="h-6 w-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+                  />
+                </svg>
+              </FixedButton>
+            </ul>
+          </div>
         </Layout>
       )}
     </div>
@@ -188,6 +193,7 @@ export const getServerSideProps = withSsrSession(
           id: true,
           title: true,
           createdAt: true,
+          views: true,
           user: {
             select: {
               name: true,
@@ -247,6 +253,7 @@ export const getServerSideProps = withSsrSession(
           id: true,
           title: true,
           createdAt: true,
+          views: true,
           user: {
             select: {
               name: true,

@@ -69,17 +69,17 @@ export default function EditComments() {
   return (
     <div>
       <form
-        className="flex w-full flex-col px-2 py-1 text-sm"
+        className="flex w-full flex-col px-2 py-1 text-sm dark:border-gray-500"
         onSubmit={handleSubmit(onValid)}
       >
         <textarea
           {...register("message", { required: true })}
           placeholder="Write...."
           className={cls(
-            "h-auto resize-none rounded-md border-2 p-2 shadow-sm outline-none transition-colors",
+            "h-auto resize-none rounded-md border-2 p-2 shadow-sm outline-none transition-colors dark:border-gray-500 dark:bg-gray-800",
             errors?.message
               ? "border-red-400 focus:border-red-400"
-              : "focus:border-sky-500"
+              : "focus:border-[#3b62a5] dark:focus:border-[#2c5398]"
           )}
         />
         <div className="my-2 flex items-center justify-end space-x-5 px-2">
@@ -89,7 +89,7 @@ export default function EditComments() {
           >
             Cancel
           </span>
-          <button className="relative w-28 rounded-md bg-sky-500 px-2 py-1 text-white shadow-sm transition-colors hover:bg-sky-600">
+          <button className="bg-darkblue bg-darkerblue relative w-28 rounded-md px-2 py-1 text-white shadow-sm transition-colors">
             {loading ? "Editing..." : "Edit comments"}
           </button>
         </div>

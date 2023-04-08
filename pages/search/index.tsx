@@ -37,7 +37,7 @@ export default function SearchPage() {
     <HomeLayout title="Search">
       {/** PostDetail */}
       <p className="mb-10 px-2 text-2xl font-bold">
-        Search By <span className="text-sky-500">"{params}"</span>
+        Search By <span className="text-darkblue">"{params}"</span>
       </p>
       <div className="flex flex-col items-center justify-center space-y-2 divide-y">
         {data?.posts?.map((post) => (
@@ -46,7 +46,7 @@ export default function SearchPage() {
               href={`/community/posts/${post.id}?hashId=${post.hashtag.id}`}
             >
               <div className="flex items-center">
-                <span className="mr-2 text-sm font-semibold text-sky-500">{`#${post.hashtag.name}`}</span>
+                <span className="text-darkblue mr-2 text-sm font-semibold">{`#${post.hashtag.name}`}</span>
                 <span className="mb-1 text-lg font-semibold text-gray-800">{`${post.title}`}</span>
               </div>
               <p className="truncate text-gray-500">{post.payload}</p>

@@ -64,8 +64,8 @@ export default function CommentSection() {
 
   return (
     <div className="pb-16">
-      <div className="mt-4 rounded-md border bg-white shadow-sm">
-        <div className="flex items-center space-x-2 border-b p-2 font-semibold">
+      <div className="mt-4 rounded-md border bg-white shadow-sm dark:divide-gray-500 dark:border-gray-500 dark:bg-[#1e272e] dark:text-gray-300">
+        <div className="flex items-center space-x-2 border-b p-2 font-semibold dark:border-gray-500">
           <span>
             {commentsData?.comments?.length
               ? commentsData?.comments?.length
@@ -92,7 +92,7 @@ export default function CommentSection() {
             />
           </svg>
         </div>
-        <div className="divide-y shadow-sm ">
+        <div className="divide-y shadow-sm  dark:border-gray-500">
           {commentsData?.comments?.map((comment) => (
             <CommentsFeed
               key={comment.id}
@@ -106,7 +106,7 @@ export default function CommentSection() {
           ))}
         </div>
       </div>
-      <div className="mt-7 rounded-md border bg-white px-2 py-1 shadow-sm">
+      <div className="mt-7 rounded-md border bg-white px-2 py-1 shadow-sm dark:border-gray-500 dark:bg-[#1e272e]">
         <form
           onSubmit={handleSubmit(onCreateComments)}
           className="flex flex-col p-2"
@@ -120,7 +120,7 @@ export default function CommentSection() {
           />
           <Button
             btnText="Create Comments"
-            className="my-3 w-full rounded-md bg-sky-500 py-2 font-semibold text-white transition-colors hover:bg-sky-600"
+            className="bg-darkblue bg-darkerblue my-3 w-full rounded-md py-2 font-semibold text-white transition-colors"
             isLoading={loading}
           />
         </form>

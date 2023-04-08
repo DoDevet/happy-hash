@@ -94,7 +94,7 @@ export default function EditProfile() {
       hasTabbar
       title={"Edit Profile"}
     >
-      <div className="w-full px-4">
+      <div className="mx-auto w-full max-w-3xl px-4">
         <form
           className="flex flex-col space-y-3 py-4"
           onSubmit={handleSubmit(onValid)}

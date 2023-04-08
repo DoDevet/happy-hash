@@ -1,5 +1,5 @@
 export default function getDateTimeFormat(
-  payload: Date | string | undefined,
+  payload: Date | string | undefined | null,
   type: "long" | "medium" | "short" = "medium"
 ) {
   if (payload === undefined) {
@@ -35,8 +35,11 @@ export default function getDateTimeFormat(
     hourCycle: "h23",
   };
 
-  return new Intl.DateTimeFormat(
-    "ko-KR",
-    type === "long" ? options : type === "medium" ? mOptions : sOption
-  ).format(new Date(payload));
+  return (
+    payload &&
+    new Intl.DateTimeFormat(
+      "ko-KR",
+      type === "long" ? options : type === "medium" ? mOptions : sOption
+    ).format(new Date(payload))
+  );
 }

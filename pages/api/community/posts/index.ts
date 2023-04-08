@@ -37,6 +37,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             id: true,
             title: true,
             createdAt: true,
+            views: true,
             user: {
               select: {
                 name: true,
@@ -90,6 +91,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           id: true,
           title: true,
           createdAt: true,
+          views: true,
           user: {
             select: {
               name: true,

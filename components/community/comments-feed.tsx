@@ -41,8 +41,8 @@ export default function CommentsFeed({
     commentsInfo.commentsId === commentsId && commentsInfo.menuOpen;
   const EDIT = commentsInfo.commentsId === commentsId && editor.editModalOpen;
   return (
-    <div className="group flex">
-      <div className="flex max-w-[25%] flex-1 items-center border-r px-2">
+    <div className="group flex dark:divide-gray-500 dark:border-gray-500  ">
+      <div className="flex max-w-[25%] flex-1 items-center border-r px-2 dark:border-gray-500">
         {imageURL ? (
           <Image
             alt="Avatar"
@@ -63,7 +63,7 @@ export default function CommentsFeed({
         ) : (
           <>
             <span className="px-1 text-sm">{message}</span>
-            <span className="absolute bottom-0 left-0 w-full border-t bg-gray-100 px-1 text-xs text-gray-600">
+            <span className="absolute bottom-0 left-0 w-full border-t bg-gray-100 px-1 text-xs text-gray-600 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300">
               {createDate}
             </span>
           </>
@@ -83,9 +83,9 @@ export default function CommentsFeed({
                 strokeWidth="1.5"
                 stroke="currentColor"
                 className={cls(
-                  "inline-flex h-6 w-6 rounded-md text-gray-400 transition-colors hover:text-gray-700 focus:text-gray-700",
+                  "inline-flex h-6 w-6 rounded-md text-gray-400 transition-colors hover:text-gray-700 focus:text-gray-700 dark:text-gray-500 dark:hover:text-gray-400",
                   COMMENT_MENU
-                    ? "border bg-slate-100 text-gray-700 shadow-md"
+                    ? "bg-slate-300 text-gray-700 shadow-md dark:border-gray-500 dark:bg-slate-800"
                     : ""
                 )}
               >

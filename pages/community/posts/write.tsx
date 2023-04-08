@@ -96,7 +96,10 @@ export default function WritePost() {
 
   return (
     <Layout hasBackArrow hasTabbar title={"Write"}>
-      <form className="space-y-5 px-2 pb-10" onSubmit={handleSubmit(onValid)}>
+      <form
+        className="mx-auto w-full max-w-3xl space-y-5 px-2 pb-10"
+        onSubmit={handleSubmit(onValid)}
+      >
         {imagePreview ? (
           <div className="relative">
             <Image
@@ -116,7 +119,7 @@ export default function WritePost() {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="h-8 w-8 rounded-md bg-sky-500"
+                className="bg-darkblue h-8 w-8 rounded-md"
               >
                 <path
                   strokeLinecap="round"
@@ -130,7 +133,7 @@ export default function WritePost() {
           <>
             <label
               htmlFor="image"
-              className="flex h-48 w-full cursor-pointer items-center justify-center rounded-md border-2 border-dotted text-gray-600 transition-colors hover:border-sky-400 hover:text-sky-400"
+              className="flex h-48 w-full cursor-pointer items-center justify-center rounded-md border-2 border-dotted text-gray-600 transition-colors hover:border-[#3b62a5] hover:text-[#3b62a5]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -193,9 +196,9 @@ export default function WritePost() {
               <div
                 key={index}
                 className={cls(
-                  "w-fit cursor-pointer rounded-full px-2 py-1 shadow-md transition-colors hover:bg-sky-500 hover:text-white",
+                  "w-fit cursor-pointer rounded-full px-2 py-1 shadow-md transition-colors hover:bg-[#3b62a5] hover:text-white",
                   selectedHash === hash
-                    ? "bg-sky-500 text-white"
+                    ? "bg-[#3b62a5] text-white"
                     : "bg-slate-300 text-gray-100"
                 )}
                 onClick={() => onClickHash(hash)}
@@ -208,7 +211,7 @@ export default function WritePost() {
         <Button
           btnText="Write Post"
           isLoading={loading || imageLoading}
-          className="w-full rounded-md bg-sky-500 py-3 text-white shadow-md outline-none transition-colors hover:bg-sky-600"
+          className="w-full rounded-md bg-[#3b62a5] py-3 text-white shadow-md outline-none transition-colors hover:bg-[#2c5398]"
         />
       </form>
     </Layout>

@@ -12,6 +12,10 @@ interface PostFeedProps {
   comments: number;
   params?: string;
   isLiked: boolean;
+  views: number;
+  comuId: string | undefined;
+  hashId: string | undefined;
+  postId: number;
   [key: string]: any;
 }
 
@@ -26,6 +30,7 @@ export default function PostFeed({
   comuId,
   hashId,
   postId,
+  views,
 }: PostFeedProps) {
   const queryUrl = getQueryUrl({ comuId, hashId });
 
@@ -33,19 +38,24 @@ export default function PostFeed({
     <Link
       scroll={false}
       href={`/community/posts?${queryUrl}&postId=${postId}`}
-      as={`/community/posts/${postId}/?${queryUrl}`}
+      // as={`/community/posts/${postId}/?${queryUrl}`}
     >
-      <div className="flex items-center justify-between px-4 py-2">
+      <div className="flex items-center justify-between px-4 py-2 dark:bg-[#1e272e] dark:text-gray-200">
         <div>
-          <span className="text-base font-semibold text-sky-500">
+          <span className="text-darkblue text-base font-semibold">
             #{hashtag}
           </span>
           <span className="ml-2 text-base font-semibold">{title}</span>
 
           <p className="text-sm text-gray-600">{username}</p>
-          <p className="text-xs text-gray-600">
-            {getDateTimeFormat(createdAt)}
-          </p>
+          <div>
+            <span className="text-xs text-gray-600">
+              {getDateTimeFormat(createdAt)}
+            </span>
+            <span className="ml-2 text-xs text-gray-600">{`${views} ${
+              views !== 1 ? "views" : "view"
+            } `}</span>
+          </div>
         </div>
         <div className="flex space-x-2 ">
           <div className="relative flex flex-col items-center justify-center">

@@ -14,7 +14,6 @@ import Input from "../input";
 import HomeMenu from "./home-menu";
 import UserMenu from "./home-usermenu";
 import Modal from "./modal";
-
 interface SearchForm {
   search: string;
 }
@@ -59,13 +58,15 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
 
   return (
     <div
-      className={cls("box-border min-h-screen w-full overflow-auto bg-white")}
+      className={cls(
+        " box-border min-h-screen w-full overflow-auto bg-white dark:bg-[#1e272e] dark:text-gray-400"
+      )}
     >
       {open && <Modal />}
       <Head>
         <title>{`${title} | #happy_hash`}</title>
       </Head>
-      <header className="fixed top-0 z-10 w-full bg-inherit pt-8 shadow dark:bg-black">
+      <header className="fixed top-0 z-10 w-full bg-inherit pt-8 shadow dark:bg-[#1e272e]">
         <div className="relative mx-auto flex max-w-7xl items-center justify-center">
           <div className="absolute -top-2 left-5 z-50 lg:hidden">
             <button
@@ -116,11 +117,11 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
                 src={avatarURL}
                 width={256}
                 height={256}
-                className="h-7 w-7 cursor-pointer rounded-full object-cover shadow-md"
+                className="h-8 w-8 cursor-pointer rounded-full object-cover shadow-md"
                 onClick={() => setHomeUserMenu((prev) => !prev)}
               />
             ) : (
-              <div className="h-10 w-10 animate-pulse cursor-pointer rounded-full bg-slate-400 object-cover shadow-md" />
+              <div className="h-8 w-8 animate-pulse cursor-pointer rounded-full bg-slate-400 object-cover shadow-md" />
             )}
 
             {homeUserMenu && <UserMenu />}
@@ -133,8 +134,11 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
               <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
             </svg>
           </div>
-          <h1 className="text-center font-semibold text-sky-500 sm:px-10">
-            <Link href={"/"} className="text-xl md:text-2xl lg:text-3xl">
+          <h1 className="text-center font-semibold text-[#3b62a5]  sm:px-10">
+            <Link
+              href={"/"}
+              className="font-play text-2xl font-extrabold lg:text-3xl"
+            >
               #happy_hash
             </Link>
           </h1>
@@ -142,8 +146,9 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
             <Link
               href="/"
               className={cls(
+                "dark:text-gray-400",
                 router.pathname === "/"
-                  ? "border-b-2 border-sky-400 px-2 text-sky-500"
+                  ? "border-b-2 border-[#3b62a5] px-2 text-[#3b62a5] dark:text-[#3b62a5]"
                   : "border-b-2 border-transparent px-2"
               )}
             >
@@ -151,9 +156,9 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
             </Link>
             <Link
               className={cls(
-                "border-b-2 px-2",
+                "border-b-2 px-2 dark:text-gray-400",
                 router.pathname === "/guide"
-                  ? "border-b-2 border-sky-400 px-2 text-sky-500"
+                  ? "border-b-2 border-[#3b62a5] px-2 text-[#3b62a5] dark:text-[#3b62a5]"
                   : "border-transparent "
               )}
               href="/guide"
@@ -163,15 +168,18 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
             <Link
               href="/profile"
               className={cls(
-                "border-b-2 px-2",
+                "border-b-2 px-2 dark:text-gray-400",
                 router.pathname === "/profile"
-                  ? "border-sky-400 px-2 text-sky-500"
+                  ? "border-[#3b62a5] px-2 text-[#3b62a5]  dark:text-[#3b62a5]"
                   : "border-transparent"
               )}
             >
               Profile
             </Link>
-            <li className="cursor-pointer" onClick={onLogout}>
+            <li
+              className="cursor-pointer dark:text-gray-400 "
+              onClick={onLogout}
+            >
               Logout
             </li>
           </nav>
@@ -196,7 +204,7 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="absolute right-3 top-2 h-6 w-6 text-gray-400 transition-colors hover:text-sky-500"
+                className="absolute right-3 top-2 h-6 w-6 text-gray-400 transition-colors hover:text-[#3b62a5]"
               >
                 <path
                   strokeLinecap="round"
@@ -208,7 +216,9 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
           </div>
         </form>
       </header>
-      <div className="mx-auto mt-40 w-full max-w-7xl  py-8">{children}</div>
+      <div className="mx-auto h-screen w-full  py-4 pt-40  dark:bg-[#1e272e]">
+        {children}
+      </div>
     </div>
   );
 }

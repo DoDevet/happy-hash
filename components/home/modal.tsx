@@ -114,7 +114,7 @@ export default function Modal() {
     >
       <div className="relative h-96 w-2/3 max-w-md rounded-md bg-white px-4 py-5 shadow-md">
         <div className="mb-4 flex w-full items-center justify-between">
-          <h1 className="text-2xl font-semibold text-sky-500">
+          <h1 className="text-2xl font-semibold text-[#3b62a5]">
             {EDIT_MODE ? "Edit hash" : "Create hash"}
           </h1>
           <button onClick={onCloseBtn}>
@@ -154,7 +154,7 @@ export default function Modal() {
           <Button
             isLoading={loading}
             btnText={EDIT_MODE ? "Edit" : "Create"}
-            className="absolute bottom-5 right-6 rounded-md bg-sky-500 px-4 py-2 font-semibold text-white shadow-md ring-sky-500 transition-colors hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2"
+            className="absolute bottom-5 right-6 rounded-md bg-[#3b62a5] px-4 py-2 font-semibold text-white shadow-md ring-[#3b62a5] transition-colors hover:bg-[#2c5398] focus:outline-none focus:ring-2 focus:ring-offset-2"
           />
         </form>
         {EDIT_MODE ? (

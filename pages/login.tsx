@@ -62,9 +62,9 @@ export default function Login() {
   };
 
   return (
-    <div className="mx-auto mt-16 max-w-xl">
+    <div className="mx-auto mt-16 max-w-xl dark:bg-[#1e272e]">
       <div className="mx-3 mt-10 flex flex-col items-center rounded-md border-gray-300 px-5 shadow-md">
-        <h1 className="typed-out mt-10 text-center text-4xl font-semibold text-sky-500">
+        <h1 className="typed-out text-darkblue mt-10 text-center font-play text-4xl font-semibold">
           #happy_hash
         </h1>
         <span className="my-10 block text-center text-gray-700">
@@ -79,7 +79,7 @@ export default function Login() {
             className={cls(
               "w-full cursor-pointer border-b pb-4 text-center",
               loginMethod === "email"
-                ? "border-b-sky-500 text-sky-500"
+                ? "text-darkblue border-b-[#3b62a5]"
                 : "text-gray-700 transition-colors hover:text-gray-400"
             )}
             onClick={() => onClickMethod("email")}
@@ -90,7 +90,7 @@ export default function Login() {
             className={cls(
               "w-full cursor-pointer border-b pb-4 text-center text-gray-700 transition-colors hover:text-gray-400",
               loginMethod === "phone"
-                ? "border-b-sky-500 text-sky-500"
+                ? "text-darkblue border-b-[#3b62a5]"
                 : "text-gray-700 transition-colors hover:text-gray-400"
             )}
             onClick={() => onClickMethod("phone")}

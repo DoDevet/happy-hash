@@ -13,6 +13,7 @@ interface PostForm {
   title: string;
   payload: string;
   image?: FileList;
+  error?: string;
 }
 
 interface WritePostResponse {
@@ -97,7 +98,7 @@ export default function WritePost() {
   return (
     <Layout hasBackArrow hasTabbar title={"Write"}>
       <form
-        className="mx-auto w-full max-w-3xl space-y-5 px-2 pb-10"
+        className="mx-auto w-full max-w-3xl space-y-5 px-2 pb-10 "
         onSubmit={handleSubmit(onValid)}
       >
         {imagePreview ? (
@@ -133,7 +134,7 @@ export default function WritePost() {
           <>
             <label
               htmlFor="image"
-              className="flex h-48 w-full cursor-pointer items-center justify-center rounded-md border-2 border-dotted text-gray-600 transition-colors hover:border-[#3b62a5] hover:text-[#3b62a5]"
+              className="flex h-48 w-full cursor-pointer items-center justify-center rounded-md border-2 border-dotted text-gray-600 transition-colors hover:border-[#3b62a5] hover:text-[#3b62a5] dark:border-gray-400 dark:hover:border-[#3b62a5]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

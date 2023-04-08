@@ -38,7 +38,7 @@ export default function PostFeed({
     <Link
       scroll={false}
       href={`/community/posts?${queryUrl}&postId=${postId}`}
-      // as={`/community/posts/${postId}/?${queryUrl}`}
+      as={`/community/posts/${postId}/?${queryUrl}`}
     >
       <div className="flex items-center justify-between px-4 py-2 dark:bg-[#1e272e] dark:text-gray-200">
         <div>
@@ -47,12 +47,12 @@ export default function PostFeed({
           </span>
           <span className="ml-2 text-base font-semibold">{title}</span>
 
-          <p className="text-sm text-gray-600">{username}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-300">{username}</p>
           <div>
-            <span className="text-xs text-gray-600">
+            <span className="text-xs text-gray-600 dark:text-gray-400">
               {getDateTimeFormat(createdAt)}
             </span>
-            <span className="ml-2 text-xs text-gray-600">{`${views} ${
+            <span className="ml-2 text-xs text-gray-600 dark:text-gray-400">{`${views} ${
               views !== 1 ? "views" : "view"
             } `}</span>
           </div>

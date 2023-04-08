@@ -13,15 +13,6 @@ interface CreateCommentsForm {
   message: string;
 }
 
-interface CommentsWithUser extends Comment {
-  user: User;
-}
-
-interface CommentsForm {
-  comments: CommentsWithUser[];
-  ok: boolean;
-}
-
 interface CreateResponse {
   ok: boolean;
 }

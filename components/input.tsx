@@ -46,7 +46,7 @@ export default function Input({
             "w-full rounded-md border-2 p-2 shadow-sm transition-colors focus:outline-none dark:border-gray-500 dark:bg-gray-800",
             errorMessage
               ? "border-red-400 focus:border-red-400"
-              : "focus:border-[#3b62a5]"
+              : "focus:border-[#3b62a5] dark:focus:border-[#2c5398]"
           )}
           placeholder={placeholder}
           {...register}

@@ -116,6 +116,7 @@ export default function PostForm({
         <div className="mb-22 mx-auto min-h-screen w-full  max-w-3xl dark:bg-[#1e272e] dark:text-gray-300">
           {imageURL ? (
             <Image
+              priority
               alt="postImage"
               src={imageURL}
               width={1024}
@@ -126,7 +127,7 @@ export default function PostForm({
             <div className="h-96 w-full border bg-slate-500" />
           )}
           <div className="-mt-2 w-full border border-t-0 border-gray-300 bg-white pt-2 shadow-sm dark:border-gray-500 dark:bg-[#1e272e]">
-            <div className=" flex items-center justify-between border-b p-2">
+            <div className=" flex items-center justify-between border-b p-2 dark:border-gray-500">
               <div className="flex items-center">
                 <Image
                   alt="avatar"
@@ -137,14 +138,14 @@ export default function PostForm({
                 />
                 <span className="ml-2">{username}</span>
               </div>
-              <span className="text-xs text-gray-700 dark:text-gray-500">
+              <span className="text-xs text-gray-700 dark:text-gray-400">
                 {createdAtFormat}
               </span>
             </div>
 
             <div className="p-2">
               <span className="block whitespace-pre-wrap">{payload}</span>
-              <Link href={`/community/posts/?hashId=${hashtagId}`}>
+              <Link href={`/community/posts/?hashId=${hashtagId}`} shallow>
                 <span className="cursor-pointer font-semibold text-[#3b62a5]">
                   #{hashTagName}
                 </span>

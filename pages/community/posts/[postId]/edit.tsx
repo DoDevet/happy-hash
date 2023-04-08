@@ -1,6 +1,5 @@
 import Input from "@/components/input";
 import Layout from "@/components/layout";
-import usePostInfo from "@/libs/client/usePostInfo";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -10,7 +9,6 @@ import Button from "@/components/button";
 import { cls } from "@/libs/client/utils";
 import useImage from "@/libs/client/useImage";
 import useMutation from "@/libs/client/useMutation";
-import useUser from "@/libs/client/useUser";
 import { NextPageContext } from "next";
 import { withSsrSession } from "@/libs/server/withSession";
 import client from "@/libs/server/client";
@@ -145,7 +143,7 @@ export default function EditPost({ isMine, post }: EditProps) {
   return (
     post &&
     isMine && (
-      <Layout hasBackArrow hasTabbar title={"EditPost"}>
+      <Layout hasBackArrow hasTabbar title={"Edit Post"}>
         <form
           className="mx-auto w-full max-w-3xl space-y-5 px-2 pb-10"
           onSubmit={handleSubmit(onValid)}
@@ -183,7 +181,7 @@ export default function EditPost({ isMine, post }: EditProps) {
             <>
               <label
                 htmlFor="image"
-                className="flex h-48 w-full cursor-pointer items-center justify-center rounded-md border-2 border-dotted text-gray-600 transition-colors hover:border-[#3b62a5] hover:text-[#3b62a5]"
+                className="flex h-48 w-full cursor-pointer items-center justify-center rounded-md border-2 border-dotted text-gray-600 transition-colors hover:border-[#3b62a5] hover:text-[#3b62a5] dark:border-gray-500 dark:hover:border-[#3b62a5]"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

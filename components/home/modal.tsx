@@ -7,7 +7,7 @@ import useMutation from "@/libs/client/useMutation";
 import Button from "../button";
 import { useSWRConfig } from "swr";
 import { shortcutTag } from "@prisma/client";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { hashInfo, isOpen } from "@/libs/client/useAtoms";
 
 interface HashForm {
@@ -112,7 +112,7 @@ export default function Modal() {
         open ? "" : "hidden"
       )}
     >
-      <div className="relative h-96 w-2/3 max-w-md rounded-md bg-white px-4 py-5 shadow-md">
+      <div className="relative h-96 w-2/3 max-w-md rounded-md bg-white px-4 py-5 shadow-md dark:bg-[#1e272e]">
         <div className="mb-4 flex w-full items-center justify-between">
           <h1 className="text-2xl font-semibold text-[#3b62a5]">
             {EDIT_MODE ? "Edit hash" : "Create hash"}

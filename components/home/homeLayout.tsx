@@ -3,21 +3,22 @@ import useImage from "@/libs/client/useImage";
 import useMutation from "@/libs/client/useMutation";
 import useUser from "@/libs/client/useUser";
 import { cls } from "@/libs/client/utils";
+import { useTheme } from "next-themes";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue } from "recoil";
 import Input from "../input";
 import HomeMenu from "./home-menu";
 import UserMenu from "./home-usermenu";
 import Modal from "./modal";
+
 interface SearchForm {
   search: string;
 }
-
 interface HomeLayoutProps {
   children: ReactNode;
   title: string;
@@ -26,6 +27,14 @@ interface LogoutResponse {
   ok: boolean;
 }
 export default function HomeLayout({ children, title }: HomeLayoutProps) {
+  const { setTheme, theme } = useTheme();
+  const [themeMode, setThemeMode] = useState("");
+
+  useEffect(() => {
+    if (theme && theme !== themeMode) {
+      setThemeMode(theme);
+    }
+  }, [theme]);
   const router = useRouter();
   const { user } = useUser();
   const avatarURL = useImage({ imageId: user?.avatar, method: "avatar" });
@@ -59,7 +68,7 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
   return (
     <div
       className={cls(
-        " box-border min-h-screen w-full overflow-auto bg-white dark:bg-[#1e272e] dark:text-gray-400"
+        "box-border min-h-screen w-full overflow-auto bg-white dark:bg-[#1e272e] dark:text-gray-300"
       )}
     >
       {open && <Modal />}
@@ -68,16 +77,16 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
       </Head>
       <header className="fixed top-0 z-10 w-full bg-inherit pt-8 shadow dark:bg-[#1e272e]">
         <div className="relative mx-auto flex max-w-7xl items-center justify-center">
-          <div className="absolute -top-2 left-5 z-50 lg:hidden">
+          <div className="absolute -top-0 left-5 z-50 lg:hidden">
             <button
               onClick={() => setHomeMenu((prev) => !prev)}
               className={cls(
                 "inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out focus:outline-none",
-                homeMenu ? "bg-slate-200" : ""
+                homeMenu ? "bg-slate-200 dark:bg-slate-600" : ""
               )}
             >
               <svg
-                className="h-6 w-6"
+                className="h-5 w-5"
                 stroke="currentColor"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -99,17 +108,35 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
               </svg>
             </button>
           </div>
-          {/** darkMode, notification icon */}
+          {/** notification icon */}
 
-          <div className="absolute -top-1 right-7 z-50 flex items-center justify-center space-x-5 text-gray-400 lg:right-1/4">
-            {/*  <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="h-5 w-5"
+          <div className="absolute right-7 top-0 z-50 flex items-center justify-center space-x-5 text-gray-400 lg:right-1/4">
+            <button
+              onClick={() => setTheme(themeMode === "dark" ? "light" : "dark")}
             >
-              <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z" />
-            </svg> */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="h-5 w-5"
+              >
+                <path
+                  className={cls(
+                    themeMode === "dark" ? "inline-block" : "hidden"
+                  )}
+                  d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z"
+                />
+
+                <path
+                  className={cls(
+                    themeMode === "dark" ? "hidden" : "inline-block"
+                  )}
+                  fillRule="evenodd"
+                  d="M7.455 2.004a.75.75 0 01.26.77 7 7 0 009.958 7.967.75.75 0 011.067.853A8.5 8.5 0 116.647 1.921a.75.75 0 01.808.083z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
 
             {avatarURL ? (
               <Image
@@ -134,7 +161,7 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
               <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
             </svg>
           </div>
-          <h1 className="text-center font-semibold text-[#3b62a5]  sm:px-10">
+          <h1 className="text-center font-semibold text-[#3b62a5] sm:px-10">
             <Link
               href={"/"}
               className="font-play text-2xl font-extrabold lg:text-3xl"
@@ -146,20 +173,20 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
             <Link
               href="/"
               className={cls(
-                "dark:text-gray-400",
+                "border-b-2 px-2",
                 router.pathname === "/"
                   ? "border-b-2 border-[#3b62a5] px-2 text-[#3b62a5] dark:text-[#3b62a5]"
-                  : "border-b-2 border-transparent px-2"
+                  : "border-b-2 border-transparent px-2 dark:text-gray-400"
               )}
             >
               Home
             </Link>
             <Link
               className={cls(
-                "border-b-2 px-2 dark:text-gray-400",
+                "border-b-2 px-2",
                 router.pathname === "/guide"
                   ? "border-b-2 border-[#3b62a5] px-2 text-[#3b62a5] dark:text-[#3b62a5]"
-                  : "border-transparent "
+                  : "border-transparent dark:text-gray-400"
               )}
               href="/guide"
             >
@@ -171,7 +198,7 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
                 "border-b-2 px-2 dark:text-gray-400",
                 router.pathname === "/profile"
                   ? "border-[#3b62a5] px-2 text-[#3b62a5]  dark:text-[#3b62a5]"
-                  : "border-transparent"
+                  : "border-transparent dark:text-gray-400"
               )}
             >
               Profile

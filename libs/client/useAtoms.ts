@@ -75,8 +75,3 @@ export const commentsEditSelector = selector({
     set(commentsMenuState, (prev) => ({ ...prev, ...newValue }));
   },
 });
-
-export const isDark = atom({
-  key: "darkMode",
-  default: false,
-});

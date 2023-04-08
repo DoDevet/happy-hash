@@ -39,7 +39,7 @@ export default function Layout({
   };
   const onClickBackHome = () => {
     setPostMenu(false);
-    router.replace("/");
+    router.back();
   };
 
   return (
@@ -143,7 +143,7 @@ export default function Layout({
       ) : null}
       <div
         className={cls(
-          "min-h-screen pt-16 dark:bg-[#1e272e] dark:text-gray-200",
+          "min-h-screen bg-white pt-16 dark:bg-[#1e272e] dark:text-gray-200",
           bottomTab ? "pb-16" : "",
           isModal ? "mx-auto max-w-3xl" : ""
         )}

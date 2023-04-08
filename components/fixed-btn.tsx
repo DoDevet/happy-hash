@@ -16,7 +16,7 @@ export default function FixedButton({ children }: BtnProps) {
       href={`/community/posts/write?${
         comuId ? `comuId=${comuId}` : `hashId=${hashId}`
       }`}
-      className="bg-darkblue bg-darkerblue  fixed bottom-24 right-[10%] flex h-14 w-14 cursor-pointer items-center justify-center rounded-full text-white transition-colors  xl:right-[30%]"
+      className="bg-darkblue bg-darkerblue fixed bottom-24 right-[10%] flex h-14 w-14 cursor-pointer items-center justify-center rounded-full border-none text-white shadow-md transition-colors  xl:right-[30%]"
     >
       {children}
     </Link>

@@ -3,7 +3,7 @@ import TagFeed from "@/components/home/tagFeed";
 import { isOpen } from "@/libs/client/useAtoms";
 import { shortcutTag } from "@prisma/client";
 import { useEffect } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import useSWR from "swr";
 
 interface shorcutWithHashTag extends shortcutTag {

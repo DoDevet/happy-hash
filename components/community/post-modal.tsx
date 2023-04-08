@@ -6,13 +6,11 @@ import PostForm from "./post-form";
 export default function PostModalDetail() {
   const router = useRouter();
   const { data, mutate } = usePostInfo();
-
   useEffect(() => {
     if (data && !data.ok) {
       router.back();
     }
   }, [data]);
-
   return (
     <div className="no-scroll dark:bg mx-auto flex h-full w-full max-w-3xl overflow-auto rounded-md bg-white dark:bg-[#1e272e] xl:h-[90%]">
       {data && data?.ok && (

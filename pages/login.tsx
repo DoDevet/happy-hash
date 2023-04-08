@@ -62,12 +62,12 @@ export default function Login() {
   };
 
   return (
-    <div className="mx-auto mt-16 max-w-xl dark:bg-[#1e272e]">
-      <div className="mx-3 mt-10 flex flex-col items-center rounded-md border-gray-300 px-5 shadow-md">
+    <div className="mx-auto h-screen w-full bg-white pt-20 dark:bg-[#1e272e]">
+      <div className="mx-auto flex max-w-3xl flex-col items-center rounded-md border-gray-300 px-5 shadow-xl dark:bg-[#1e272e]">
         <h1 className="typed-out text-darkblue mt-10 text-center font-play text-4xl font-semibold">
           #happy_hash
         </h1>
-        <span className="my-10 block text-center text-gray-700">
+        <span className="my-10 block text-center text-gray-700 dark:text-gray-300">
           Login with
         </span>
         <div
@@ -77,10 +77,10 @@ export default function Login() {
         >
           <span
             className={cls(
-              "w-full cursor-pointer border-b pb-4 text-center",
+              "w-full cursor-pointer border-b pb-4 text-center transition-colors dark:border-gray-500",
               loginMethod === "email"
-                ? "text-darkblue border-b-[#3b62a5]"
-                : "text-gray-700 transition-colors hover:text-gray-400"
+                ? "text-darkblue border-b-[#3b62a5] dark:border-b-[#3b62a5]"
+                : "text-gray-700 transition-colors hover:text-gray-400 dark:text-gray-400"
             )}
             onClick={() => onClickMethod("email")}
           >
@@ -88,10 +88,10 @@ export default function Login() {
           </span>
           <span
             className={cls(
-              "w-full cursor-pointer border-b pb-4 text-center text-gray-700 transition-colors hover:text-gray-400",
+              "w-full cursor-pointer border-b pb-4 text-center text-gray-700 transition-colors hover:text-gray-400 dark:border-gray-500",
               loginMethod === "phone"
-                ? "text-darkblue border-b-[#3b62a5]"
-                : "text-gray-700 transition-colors hover:text-gray-400"
+                ? "text-darkblue border-b-[#3b62a5] dark:border-b-[#3b62a5]"
+                : "text-gray-700 transition-colors hover:text-gray-400 dark:text-gray-400"
             )}
             onClick={() => onClickMethod("phone")}
           >

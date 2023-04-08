@@ -29,7 +29,7 @@ export default function HomeMenu() {
 
   return (
     <div className="absolute z-30 w-full bg-white py-5 shadow-md dark:bg-[#1e272e]">
-      <div className="divide-y px-4 font-semibold text-gray-600">
+      <div className="divide-y px-4 font-semibold text-gray-600 dark:divide-gray-500">
         <div className="flex flex-col space-y-3 py-1 outline-none">
           <Link
             href="/"

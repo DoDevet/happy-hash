@@ -29,7 +29,7 @@ export default function UserMenu() {
 
   return (
     <div className="absolute right-5 top-8 z-30 mt-2 w-28 rounded-md border border-t-0 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-[#1e272e]">
-      <div className="divide-y px-2 font-semibold text-gray-600">
+      <div className="divide-y px-2 font-semibold text-gray-600 dark:divide-gray-500">
         <div className="flex flex-col space-y-3 py-1 outline-none">
           <Link
             href={`/profile`}

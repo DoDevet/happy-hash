@@ -14,6 +14,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           startsWith: params?.toString(),
         },
       },
+      include: {
+        _count: {
+          select: { posts: true, shortcutTag: true },
+        },
+      },
     });
 
     const posts = await client.post.findMany({

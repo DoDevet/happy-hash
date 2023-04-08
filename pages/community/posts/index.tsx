@@ -70,7 +70,7 @@ function HashCommunity() {
   }, [data]);
 
   return (
-    <div className="bg-white">
+    <div className="">
       {postId && (
         <div className="fixed z-50 mx-auto flex h-screen w-full items-center justify-center bg-black bg-opacity-60 ">
           <PostModalDetail />
@@ -87,7 +87,7 @@ function HashCommunity() {
           hasBackHome
           bottomTab
         >
-          <div className="min-h-screen w-full dark:bg-[#1e272e] dark:text-gray-200">
+          <div className=" w-full dark:bg-[#1e272e] dark:text-gray-200">
             {data?.error ? <span>{data.error.toString()}</span> : ""}
             <ul className="relative mx-auto flex h-full w-full max-w-3xl flex-col divide-y dark:divide-gray-500">
               {data?.posts?.map((post) => (

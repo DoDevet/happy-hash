@@ -12,18 +12,19 @@ datasource db {
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  phone        String?       @unique
-  email        String?       @unique
+  id           Int            @id @default(autoincrement())
+  phone        String?        @unique
+  email        String?        @unique
   name         String
   avatar       String?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
   token        Token[]
   posts        Post[]
   comments     Comment[]
   shortcutTags shortcutTag[]
   Like         Like[]
+  user         Notification[]
 }
 
 model Token {
@@ -106,4 +107,16 @@ model Like {
 
   @@index([userId])
   @@index([postId])
+}
+
+model Notification {
+  id Int @id @default(autoincrement())
+
+  message   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int?
+
+  @@index([userId])
 }

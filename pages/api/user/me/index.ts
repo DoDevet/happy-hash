@@ -25,7 +25,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (profile) {
       return res.json({ ok: true, profile });
     } else {
-      return res.status(401).send("Bad Request");
+      req.session.destroy();
+      return res.json({ ok: false, error: "Bad Request" });
     }
   }
   if (req.method === "PATCH") {

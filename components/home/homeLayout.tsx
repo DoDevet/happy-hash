@@ -36,7 +36,7 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
     }
   }, [theme]);
   const router = useRouter();
-  const { user } = useUser();
+  const { user, isLoading } = useUser();
   const avatarURL = useImage({ imageId: user?.avatar, method: "avatar" });
   const { register, handleSubmit, getValues, reset } = useForm<SearchForm>();
   const onSearchValid = (data: SearchForm) => {
@@ -148,7 +148,13 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
                 onClick={() => setHomeUserMenu((prev) => !prev)}
               />
             ) : (
-              <div className="h-8 w-8 animate-pulse cursor-pointer rounded-full bg-slate-400 object-cover shadow-md" />
+              <div
+                onClick={() => setHomeUserMenu((prev) => !prev)}
+                className={cls(
+                  "h-8 w-8 cursor-pointer rounded-full bg-slate-400 object-cover shadow-md",
+                  isLoading ? "animate-pulse" : ""
+                )}
+              />
             )}
 
             {homeUserMenu && <UserMenu />}

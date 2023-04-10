@@ -9,10 +9,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       session: { user },
     } = req;
 
-    const post = await client.post.findUnique({
-      where: {
-        id: +id!,
+    const post = await client.post.update({
+      where: { id: +id! },
+      data: {
+        views: { increment: 1 },
       },
+
       include: {
         hashtag: {
           select: {
@@ -33,12 +35,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (!post) {
       return res.json({ ok: false, error: "No post found" });
     }
-     await client.post.update({
-       where: { id: +id! },
-       data: {
-         views: { increment: 1 },
-       },
-     });
+
     const isFav = Boolean(
       await client.like.findFirst({
         where: {

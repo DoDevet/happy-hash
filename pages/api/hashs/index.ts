@@ -59,9 +59,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const {
       body: { id, hashs, shName },
     } = req;
-    const connectHash = hashs.map((name: string) => {
-      return { where: { name: name }, create: { name: name } };
-    });
 
     const prevHash = await client.shortcutTag.findUnique({
       where: {
@@ -71,11 +68,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         hashtags: {
           select: {
             id: true,
+            name: true,
           },
         },
       },
     });
-    const disconnectHash = prevHash?.hashtags?.map((hash) => ({ id: hash.id }));
+
+    const prevHs = prevHash?.hashtags.map((hash) => hash.name);
+    const createOrConnect = hashs.filter(
+      (hash: string) => !prevHs?.includes(hash)
+    );
+    const disconnectHash = prevHs?.filter((hash) => !hashs.includes(hash));
     await client.shortcutTag.update({
       where: {
         id: id,
@@ -83,8 +86,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       data: {
         customName: shName,
         hashtags: {
-          disconnect: [...disconnectHash!],
-          connectOrCreate: [...connectHash],
+          disconnect: disconnectHash
+            ? disconnectHash.map((hash) => ({ name: hash }))
+            : undefined,
+          connectOrCreate: createOrConnect
+            ? createOrConnect.map((hash: string) => ({
+                where: { name: hash },
+                create: { name: hash },
+              }))
+            : undefined,
         },
         name: hashs.toString(),
       },

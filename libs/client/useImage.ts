@@ -7,7 +7,7 @@ export default function useImage({
   imageId,
   method = "public",
 }: useImageProps) {
-  return imageId === undefined
+  return !imageId!!
     ? ""
     : `https://imagedelivery.net/x2vrVGmUfxi_qt-pjNxZ6g/${imageId}/${method}`;
 }

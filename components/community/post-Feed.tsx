@@ -38,7 +38,8 @@ export default function PostFeed({
     <Link
       scroll={false}
       href={`/community/posts?${queryUrl}&postId=${postId}`}
-      as={`/community/posts/${postId}/?${queryUrl}`}
+      as={`/community/posts/${postId}?${queryUrl}`}
+      passHref
     >
       <div className="flex items-center justify-between px-4 py-2 dark:bg-[#1e272e] dark:text-gray-200">
         <div>

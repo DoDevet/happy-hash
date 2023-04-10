@@ -77,11 +77,11 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
       </Head>
       <header className="fixed top-0 z-10 w-full bg-inherit pt-8 shadow dark:bg-[#1e272e]">
         <div className="relative mx-auto flex max-w-7xl items-center justify-center">
-          <div className="absolute -top-0 left-5 z-50 lg:hidden">
+          <div className="absolute -top-0 left-5 z-50 lg:hidden ">
             <button
               onClick={() => setHomeMenu((prev) => !prev)}
               className={cls(
-                "inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out focus:outline-none",
+                ":hidden inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out focus:outline-none",
                 homeMenu ? "bg-slate-200 dark:bg-slate-600" : ""
               )}
             >
@@ -110,7 +110,7 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
           </div>
           {/** notification icon */}
 
-          <div className="absolute right-7 top-0 z-50 flex items-center justify-center space-x-5 text-gray-400 lg:right-1/4">
+          <div className="absolute right-7 top-0 z-50 flex items-center justify-center space-x-2 text-gray-400 lg:right-1/4">
             <button
               onClick={() => setTheme(themeMode === "dark" ? "light" : "dark")}
             >

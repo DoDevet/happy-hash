@@ -117,7 +117,6 @@ export default function EditProfile() {
               className="cursor-pointer rounded-md border bg-gray-50 px-2 py-2 transition-colors hover:bg-gray-200 dark:border-gray-500 dark:bg-gray-600 hover:dark:bg-gray-800"
             >
               <input
-                accept="*/image"
                 type={"file"}
                 className="hidden"
                 id="avatar"

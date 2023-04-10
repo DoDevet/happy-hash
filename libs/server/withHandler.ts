@@ -27,9 +27,9 @@ export default function withHandler({
       return res.status(401).json({ ok: false, error: "Login First" });
     }
     try {
-      await handler(req, res);
+      handler(req, res);
     } catch (error) {
-      res.status(505).json({ error });
+      res.status(500).json({ error });
     }
   };
 }

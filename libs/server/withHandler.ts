@@ -21,15 +21,16 @@ export default function withHandler({
     res: NextApiResponse
   ): Promise<any> {
     if (req.method && !methods.includes(req.method as any)) {
-      res.status(405).end();
+      return res.status(405).end();
     }
     if (isPrivate && !req.session.user) {
       return res.status(401).json({ ok: false, error: "Login First" });
     }
     try {
-      handler(req, res);
+      await handler(req, res);
     } catch (error) {
-      res.status(500).json({ error });
+      console.log(error);
+      return res.status(500).json({ error });
     }
   };
 }

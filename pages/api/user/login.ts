@@ -9,6 +9,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const user = phone ? { phone } : email ? { email } : null;
     if (user === null) return res.status(400).json({ ok: false });
     const payload = Math.floor(10000 + Math.random() * 10000) + "";
+
+    console.log(process.env.DATABASE_URL);
+
     const token = await client.token.create({
       data: {
         token: payload,
@@ -25,9 +28,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         },
       },
     });
-    if (token) {
-      res.json({ ok: true });
-    }
+    return res.json({ ok: true });
   }
 }
 

@@ -44,8 +44,8 @@ export default function PostModalDetail({
         isModal
         createdAt={createdAt}
         hashTagName={hashtag}
-        isFav={isLiked}
-        likes={likes}
+        isFav={data?.isFav}
+        likes={data?.post._count.likes}
         mutate={mutate}
         title={title}
         views={views}

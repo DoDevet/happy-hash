@@ -105,6 +105,7 @@ function HashCommunity() {
                 key={post.id}
                 href={`/community/posts?postId=${post.id}&${queryUrl}`}
                 as={`/community/posts/${post.id}?${queryUrl}`}
+                shallow
                 onClick={() =>
                   setPostInfo({
                     comments: post?._count?.comments,

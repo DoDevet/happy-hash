@@ -14,6 +14,7 @@ interface LoginForm {
 }
 interface MutationResponse {
   ok: boolean;
+  token: string;
 }
 
 interface TokenForm {
@@ -32,8 +33,11 @@ export default function Login() {
       method: "POST",
     });
 
-  const { register: tokenRegister, handleSubmit: handleTokenSubmit } =
-    useForm<TokenForm>();
+  const {
+    register: tokenRegister,
+    handleSubmit: handleTokenSubmit,
+    setValue,
+  } = useForm<TokenForm>();
   const [
     tokenValid,
     { data: tokenData, error: tokenError, loading: validLoading },
@@ -41,6 +45,12 @@ export default function Login() {
     url: "/api/user/confirm",
     method: "POST",
   });
+
+  useEffect(() => {
+    if (loginResponse && loginResponse.ok) {
+      setValue("token", loginResponse.token);
+    }
+  }, [loginResponse]);
 
   useEffect(() => {
     if (tokenData && tokenData.ok) {

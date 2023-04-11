@@ -7,6 +7,11 @@ interface ICommentsInfo {
   editModalOpen: boolean;
 }
 
+export interface IComuHashsInfo {
+  id: number;
+  name: string;
+}
+
 export const hashInfo = atom({
   key: "hashInfo",
   default: {
@@ -75,3 +80,10 @@ export const commentsEditSelector = selector({
     set(commentsMenuState, (prev) => ({ ...prev, ...newValue }));
   },
 });
+
+export const comuHashsInfo = atom<IComuHashsInfo[]>({
+  key: "comuHashsInfo",
+  default: [],
+});
+
+

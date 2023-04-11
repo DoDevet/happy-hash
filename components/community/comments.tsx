@@ -19,7 +19,6 @@ interface CreateResponse {
 
 export default function CommentSection() {
   const router = useRouter();
-
   const {
     query: { postId },
   } = router;

@@ -25,7 +25,7 @@ interface PostForm {
 export default function usePostInfo() {
   const router = useRouter();
   const {
-    query: { comuId, postId },
+    query: { postId },
   } = router;
   const { data, mutate } = useSWR<PostForm>(
     postId ? `/api/community/posts/${postId}` : null

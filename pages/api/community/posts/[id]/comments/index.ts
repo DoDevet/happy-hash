@@ -7,20 +7,20 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const {
       query: { id },
     } = req;
-
     const post = await client.post.findUnique({
       where: {
         id: +id!,
       },
     });
-
     if (post) {
       const comments = await client.comment.findMany({
         where: {
           postId: +id!,
         },
         include: {
-          user: true,
+          user: {
+            select: { avatar: true, id: true, name: true },
+          },
         },
       });
       return res.json({ ok: true, comments });

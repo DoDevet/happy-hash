@@ -124,7 +124,7 @@ export default function PostForm({
               className="h-auto w-full object-contain"
             />
           ) : (
-            <div className="h-96 w-full border bg-slate-500" />
+            <div className="h-96 w-full animate-pulse border bg-slate-500" />
           )}
           <div className="-mt-2 w-full border border-t-0 border-gray-300 bg-white pt-2 shadow-sm dark:border-gray-500 dark:bg-[#1e272e]">
             <div className=" flex items-center justify-between border-b p-2 dark:border-gray-500">

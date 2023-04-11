@@ -110,7 +110,7 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
           </div>
           {/** notification icon */}
 
-          <div className="absolute right-7 top-0 z-50 flex items-center justify-center space-x-2 text-gray-400 lg:right-1/4 xl:space-x-5">
+          <div className="absolute right-7 top-0 z-50 flex items-center justify-center space-x-1 text-gray-400 sm:space-x-5 lg:right-1/4 xl:space-x-5">
             <button
               onClick={() => setTheme(themeMode === "dark" ? "light" : "dark")}
             >

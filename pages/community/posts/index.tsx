@@ -2,13 +2,14 @@ import FixedButton from "@/components/fixed-btn";
 import Layout from "@/components/layout";
 import { useRouter } from "next/router";
 import useSWR, { SWRConfig } from "swr";
-import { useEffect } from "react";
-import { NextPageContext } from "next";
-import { withSsrSession } from "@/libs/server/withSession";
+import { useEffect, useState } from "react";
 import client from "@/libs/server/client";
-
 import PostFeed from "@/components/community/post-Feed";
 import PostModalDetail from "@/components/community/post-modal";
+import getQueryUrl from "@/libs/client/getQueryUrl";
+import Link from "next/link";
+import { withSsrSession } from "@/libs/server/withSession";
+import { NextPageContext } from "next";
 
 export interface PostProps {
   ok: boolean;
@@ -17,7 +18,7 @@ export interface PostProps {
       hashtag: { name: string };
       id: number;
       title: string;
-      createdAt: string;
+      createdAt: Date;
       views: number;
       user: {
         name: string;
@@ -41,13 +42,31 @@ export interface PostProps {
   comuId?: number;
   hashId?: number;
 }
+interface PostFeedProps {
+  comments: number | undefined;
+  title: string | undefined;
+  createdAt: Date | undefined;
+  hashtag: string | undefined;
+  hashId: string | undefined;
+  postId: number | undefined;
+  comuId: string | undefined;
+  likes: number | undefined;
+  username: string | undefined;
+  isLiked: boolean | undefined;
+  views: number | undefined;
+  avatarId: string | undefined | null;
+}
 
 function HashCommunity() {
   const router = useRouter();
   const { comuId, postId, hashId } = router.query;
   const url = comuId ? `?comuId=${comuId}` : `?hashId=${hashId}`;
   const { data, mutate } = useSWR<PostProps>(`/api/community/posts${url}`);
-
+  const [postInfo, setPostInfo] = useState<PostFeedProps | undefined>();
+  const queryUrl = getQueryUrl({
+    comuId: comuId?.toString(),
+    hashId: hashId?.toString(),
+  });
   useEffect(() => {
     if (!postId) {
       document.body.style.overflow = "unset";
@@ -62,71 +81,84 @@ function HashCommunity() {
       router.replace("/");
     }
   }, [data]);
-
-  useEffect(() => {
-    if (data && data.ok === false) {
-      router.replace("/");
-    }
-  }, [data]);
+  console.log(postInfo);
 
   return (
-    <div className="">
+    <div>
       {postId && (
         <div className="fixed z-50 mx-auto flex h-screen w-full items-center justify-center bg-black bg-opacity-60 ">
-          <PostModalDetail />
+          <PostModalDetail {...(postInfo as PostFeedProps)} />
         </div>
       )}
-      {data && data.ok && (
-        <Layout
-          title={
-            data?.title?.customName
-              ? data?.title?.customName
-              : data?.title?.name
-          }
-          hasTabbar
-          hasBackHome
-          bottomTab
-        >
-          <div className=" w-full dark:bg-[#1e272e] dark:text-gray-200">
-            {data?.error ? <span>{data.error.toString()}</span> : ""}
-            <ul className="relative mx-auto flex h-full w-full max-w-3xl flex-col divide-y dark:divide-gray-500">
-              {data?.posts?.map((post) => (
-                <li key={post.id}>
-                  <PostFeed
-                    comments={post?._count?.comments}
-                    title={post?.title}
-                    createdAt={post.createdAt}
-                    hashtag={post?.hashtag?.name}
-                    hashId={hashId?.toString()}
-                    postId={post?.id}
-                    comuId={comuId?.toString()}
-                    likes={post?._count?.likes}
-                    username={post?.user?.name}
-                    isLiked={post.likes.length !== 0}
-                    views={post.views}
-                  />
-                </li>
-              ))}
-              <FixedButton comuId={+comuId!}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill={"none"}
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="h-6 w-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
-                  />
-                </svg>
-              </FixedButton>
-            </ul>
-          </div>
-        </Layout>
-      )}
+      <Layout
+        title={
+          data?.title?.customName ? data?.title?.customName : data?.title?.name
+        }
+        hasTabbar
+        hasBackHome
+        bottomTab
+      >
+        <div className=" w-full dark:bg-[#1e272e] dark:text-gray-200">
+          {data?.error ? <span>{data.error.toString()}</span> : ""}
+          <ul className="relative mx-auto flex h-full w-full max-w-3xl flex-col divide-y dark:divide-gray-500">
+            {data?.posts?.map((post) => (
+              <Link
+                key={post.id}
+                href={`/community/posts?postId=${post.id}&${queryUrl}`}
+                as={`/community/posts/${post.id}?${queryUrl}`}
+                shallow
+                onClick={() =>
+                  setPostInfo({
+                    comments: post?._count?.comments,
+                    title: post?.title,
+                    createdAt: post.createdAt,
+                    hashtag: post?.hashtag?.name,
+                    hashId: hashId?.toString(),
+                    postId: post?.id,
+                    comuId: comuId?.toString(),
+                    likes: post?._count?.likes,
+                    username: post?.user?.name,
+                    isLiked: post.likes.length !== 0,
+                    views: post.views,
+                    avatarId: post.user.avatar,
+                  })
+                }
+              >
+                <PostFeed
+                  comments={post?._count?.comments}
+                  title={post?.title}
+                  createdAt={post.createdAt}
+                  hashtag={post?.hashtag?.name}
+                  hashId={hashId?.toString()}
+                  postId={post?.id}
+                  comuId={comuId?.toString()}
+                  likes={post?._count?.likes}
+                  username={post?.user?.name}
+                  isLiked={post.likes.length !== 0}
+                  views={post.views}
+                />
+              </Link>
+            ))}
+            <FixedButton comuId={+comuId!}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill={"none"}
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="h-6 w-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+                />
+              </svg>
+            </FixedButton>
+          </ul>
+        </div>
+      </Layout>
+      )
     </div>
   );
 }

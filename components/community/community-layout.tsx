@@ -1,11 +1,9 @@
-import getHashTags from "@/libs/client/getHashtags";
-import { comuHashsInfo, hashInfo, postMenuOpen } from "@/libs/client/useAtoms";
+import { postMenuOpen } from "@/libs/client/useAtoms";
 import { cls } from "@/libs/client/utils";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import PostMenu from "./community/post-menu";
+import { useRecoilState } from "recoil";
+import PostMenu from "./post-menu";
 
 interface LayoutProps {
   hasTabbar?: boolean;
@@ -18,7 +16,7 @@ interface LayoutProps {
   [key: string]: any;
 }
 
-export default function Layout({
+export default function CommunityLayout({
   title,
   hasTabbar,
   children,
@@ -29,9 +27,6 @@ export default function Layout({
   isModal = false,
 }: LayoutProps) {
   const router = useRouter();
-  const {
-    query: { comuId, hashId },
-  } = router;
   const [postMenu, setPostMenu] = useRecoilState(postMenuOpen);
 
   const onClickBackArrow = () => {

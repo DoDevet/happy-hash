@@ -1,4 +1,5 @@
 import { commentsMenuState } from "@/libs/client/useAtoms";
+import useComments from "@/libs/client/useComments";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
 
@@ -18,7 +19,7 @@ export default function CommentsMenu() {
     query: { postId },
   } = router;
   const [comments, setComments] = useRecoilState(commentsMenuState);
-  const { mutate } = useSWRConfig();
+  const { commentsMutate } = useComments();
   const [deleteComments, { data, loading }] = useMutation<DeleteMutation>({
     url: `/api/community/posts/${postId}/comments`,
     method: "DELETE",
@@ -35,7 +36,16 @@ export default function CommentsMenu() {
 
   useEffect(() => {
     if (data && data.ok) {
-      mutate(`/api/community/posts/${postId}/comments`);
+      commentsMutate(
+        (prev) =>
+          prev && {
+            ...prev,
+            comments: prev.comments.filter(
+              (comment) => comment.id !== comments.commentsId
+            ),
+          },
+        false
+      );
       setComments((prev) => ({
         ...prev,
         menuOpen: false,
@@ -43,7 +53,7 @@ export default function CommentsMenu() {
         message: "",
       }));
     }
-  }, [data, mutate]);
+  }, [data, commentsMutate]);
 
   return (
     <div className="absolute right-0 top-3 z-30 mt-2 w-20 rounded-md border border-t-0 bg-white py-1 shadow-lg  dark:border-gray-500 dark:bg-[#1e272e]">

@@ -23,7 +23,9 @@ export default function EditComments() {
   const {
     register,
     setValue,
+    getValues,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<EditCommentsProps>();
 
@@ -41,6 +43,7 @@ export default function EditComments() {
       message: "",
       commentsId: 0,
     });
+    reset();
   };
   const onValid = (data: EditCommentsProps) => {
     if (loading) return;
@@ -61,7 +64,23 @@ export default function EditComments() {
 
   useEffect(() => {
     if (data && data.ok) {
-      commentsMutate();
+      commentsMutate(
+        (prev) =>
+          prev && {
+            ...prev,
+            comments: prev?.comments.map((comment) => {
+              if (comment.id === editSelector.commentsId) {
+                return {
+                  ...comment,
+                  message: getValues("message"),
+                };
+              } else {
+                return comment;
+              }
+            }),
+          },
+        false
+      );
       onClickCancel();
     }
   }, [data]);

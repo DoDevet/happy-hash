@@ -29,7 +29,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           },
         },
         likes: true,
-        user: true,
+        user: {
+          select: {
+            avatar: true,
+            name: true,
+            id: true,
+          },
+        },
       },
     });
     if (!post) {

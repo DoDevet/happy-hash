@@ -18,24 +18,22 @@ function PostDetail() {
   }, [data]);
 
   return (
-    data && (
-      <PostForm
-        avatarId={data.post.user.avatar}
-        createdAt={data.post.createdAt}
-        hashTagName={data.post.hashtag.name}
-        hashtagId={data.post.hashtagId}
-        imageId={data.post.image}
-        isFav={data.isFav}
-        isMine={data.isMine}
-        likes={data.post._count.likes}
-        mutate={mutate}
-        name={data.post.user.name}
-        payload={data.post.payload}
-        title={data.post.title}
-        username={data.post.user.name}
-        views={data.post.views}
-      />
-    )
+    <PostForm
+      avatarId={data?.post.user.avatar}
+      createdAt={data?.post.createdAt}
+      hashTagName={data?.post.hashtag.name}
+      hashtagId={data?.post.hashtagId}
+      imageId={data?.post.image}
+      isFav={data?.isFav}
+      isMine={data?.isMine}
+      likes={data?.post._count.likes}
+      mutate={mutate}
+      name={data?.post.user.name}
+      payload={data?.post.payload}
+      title={data?.post.title}
+      username={data?.post.user.name}
+      views={data?.post.views}
+    />
   );
 }
 

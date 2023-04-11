@@ -16,24 +16,27 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           hashtags: {
             select: {
               name: true,
+              id: true,
             },
           },
         },
       });
       if (!scHash || user?.id !== scHash?.userId) {
-        res.status(401).send("BAD REQUEST");
+        return res.status(401).send("BAD REQUEST");
       }
-      const hashArr = scHash?.hashtags.map((hash) => hash.name);
-      res.json({ ok: true, hashArr });
+      return res.json({ ok: true, hashArr: scHash.hashtags });
     } else if (hashId) {
       const hashArr = await client.hashtag.findUnique({
-        where: { id: +hashId! },
-        select: { name: true },
+        where: { id: hashId ? +hashId : undefined },
+        select: { name: true, id: true },
       });
       if (!hashArr) {
-        res.status(401).send("BAD REQUEST");
+        return res.status(401).send("BAD REQUEST");
       }
-      res.json({ ok: true, hashArr: [hashArr?.name] });
+      return res.json({
+        ok: true,
+        hashArr: [{ name: hashArr.name, id: hashArr.id }],
+      });
     }
   }
 }

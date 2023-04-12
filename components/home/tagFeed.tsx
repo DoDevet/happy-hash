@@ -64,6 +64,7 @@ export default function TagFeed({
           {hashtags?.map((hash, index) => (
             <Link
               key={index}
+              shallow
               className="my-1 rounded-md bg-[#ffaa18] px-2 py-1 text-center shadow-md  hover:scale-105"
               href={{
                 pathname: `/community/posts`,
@@ -84,6 +85,7 @@ export default function TagFeed({
             comuId: id,
           },
         }}
+        shallow
         onClick={() => setComuHashs(hashtags)}
       >
         <div className="rounded-md bg-gray-100 py-1 text-center text-[#2c5398] shadow-lg hover:scale-105">

@@ -157,7 +157,6 @@ function HashCommunity() {
           </ul>
         </div>
       </Layout>
-      )
     </div>
   );
 }

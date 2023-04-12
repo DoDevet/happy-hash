@@ -3,10 +3,9 @@ import { comuHashsInfo, hashInfo, postMenuOpen } from "@/libs/client/useAtoms";
 import { cls } from "@/libs/client/utils";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import PostMenu from "./community/post-menu";
-
+import getQueryUrl from "@/libs/client/getQueryUrl";
 interface LayoutProps {
   hasTabbar?: boolean;
   title?: string | string[] | undefined | null;
@@ -33,14 +32,16 @@ export default function Layout({
     query: { comuId, hashId },
   } = router;
   const [postMenu, setPostMenu] = useRecoilState(postMenuOpen);
-
+  const queryUrl = getQueryUrl({ comuId, hashId });
   const onClickBackArrow = () => {
     router.beforePopState((state) => {
       state.options.scroll = false;
       return true;
     });
     setPostMenu(false);
-    router.back();
+    router.replace(`/community/posts?${queryUrl}`, undefined, {
+      shallow: true,
+    });
   };
   const onClickBackHome = () => {
     setPostMenu(false);

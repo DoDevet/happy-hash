@@ -90,7 +90,7 @@ export default function Login() {
               "w-full cursor-pointer border-b pb-4 text-center transition-colors dark:border-gray-500",
               loginMethod === "email"
                 ? "text-darkblue border-b-[#3b62a5] dark:border-b-[#3b62a5]"
-                : "text-gray-700 transition-colors hover:text-gray-400 dark:text-gray-400"
+                : "text-gray-700 transition-colors dark:text-gray-400"
             )}
             onClick={() => onClickMethod("email")}
           >
@@ -98,10 +98,10 @@ export default function Login() {
           </span>
           <span
             className={cls(
-              "w-full cursor-pointer border-b pb-4 text-center text-gray-700 transition-colors hover:text-gray-400 dark:border-gray-500",
+              "w-full cursor-pointer border-b pb-4 text-center transition-colors dark:border-gray-500",
               loginMethod === "phone"
                 ? "text-darkblue border-b-[#3b62a5] dark:border-b-[#3b62a5]"
-                : "text-gray-700 transition-colors hover:text-gray-400 dark:text-gray-400"
+                : "text-gray-700 transition-colors  dark:text-gray-400"
             )}
             onClick={() => onClickMethod("phone")}
           >

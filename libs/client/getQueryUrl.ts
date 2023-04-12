@@ -1,7 +1,11 @@
 interface UrlProps {
-  comuId?: string;
-  hashId?: string;
+  comuId?: string | string[] | undefined | null;
+  hashId?: string | string[] | undefined | null;
 }
 export default function getQueryUrl({ comuId, hashId }: UrlProps) {
-  return comuId ? `comuId=${comuId}` : hashId ? `hashId=${hashId}` : null;
+  return comuId
+    ? `comuId=${comuId.toString()}`
+    : hashId
+    ? `hashId=${hashId.toString()}`
+    : null;
 }

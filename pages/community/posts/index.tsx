@@ -150,7 +150,7 @@ export default function HashCommunity({
                 />
               </Link>
             ))}
-            {isValidating ? (
+            {!isReachingEnd && isValidating ? (
               <div className="flex w-full items-center justify-center space-x-1">
                 <svg
                   fill="currentColor"

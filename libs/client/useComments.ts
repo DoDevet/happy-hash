@@ -16,7 +16,13 @@ export default function useComments() {
     query: { postId },
   } = router;
   const { data, mutate, isLoading } = useSWR<CommentsForm>(
-    `/api/community/posts/${postId}/comments`
+    `/api/community/posts/${postId}/comments`,
+    null,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
   );
   return {
     commentsData: { ...data },

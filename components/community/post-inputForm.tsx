@@ -125,6 +125,7 @@ export default function PostInputForm({
         hashtag: { id: selectedHash?.id!, name: selectedHash?.name! },
         hashtagId: selectedHash?.id!,
       });
+
       postMutation({
         title,
         payload,
@@ -132,6 +133,7 @@ export default function PostInputForm({
         imageURL: id,
         postId,
       });
+
       setImageLoading(false);
     }
   };

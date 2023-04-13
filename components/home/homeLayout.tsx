@@ -108,7 +108,6 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
               </svg>
             </button>
           </div>
-          {/** notification icon */}
 
           <div className="absolute right-7 top-0 z-50 flex items-center justify-center space-x-1 text-gray-400 sm:space-x-5 lg:right-1/4 xl:space-x-5">
             <button

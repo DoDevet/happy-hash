@@ -3,7 +3,7 @@ import Link from "next/link";
 import getDateTimeFormat from "@/libs/client/getDateTimeFormat";
 import getQueryUrl from "@/libs/client/getQueryUrl";
 
-interface PostFeedProps {
+export interface PostFeedProps {
   title: string;
   hashtag: string;
   username: string;

@@ -41,8 +41,8 @@ export default function CommentsFeed({
     commentsInfo.commentsId === commentsId && commentsInfo.menuOpen;
   const EDIT = commentsInfo.commentsId === commentsId && editor.editModalOpen;
   return (
-    <div className="group flex dark:divide-gray-500 dark:border-gray-500  ">
-      <div className="flex max-w-[25%] flex-1 items-center border-r px-2 dark:border-gray-500">
+    <div className="group flex  dark:divide-gray-500 dark:border-gray-500 ">
+      <div className="flex w-full max-w-[21%] items-center border-r px-2 dark:border-gray-500">
         {imageURL ? (
           <Image
             alt="Avatar"
@@ -54,10 +54,9 @@ export default function CommentsFeed({
         ) : (
           <div className="h-7 w-7 rounded-full bg-slate-400" />
         )}
-
-        <span className="ml-2 text-ellipsis text-sm">{username}</span>
+        <span className="ml-2 truncate text-ellipsis text-sm">{username}</span>
       </div>
-      <div className="relative flex w-full max-w-xl flex-1 flex-col justify-center break-all py-1 pb-5">
+      <div className="relative flex w-full max-w-3xl flex-col justify-center break-all py-1 pb-5">
         {EDIT ? (
           <EditComments />
         ) : (

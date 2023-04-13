@@ -29,7 +29,9 @@ export default function PostMenu() {
   useEffect(() => {
     if (deleteResponse && deleteResponse.ok) {
       router.replace(
-        `/community/posts?${comuId ? `comuId=${comuId}` : `hashId=${hashId}`}`
+        `/community/posts?${comuId ? `comuId=${comuId}` : `hashId=${hashId}`}`,
+        undefined,
+        { shallow: true }
       );
     }
   }, [deleteResponse, router]);

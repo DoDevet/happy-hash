@@ -136,6 +136,10 @@ export default function EditProfile() {
                 value: true,
                 message: "Username is required.",
               },
+              maxLength: {
+                value: 8,
+                message: "Username must be less than 8 characters",
+              },
             })}
           />
           <Input

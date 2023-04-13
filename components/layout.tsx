@@ -32,13 +32,18 @@ export default function Layout({
     query: { comuId, hashId },
   } = router;
   const [postMenu, setPostMenu] = useRecoilState(postMenuOpen);
+  const queryUrl = getQueryUrl({ comuId, hashId });
   const onClickBackArrow = () => {
     router.beforePopState((state) => {
       state.options.scroll = false;
       return true;
     });
+    if (!queryUrl) router.back();
+    else
+      router.replace(`/community/posts?${queryUrl}`, undefined, {
+        shallow: true,
+      });
     setPostMenu(false);
-    router.back();
   };
   const onClickBackHome = () => {
     setPostMenu(false);

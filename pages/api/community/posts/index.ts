@@ -5,7 +5,7 @@ import client from "@/libs/server/client";
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     const {
-      query: { comuId, hashId },
+      query: { comuId, hashId, page },
       session: { user },
     } = req;
 
@@ -24,7 +24,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           id: true,
         },
       });
-
       if (scTag === undefined || scTag?.userId !== user?.id) {
         return res.status(401).json({ ok: false });
       } else {
@@ -38,6 +37,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             title: true,
             createdAt: true,
             views: true,
+            payload: true,
+            image: true,
             user: {
               select: {
                 name: true,
@@ -65,15 +66,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           orderBy: {
             createdAt: "desc",
           },
+          take: 20,
+          skip: page ? (+page - 1) * 20 : 0,
         });
         res.json({
           ok: true,
           posts,
-          title: {
-            customName: scTag?.customName,
-            name: scTag?.name,
-          },
-          comuId: scTag?.id,
         });
       }
     } else if (hashId) {
@@ -92,6 +90,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           title: true,
           createdAt: true,
           views: true,
+          payload: true,
+          image: true,
           user: {
             select: {
               name: true,
@@ -119,12 +119,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         orderBy: {
           createdAt: "desc",
         },
+        take: 20,
+        skip: page ? (+page - 1) * 20 : 0,
       });
       res.json({
         ok: true,
         posts,
-        title: { customName: "#" + hashInfo?.name, name: hashInfo?.name },
-        hashId,
       });
     } else res.json({ ok: false, error: "Error" });
   }

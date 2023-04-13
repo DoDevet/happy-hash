@@ -13,6 +13,8 @@ export default function FixedButton({ children }: BtnProps) {
   } = router;
   return (
     <Link
+      replace
+      shallow
       href={`/community/posts/write?${
         comuId ? `comuId=${comuId}` : `hashId=${hashId}`
       }`}

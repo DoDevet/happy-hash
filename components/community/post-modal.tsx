@@ -1,21 +1,8 @@
 import usePostInfo from "@/libs/client/usePostInfo";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { PostFeedProps } from "./post-Feed";
 import PostForm from "./post-form";
-interface PostFeedProps {
-  comments: number | undefined;
-  title: string | undefined;
-  createdAt: Date | undefined;
-  hashtag: string | undefined;
-  hashId: string | undefined;
-  postId: number | undefined;
-  comuId: string | undefined;
-  likes: number | undefined;
-  username: string | undefined;
-  isLiked: boolean | undefined;
-  views: number | undefined;
-  avatarId: string | undefined | null;
-}
 
 export default function PostModalDetail({
   title,
@@ -29,6 +16,8 @@ export default function PostModalDetail({
   hashId,
   postId,
   views,
+  image,
+  payload,
   avatarId,
 }: PostFeedProps) {
   const router = useRouter();
@@ -44,18 +33,18 @@ export default function PostModalDetail({
         isModal
         createdAt={createdAt}
         hashTagName={hashtag}
-        isFav={data?.isFav}
-        likes={data?.post._count.likes}
-        mutate={mutate}
         title={title}
         views={views}
         username={username}
         name={username}
         avatarId={avatarId}
-        hashtagId={data?.post.hashtagId}
-        imageId={data?.post.image}
+        imageId={image}
+        payload={payload}
+        mutate={mutate}
+        isFav={data?.isFav}
+        likes={data?.post._count.likes}
         isMine={data?.isMine}
-        payload={data?.post.payload}
+        hashtagId={data?.post.hashtagId}
       />
     </div>
   );

@@ -3,10 +3,7 @@ import { useEffect, useState } from "react";
 export function useInfiniteScroll({ isEnd }: { isEnd?: boolean }) {
   const [page, setPage] = useState(1);
   function handleScroll() {
-    if (
-      document.documentElement.scrollTop + window.innerHeight ===
-      document.documentElement.scrollHeight
-    ) {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
       setPage((prev) => prev + 1);
     }
   }

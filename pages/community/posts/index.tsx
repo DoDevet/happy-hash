@@ -102,7 +102,7 @@ export default function HashCommunity({
           <ul
             className={cls(
               "relative mx-auto flex h-full w-full max-w-3xl flex-col divide-y dark:divide-gray-500",
-              !isReachingEnd ? "pb-7" : ""
+              !isReachingEnd ? "pb-9" : ""
             )}
           >
             {posts?.map((post) => (
@@ -148,7 +148,7 @@ export default function HashCommunity({
               </Link>
             ))}
             {isValidating ? (
-              <div className="flex w-full items-center justify-center space-x-1 py-2">
+              <div className="flex w-full items-center justify-center space-x-1">
                 <svg
                   fill="currentColor"
                   viewBox="0 0 20 20"

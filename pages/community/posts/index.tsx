@@ -73,7 +73,10 @@ export default function HashCommunity({
   const isEmpty = data?.[0]?.posts.length === 0;
   const isReachingEnd =
     isEmpty || (data && data[data.length - 1]?.posts.length < 20);
-  const handleScroll = useInfiniteScroll({ isEnd: isReachingEnd });
+  const handleScroll = useInfiniteScroll({
+    isEnd: isReachingEnd,
+    isLoading: isValidating,
+  });
   useEffect(() => {
     if (isReachingEnd) return;
     else setSize(handleScroll);

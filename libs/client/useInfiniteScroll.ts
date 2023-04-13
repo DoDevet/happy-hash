@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 
-export function useInfiniteScroll({ isEnd }: { isEnd?: boolean }) {
+export function useInfiniteScroll({
+  isEnd,
+  isLoading,
+}: {
+  isEnd?: boolean;
+  isLoading: boolean;
+}) {
   const [page, setPage] = useState(1);
   function handleScroll() {
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
@@ -8,7 +14,7 @@ export function useInfiniteScroll({ isEnd }: { isEnd?: boolean }) {
     }
   }
   useEffect(() => {
-    if (!isEnd) window.addEventListener("scroll", handleScroll);
+    if (!isEnd || !isLoading) window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };

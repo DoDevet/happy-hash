@@ -42,7 +42,7 @@ export default function CommentsFeed({
   const EDIT = commentsInfo.commentsId === commentsId && editor.editModalOpen;
   return (
     <div className="group flex  dark:divide-gray-500 dark:border-gray-500 ">
-      <div className="flex w-full max-w-[21%] items-center border-r px-2 dark:border-gray-500">
+      <div className="flex w-full min-w-fit max-w-[25%] items-center border-r px-2 dark:border-gray-500  sm:max-w-[16%]">
         {imageURL ? (
           <Image
             alt="Avatar"

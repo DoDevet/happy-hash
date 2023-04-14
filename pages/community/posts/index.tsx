@@ -161,7 +161,7 @@ export default function HashCommunity({
         <div
           className={cls(
             "w-full dark:bg-[#1e272e] dark:text-gray-200",
-            comuId && hashs?.length! > 1 ? "pt-8" : ""
+            comuId && hashs?.length! > 1 ? "pt-11" : ""
           )}
         >
           <ul

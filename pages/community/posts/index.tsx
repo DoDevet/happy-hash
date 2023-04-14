@@ -2,7 +2,7 @@ import FixedButton from "@/components/fixed-btn";
 import Layout from "@/components/layout";
 import { useRouter } from "next/router";
 import useSWRInfinite from "swr/infinite";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import PostFeed, { PostFeedProps } from "@/components/community/post-Feed";
 import PostModalDetail from "@/components/community/post-modal";
 import getQueryUrl from "@/libs/client/getQueryUrl";
@@ -12,6 +12,7 @@ import { NextPageContext } from "next";
 import { withSsrSession } from "@/libs/server/withSession";
 import client from "@/libs/server/client";
 import { cls } from "@/libs/client/utils";
+import PostFeedNav from "@/components/community/post-Feed-nav";
 interface PostForm {
   hashtag: { name: string };
   id: number;
@@ -47,6 +48,7 @@ export interface SSRPostProps {
 interface PostProps {
   ok: boolean;
   posts: PostForm[];
+  hashs: string[] | null | undefined;
   [key: string]: any;
 }
 
@@ -56,21 +58,26 @@ export default function HashCommunity({
   comuId,
   hashId,
   posts: initialPosts,
+  hashs,
 }: PostProps) {
   const router = useRouter();
-  const { postId } = router.query;
+  const { postId, selectHash } = router.query;
   const url = comuId ? `?comuId=${comuId}` : `?hashId=${hashId}`;
   const queryUrl = getQueryUrl({
     comuId: comuId?.toString(),
     hashId: hashId?.toString(),
   });
+
   const [postInfo, setPostInfo] = useState<PostFeedProps | undefined>();
   const { data, setSize, isValidating, mutate } = useSWRInfinite(
-    (index) => `/api/community/posts${url}&page=${index + 1}`,
-    null,
-    { fallbackData: [{ ok, posts: initialPosts }] }
+    (index) =>
+      `/api/community/posts${url}&page=${index + 1}${
+        selectHash ? `&selectHash=${selectHash}` : ""
+      }`,
+    null
+    //{ fallbackData: [{ ok, posts: initialPosts }] }
   );
-  const isEmpty = data?.[0]?.posts.length === 0;
+  const isEmpty = data?.[0]?.posts?.length === 0;
   const isReachingEnd =
     isEmpty || (data && data[data.length - 1]?.posts.length < 20);
   const handleScroll = useInfiniteScroll({
@@ -91,8 +98,55 @@ export default function HashCommunity({
       document.body.style.overflow = "hidden";
     }
   }, [postId, mutate]);
-
   const posts = data?.flatMap((post) => post.posts);
+  const memoList = React.useMemo(
+    () =>
+      posts?.map((post) => (
+        <Link
+          href={`/community/posts?postId=${post.id}&${queryUrl}${
+            selectHash ? `&selectHash=${selectHash}` : ""
+          }`}
+          as={`/community/posts/${post.id}?${queryUrl}`}
+          shallow
+          replace
+          key={post.id}
+          className="cursor-pointer"
+          onClick={() => {
+            setPostInfo({
+              comments: post?._count?.comments,
+              title: post?.title,
+              createdAt: post.createdAt,
+              hashtag: post?.hashtag?.name,
+              hashId: hashId?.toString(),
+              postId: post?.id,
+              comuId: comuId?.toString(),
+              likes: post?._count?.likes,
+              username: post?.user?.name,
+              isLiked: post.likes.length !== 0,
+              views: post.views,
+              avatarId: post.user.avatar,
+              payload: post.payload,
+              image: post.image,
+            });
+          }}
+        >
+          <PostFeed
+            comments={post?._count?.comments}
+            title={post?.title}
+            createdAt={post.createdAt}
+            hashtag={post?.hashtag?.name}
+            hashId={hashId?.toString()}
+            postId={post?.id}
+            comuId={comuId?.toString()}
+            likes={post?._count?.likes}
+            username={post?.user?.name}
+            isLiked={post?.likes?.length !== 0}
+            views={post?.views}
+          />
+        </Link>
+      )),
+    [data]
+  );
   return (
     <div>
       {postId && (
@@ -101,55 +155,22 @@ export default function HashCommunity({
         </div>
       )}
       <Layout title={title} hasTabbar hasBackHome bottomTab>
-        <div className=" w-full dark:bg-[#1e272e] dark:text-gray-200">
+        {comuId && hashs?.length! > 1 ? (
+          <PostFeedNav comuId={comuId} hashs={hashs} title={title} />
+        ) : null}
+        <div
+          className={cls(
+            "w-full dark:bg-[#1e272e] dark:text-gray-200",
+            comuId && hashs?.length! > 1 ? "pt-8" : ""
+          )}
+        >
           <ul
             className={cls(
               "relative mx-auto flex h-full w-full max-w-3xl flex-col divide-y dark:divide-gray-500",
               !isReachingEnd ? "pb-9" : ""
             )}
           >
-            {posts?.map((post) => (
-              <Link
-                href={`/community/posts?postId=${post.id}&${queryUrl}`}
-                as={`/community/posts/${post.id}?${queryUrl}`}
-                shallow
-                replace
-                key={post.id}
-                className="cursor-pointer"
-                onClick={() => {
-                  setPostInfo({
-                    comments: post?._count?.comments,
-                    title: post?.title,
-                    createdAt: post.createdAt,
-                    hashtag: post?.hashtag?.name,
-                    hashId: hashId?.toString(),
-                    postId: post?.id,
-                    comuId: comuId?.toString(),
-                    likes: post?._count?.likes,
-                    username: post?.user?.name,
-                    isLiked: post.likes.length !== 0,
-                    views: post.views,
-                    avatarId: post.user.avatar,
-                    payload: post.payload,
-                    image: post.image,
-                  });
-                }}
-              >
-                <PostFeed
-                  comments={post?._count?.comments}
-                  title={post?.title}
-                  createdAt={post.createdAt}
-                  hashtag={post?.hashtag?.name}
-                  hashId={hashId?.toString()}
-                  postId={post?.id}
-                  comuId={comuId?.toString()}
-                  likes={post?._count?.likes}
-                  username={post?.user?.name}
-                  isLiked={post?.likes?.length !== 0}
-                  views={post?.views}
-                />
-              </Link>
-            ))}
+            {memoList}
             {!isReachingEnd && isValidating ? (
               <div className="flex w-full items-center justify-center space-x-1">
                 <svg
@@ -193,8 +214,9 @@ export default function HashCommunity({
 
 export const getServerSideProps = withSsrSession(
   async (ctx: NextPageContext) => {
+    console.log("SSR");
     const {
-      query: { comuId, hashId, page },
+      query: { comuId, hashId, page, selectHash },
     } = ctx;
     const user = ctx?.req?.session?.user;
     if (comuId) {
@@ -222,10 +244,12 @@ export const getServerSideProps = withSsrSession(
           },
         };
       }
-      const hashs = scTag?.hashtags.map((hash) => ({ hashtag: hash }));
-      const posts = await client.post.findMany({
+
+      /* const posts = await client.post.findMany({
         where: {
-          OR: hashs,
+          OR: selectHash
+            ? [{ hashtag: { name: selectHash.toString() } }]
+            : scTag?.hashtags.map((hash) => ({ hashtag: hash })),
         },
         select: {
           id: true,
@@ -263,14 +287,17 @@ export const getServerSideProps = withSsrSession(
         },
         take: 20,
         skip: page ? (+page - 1) * 20 : 0,
-      });
+      }); */
       const title = scTag.customName ? scTag.customName : scTag.name;
       return {
         props: {
           ok: true,
-          posts: JSON.parse(JSON.stringify(posts)),
+          /*   posts: JSON.parse(JSON.stringify(posts)), */
           title: JSON.parse(JSON.stringify(title)),
           comuId: JSON.parse(JSON.stringify(scTag?.id)),
+          hashs: JSON.parse(
+            JSON.stringify(scTag.hashtags.map((hash) => hash?.name))
+          ),
         },
       };
     } else if (hashId) {

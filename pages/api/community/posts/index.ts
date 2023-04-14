@@ -5,7 +5,7 @@ import client from "@/libs/server/client";
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     const {
-      query: { comuId, hashId, page },
+      query: { comuId, hashId, page, selectHash },
       session: { user },
     } = req;
 
@@ -27,10 +27,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       if (scTag === undefined || scTag?.userId !== user?.id) {
         return res.status(401).json({ ok: false });
       } else {
-        const hashs = scTag?.hashtags.map((hash) => ({ hashtag: hash }));
         const posts = await client.post.findMany({
           where: {
-            OR: hashs,
+            OR: selectHash
+              ? [{ hashtag: { name: selectHash.toString() } }]
+              : scTag?.hashtags.map((hash) => ({
+                  hashtag: hash,
+                })),
           },
           select: {
             id: true,

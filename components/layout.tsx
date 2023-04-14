@@ -29,7 +29,7 @@ export default function Layout({
 }: LayoutProps) {
   const router = useRouter();
   const {
-    query: { comuId, hashId },
+    query: { comuId, hashId, selectHash },
   } = router;
   const [postMenu, setPostMenu] = useRecoilState(postMenuOpen);
   const queryUrl = getQueryUrl({ comuId, hashId });
@@ -39,7 +39,15 @@ export default function Layout({
       return true;
     });
     if (!queryUrl) router.back();
-    else
+    if (selectHash!!) {
+      router.replace(
+        `/community/posts?${queryUrl}&selectHash=${selectHash}`,
+        undefined,
+        {
+          shallow: true,
+        }
+      );
+    } else
       router.replace(`/community/posts?${queryUrl}`, undefined, {
         shallow: true,
       });

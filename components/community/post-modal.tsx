@@ -34,7 +34,7 @@ export default function PostModalDetail({
         createdAt={createdAt}
         hashTagName={hashtag}
         title={title}
-        views={views}
+        views={views + 1}
         username={username}
         name={username}
         avatarId={avatarId}

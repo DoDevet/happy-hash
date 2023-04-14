@@ -7,6 +7,8 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import EditComments from "./comments-editForm";
 import CommentsMenu from "./comments-menu";
 
+import React from "react";
+
 interface CommentsProps {
   commentsId: number;
   imageId: string | null;
@@ -16,7 +18,7 @@ interface CommentsProps {
   isMine: boolean;
 }
 
-export default function CommentsFeed({
+function CommentsFeed({
   commentsId,
   imageId,
   username,
@@ -113,3 +115,4 @@ export default function CommentsFeed({
     </div>
   );
 }
+export default React.memo(CommentsFeed);

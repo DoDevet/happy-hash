@@ -49,7 +49,7 @@ export default function SearchPage() {
           <p className="mb-2 px-2 text-2xl font-bold">hashs :</p>
           <div className="grid w-fit gap-3 px-4 ">
             {data?.hashs?.map((hash) => (
-              <Link href={`/community/posts?hashId=${hash?.id}`}>
+              <Link key={hash.id} href={`/community/posts?hashId=${hash?.id}`}>
                 <div
                   key={hash?.id}
                   className="rounded-md bg-[#3b62a5] px-5 py-2 text-gray-200 shadow-md transition-colors hover:bg-[#2c5398]"

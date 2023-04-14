@@ -17,9 +17,9 @@ export default function HomeMenu() {
       method: "POST",
     });
   const onLogout = () => {
-    setOpen(false);
     logoutMutation({});
     router.replace("/");
+    setOpen(false);
   };
   useEffect(() => {
     if (logoutResponse && logoutResponse.ok) {

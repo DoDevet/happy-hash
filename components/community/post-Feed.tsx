@@ -2,6 +2,7 @@ import { cls } from "@/libs/client/utils";
 import Link from "next/link";
 import getDateTimeFormat from "@/libs/client/getDateTimeFormat";
 import getQueryUrl from "@/libs/client/getQueryUrl";
+import React from "react";
 
 export interface PostFeedProps {
   title: string;
@@ -19,7 +20,7 @@ export interface PostFeedProps {
   [key: string]: any;
 }
 
-export default function PostFeed({
+function PostFeed({
   title,
   hashtag,
   username,
@@ -32,8 +33,6 @@ export default function PostFeed({
   postId,
   views,
 }: PostFeedProps) {
-  const queryUrl = getQueryUrl({ comuId, hashId });
-
   return (
     <div className="flex items-center justify-between px-4 py-2 dark:bg-[#1e272e] dark:text-gray-200">
       <div>
@@ -91,3 +90,4 @@ export default function PostFeed({
     </div>
   );
 }
+export default React.memo(PostFeed);

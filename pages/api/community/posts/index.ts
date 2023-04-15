@@ -8,8 +8,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       query: { comuId, hashId, page, selectHash },
       session: { user },
     } = req;
-
-    if (comuId !== undefined) {
+    console.log("GET");
+    if (comuId) {
       const scTag = await client.shortcutTag.findFirst({
         where: { AND: [{ id: +comuId! }, { user: { id: +user?.id! } }] },
         select: {

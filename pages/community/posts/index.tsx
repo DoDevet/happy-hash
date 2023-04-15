@@ -53,11 +53,10 @@ interface PostProps {
 }
 
 export default function HashCommunity({
-  ok,
   title,
   comuId,
   hashId,
-  posts: initialPosts,
+
   hashs,
 }: PostProps) {
   const router = useRouter();
@@ -69,25 +68,20 @@ export default function HashCommunity({
   });
 
   const [postInfo, setPostInfo] = useState<PostFeedProps | undefined>();
-  const { data, setSize, isValidating, mutate } = useSWRInfinite(
-    (index) =>
-      `/api/community/posts${url}&page=${index + 1}${
-        selectHash ? `&selectHash=${selectHash}` : ""
-      }`,
-    null
-    //{ fallbackData: [{ ok, posts: initialPosts }] }
-  );
+  const { data, isValidating, mutate, setSize, isLoading } =
+    useSWRInfinite<PostProps>(
+      (index) =>
+        `/api/community/posts${url}&page=${index + 1}${
+          selectHash ? `&selectHash=${selectHash}` : ""
+        }`,
+      null,
+      { revalidateFirstPage: false }
+      //{ fallbackData: [{ ok, posts: initialPosts }] }
+    );
+
   const isEmpty = data?.[0]?.posts?.length === 0;
   const isReachingEnd =
-    isEmpty || (data && data[data.length - 1]?.posts.length < 20);
-  const handleScroll = useInfiniteScroll({
-    isEnd: isReachingEnd,
-    isLoading: isValidating,
-  });
-  useEffect(() => {
-    if (isReachingEnd) return;
-    else setSize(handleScroll);
-  }, [handleScroll, isEmpty, isReachingEnd]);
+    isEmpty || (data && data[data.length - 1]?.posts?.length < 20);
 
   useEffect(() => {
     if (!postId) {
@@ -166,13 +160,36 @@ export default function HashCommunity({
         >
           <ul
             className={cls(
-              "relative mx-auto flex h-full w-full max-w-3xl flex-col divide-y dark:divide-gray-500",
-              !isReachingEnd ? "pb-9" : ""
+              "relative mx-auto flex h-full w-full max-w-3xl flex-col divide-y dark:divide-gray-500"
             )}
           >
             {memoList}
+            {!isReachingEnd && !isValidating ? (
+              <div
+                className={
+                  "text-darkblue flex cursor-pointer flex-col items-center justify-center py-2"
+                }
+                onClick={() => setSize((prev) => prev + 1)}
+              >
+                <span>Read More</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="h-6 w-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                  />
+                </svg>
+              </div>
+            ) : null}
             {!isReachingEnd && isValidating ? (
-              <div className="flex w-full items-center justify-center space-x-1">
+              <div className="flex w-full items-center justify-center space-x-1 py-3">
                 <svg
                   fill="currentColor"
                   viewBox="0 0 20 20"
@@ -214,6 +231,7 @@ export default function HashCommunity({
 
 export const getServerSideProps = withSsrSession(
   async (ctx: NextPageContext) => {
+    console.log("SSR");
     const {
       query: { comuId, hashId, page, selectHash },
     } = ctx;

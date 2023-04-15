@@ -5,13 +5,23 @@ import withHandler from "@/libs/server/withHandler";
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     const {
-      query: { id },
+      query: { id, page },
     } = req;
+
     const post = await client.post.findUnique({
       where: {
         id: +id!,
       },
+      select: {
+        id: true,
+        _count: {
+          select: {
+            comments: true,
+          },
+        },
+      },
     });
+
     if (post) {
       const comments = await client.comment.findMany({
         where: {
@@ -22,8 +32,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             select: { avatar: true, id: true, name: true },
           },
         },
+        take: 10,
+        skip: 10 * (+page! - 1),
       });
-      return res.json({ ok: true, comments });
+      return res.json({
+        ok: true,
+        comments,
+        totalComments: post._count.comments,
+      });
     } else return res.status(401).send("Photo not exitst");
   }
   if (req.method === "POST") {

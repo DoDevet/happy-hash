@@ -1,6 +1,9 @@
 import { Comment, User } from "@prisma/client";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import useSWR from "swr";
+import { CommentsPageNav } from "./useAtoms";
 
 interface CommentsWithUser extends Comment {
   user: User;
@@ -9,20 +12,19 @@ interface CommentsWithUser extends Comment {
 interface CommentsForm {
   comments: CommentsWithUser[];
   ok: boolean;
+  totalComments: number;
 }
 export default function useComments() {
   const router = useRouter();
   const {
     query: { postId },
   } = router;
+
+  const page = useRecoilValue(CommentsPageNav);
   const { data, mutate, isLoading } = useSWR<CommentsForm>(
-    `/api/community/posts/${postId}/comments`,
+    `/api/community/posts/${postId}/comments?page=${page.currentPage}`,
     null,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
+    { revalidateOnFocus: false }
   );
   return {
     commentsData: { ...data },

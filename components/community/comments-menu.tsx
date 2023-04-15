@@ -1,11 +1,11 @@
-import { commentsMenuState } from "@/libs/client/useAtoms";
+import { commentsMenuState, CommentsPageNav } from "@/libs/client/useAtoms";
 import useComments from "@/libs/client/useComments";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
 
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { useSWRConfig } from "swr";
 
 interface DeleteMutation {
@@ -19,7 +19,8 @@ export default function CommentsMenu() {
     query: { postId },
   } = router;
   const [comments, setComments] = useRecoilState(commentsMenuState);
-  const { commentsMutate } = useComments();
+  const [commentsNav, setCommentsNav] = useRecoilState(CommentsPageNav);
+  const { mutate } = useSWRConfig();
   const [deleteComments, { data, loading }] = useMutation<DeleteMutation>({
     url: `/api/community/posts/${postId}/comments`,
     method: "DELETE",
@@ -36,12 +37,18 @@ export default function CommentsMenu() {
 
   useEffect(() => {
     if (data && data.ok) {
-      commentsMutate(
+      setCommentsNav((prev) => ({
+        totalComments: prev.totalComments - 1,
+        limitPage: Math.ceil((prev.totalComments - 1) / 10),
+        currentPage: Math.ceil((prev.totalComments - 1) / 10),
+      }));
+      mutate(
+        `/api/community/posts/${postId}/comments?page=${commentsNav.currentPage}`,
         (prev) =>
           prev && {
             ...prev,
             comments: prev.comments.filter(
-              (comment) => comment.id !== comments.commentsId
+              (comment: any) => comment.id !== comments.commentsId
             ),
           },
         false
@@ -53,7 +60,7 @@ export default function CommentsMenu() {
         message: "",
       }));
     }
-  }, [data, commentsMutate]);
+  }, [data]);
 
   return (
     <div className="absolute right-0 top-3 z-30 mt-2 w-20 rounded-md border border-t-0 bg-white py-1 shadow-lg  dark:border-gray-500 dark:bg-[#1e272e]">

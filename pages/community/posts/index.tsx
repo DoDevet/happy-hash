@@ -214,7 +214,6 @@ export default function HashCommunity({
 
 export const getServerSideProps = withSsrSession(
   async (ctx: NextPageContext) => {
-    console.log("SSR");
     const {
       query: { comuId, hashId, page, selectHash },
     } = ctx;

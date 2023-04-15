@@ -129,13 +129,17 @@ export default function PostForm({
           <div className="-mt-2 w-full border border-t-0 border-gray-300 bg-white pt-2 shadow-sm dark:border-gray-500 dark:bg-[#1e272e]">
             <div className=" flex items-center justify-between border-b p-2 dark:border-gray-500">
               <div className="flex items-center">
-                <Image
-                  alt="avatar"
-                  width={256}
-                  height={256}
-                  src={avatarURL}
-                  className="h-7 w-7 rounded-full object-cover"
-                />
+                {avatarURL ? (
+                  <Image
+                    alt="avatar"
+                    width={256}
+                    height={256}
+                    src={avatarURL}
+                    className="h-7 w-7 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="h-7 w-7 rounded-full bg-slate-400" />
+                )}
                 <span className="ml-2">{username}</span>
               </div>
               <span className="text-xs text-gray-700 dark:text-gray-400">

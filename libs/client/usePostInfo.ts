@@ -1,7 +1,9 @@
 import { Like, Post, User } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import useSWR from "swr";
+import { CommentsPageNav } from "./useAtoms";
 interface PostWithHashtag extends Post {
   hashtag: {
     name: string;
@@ -24,12 +26,25 @@ interface PostForm {
 
 export default function usePostInfo() {
   const router = useRouter();
+  const setCommentsNav = useSetRecoilState(CommentsPageNav);
   const {
     query: { postId },
   } = router;
   const { data, mutate } = useSWR<PostForm>(
-    postId ? `/api/community/posts/${postId}` : null
+    postId ? `/api/community/posts/${postId}` : null,
+    null,
+    { revalidateOnFocus: false }
   );
+
+  useEffect(() => {
+    if (data && data.ok) {
+      setCommentsNav((prev) => ({
+        currentPage: 1,
+        limitPage: Math.ceil(data.post._count.comments / 10),
+        totalComments: data.post._count.comments,
+      }));
+    }
+  }, [data]);
 
   useEffect(() => {
     if (data && !data.ok) {

@@ -18,7 +18,7 @@ interface CommentsProps {
   isMine: boolean;
 }
 
-function CommentsFeed({
+export default function CommentsFeed({
   commentsId,
   imageId,
   username,
@@ -44,7 +44,7 @@ function CommentsFeed({
   const EDIT = commentsInfo.commentsId === commentsId && editor.editModalOpen;
   return (
     <div className="group flex  dark:divide-gray-500 dark:border-gray-500 ">
-      <div className="flex w-full min-w-fit max-w-[25%] items-center border-r px-2 dark:border-gray-500  sm:max-w-[16%]">
+      <div className="flex w-full max-w-[30%] items-center border-r px-2 text-sm dark:border-gray-500  sm:max-w-[16%]">
         {imageURL ? (
           <Image
             alt="Avatar"
@@ -54,9 +54,9 @@ function CommentsFeed({
             src={imageURL}
           />
         ) : (
-          <div className="h-7 w-7 rounded-full bg-slate-400" />
+          <div className="h-7 w-7 rounded-full bg-slate-400 " />
         )}
-        <span className="ml-2 truncate text-ellipsis text-sm">{username}</span>
+        <span className="ml-2 truncate text-sm">{username}</span>
       </div>
       <div className="relative flex w-full max-w-3xl flex-col justify-center break-all py-1 pb-5">
         {EDIT ? (
@@ -115,4 +115,3 @@ function CommentsFeed({
     </div>
   );
 }
-export default React.memo(CommentsFeed);

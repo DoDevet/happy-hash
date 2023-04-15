@@ -9,7 +9,10 @@ export function useInfiniteScroll({
 }) {
   const [page, setPage] = useState(1);
   function handleScroll() {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+    if (
+      window.innerHeight + window.scrollY >=
+      document.body.offsetHeight - 100
+    ) {
       setPage((prev) => prev + 1);
     }
   }

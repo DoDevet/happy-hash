@@ -86,4 +86,11 @@ export const comuHashsInfo = atom<IComuHashsInfo[]>({
   default: [],
 });
 
-
+export const CommentsPageNav = atom({
+  key: "commentsPageNav",
+  default: {
+    totalComments: 0,
+    currentPage: 1,
+    limitPage: 1,
+  },
+});

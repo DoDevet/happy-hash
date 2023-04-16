@@ -22,6 +22,7 @@ interface HashForm {
 
 export default function Home() {
   const { data } = useSWR<HashForm>("/api/hashs", null, {});
+
   const [open, setOpen] = useRecoilState(isOpen);
   useEffect(() => {
     if (open) {

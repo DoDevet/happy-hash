@@ -1,4 +1,9 @@
-import { homeMenuOpen, isOpen, userMenuOpen } from "@/libs/client/useAtoms";
+import {
+  comuHashsInfo,
+  homeMenuOpen,
+  isOpen,
+  userMenuOpen,
+} from "@/libs/client/useAtoms";
 import useImage from "@/libs/client/useImage";
 import useMutation from "@/libs/client/useMutation";
 import useUser from "@/libs/client/useUser";
@@ -10,11 +15,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import Input from "../input";
 import HomeMenu from "./home-menu";
 import UserMenu from "./home-usermenu";
 import Modal from "./modal";
+import useSWR from "swr";
 
 interface SearchForm {
   search: string;
@@ -26,15 +32,44 @@ interface HomeLayoutProps {
 interface LogoutResponse {
   ok: boolean;
 }
+
+interface HashRankingInfo {
+  rank: number | null;
+  hash: {
+    name: string | null;
+    id: number | null;
+  };
+}
+
+interface IHashRanking {
+  ok: boolean;
+  hashRanking: [{ id: number; name: string; posts: [{ id: number }] }];
+}
+
 export default function HomeLayout({ children, title }: HomeLayoutProps) {
   const { setTheme, theme } = useTheme();
   const [themeMode, setThemeMode] = useState("");
+  const { data: ranking } = useSWR<IHashRanking>("/api/ranking");
+  const [hashrankingOpen, setHashRankingOpen] = useState(false);
+  const [count, setCount] = useState(0);
+
+  const setComuHashs = useSetRecoilState(comuHashsInfo);
 
   useEffect(() => {
     if (theme && theme !== themeMode) {
       setThemeMode(theme);
     }
   }, [theme]);
+
+  useEffect(() => {
+    if (ranking && ranking.ok) {
+      const intervalId = setInterval(() => {
+        setCount((prev) => (prev + 1) % ranking.hashRanking.length);
+      }, 6000);
+      return () => clearInterval(intervalId);
+    }
+  }, [ranking]);
+
   const router = useRouter();
   const { user, isLoading } = useUser();
   const avatarURL = useImage({ imageId: user?.avatar, method: "avatar" });
@@ -75,7 +110,7 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
       <Head>
         <title>{`${title} | #happy_hash`}</title>
       </Head>
-      <header className="fixed top-0 z-10 w-full bg-inherit pt-8 shadow dark:bg-[#1e272e]">
+      <header className="fixed top-0 z-10 w-full bg-inherit pb-2 pt-8 shadow dark:bg-[#1e272e]">
         <div className="relative mx-auto flex max-w-7xl items-center justify-center">
           <div className="absolute -top-0 left-5 z-50 lg:hidden ">
             <button
@@ -247,8 +282,72 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
             </button>
           </div>
         </form>
+        <div className="relative mx-auto -mt-4 flex max-w-2xl items-center px-8 text-gray-400">
+          {hashrankingOpen ? (
+            <div className="space-y-2">
+              {ranking?.hashRanking?.map((hash, index) => {
+                const hashrank = String(index + 1).padStart(2);
+                return (
+                  <Link
+                    href={`/community/posts?hashId=${hash.id}`}
+                    className="flex space-x-3 text-gray-700 dark:text-gray-400"
+                    key={index}
+                    onClick={() => setComuHashs([{ ...hash }])}
+                  >
+                    <span>{" " + hashrank}.</span>
+                    <span className="text-[#3b62a5] dark:text-[#5f86c9]">
+                      {hash.name}
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            <Link
+              onClick={() =>
+                setComuHashs([
+                  {
+                    id: ranking?.hashRanking[count].id!,
+                    name: ranking?.hashRanking[count].name!,
+                  },
+                ])
+              }
+              href={`/community/posts?hashId=${ranking?.hashRanking[count].id}`}
+            >
+              <div className="space-x-3 text-gray-700 dark:text-gray-400  ">
+                <span>{count + 1}.</span>
+                <span className="text-[#3b62a5] dark:text-[#5f86c9]">
+                  {ranking?.hashRanking[count]?.name}
+                </span>
+              </div>
+            </Link>
+          )}
+          <div
+            onClick={() => setHashRankingOpen((prev) => !prev)}
+            className="absolute right-9 top-0 cursor-pointer"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="h-5 w-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d={cls(
+                  hashrankingOpen
+                    ? "M4.5 15.75l7.5-7.5 7.5 7.5"
+                    : "M19.5 8.25l-7.5 7.5-7.5-7.5"
+                )}
+              />
+            </svg>
+          </div>
+        </div>
       </header>
-      <div className="mx-auto mb-40 min-h-screen w-full py-4 pt-40 dark:bg-[#1e272e]">
+      <div className="mx-auto mb-40 min-h-screen w-full py-4 pt-44 dark:bg-[#1e272e]">
         {children}
       </div>
     </div>

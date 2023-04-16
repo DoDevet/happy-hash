@@ -14,7 +14,6 @@ interface DeleteMutation {
 
 export default function CommentsMenu({
   commentsId,
-  message,
   setEditor,
 }: {
   commentsId: number;

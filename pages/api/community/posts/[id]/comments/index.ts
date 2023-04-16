@@ -90,15 +90,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       await client.comment.findFirst({
         where: {
           userId: +user?.id!,
-          id: commentsId,
+          id: +commentsId!,
         },
       })
     );
-
     if (comments) {
       await client.comment.update({
         where: {
-          id: commentsId,
+          id: +commentsId!,
         },
         data: {
           message,

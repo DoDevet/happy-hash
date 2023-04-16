@@ -42,20 +42,18 @@ export default function EditComments({
       method: "PATCH",
     });
   const { commentsMutate } = useComments();
-
   const onClickCancel = () => {
     setEditor(false);
     reset();
   };
   const onValid = (data: EditCommentsProps) => {
     if (loading) return;
-
     if (data.message === message) {
       onClickCancel();
     }
     updateComments({
       commentsId,
-      message,
+      message: data.message,
     });
   };
   useEffect(() => {

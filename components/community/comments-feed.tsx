@@ -1,9 +1,7 @@
 import getDateTimeFormat from "@/libs/client/getDateTimeFormat";
-
 import useImage from "@/libs/client/useImage";
 import { cls } from "@/libs/client/utils";
 import Image from "next/image";
-import { useRecoilState, useRecoilValue } from "recoil";
 import EditComments from "./comments-editForm";
 import CommentsMenu from "./comments-menu";
 

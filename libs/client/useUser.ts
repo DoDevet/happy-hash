@@ -13,6 +13,5 @@ interface UserData {
 
 export default function useUser() {
   const { data, isLoading } = useSWR<UserData>("/api/user/me");
-
   return { user: data?.profile, isLoading };
 }

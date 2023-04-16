@@ -7,7 +7,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const {
       query: { id, page },
     } = req;
-
+    console.log("GET");
     const post = await client.post.findUnique({
       where: {
         id: +id!,

@@ -1,26 +1,33 @@
-import { commentsMenuState, CommentsPageNav } from "@/libs/client/useAtoms";
+import { CommentsPageNav } from "@/libs/client/useAtoms";
 import useComments from "@/libs/client/useComments";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
 
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { useSWRConfig } from "swr";
+import { useRecoilState } from "recoil";
 
 interface DeleteMutation {
   ok: boolean;
   error?: string;
 }
 
-export default function CommentsMenu() {
+export default function CommentsMenu({
+  commentsId,
+  message,
+  setEditor,
+}: {
+  commentsId: number;
+  message: string;
+  setEditor: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const router = useRouter();
   const {
     query: { postId },
   } = router;
-  const [comments, setComments] = useRecoilState(commentsMenuState);
+
   const [commentsNav, setCommentsNav] = useRecoilState(CommentsPageNav);
-  const { mutate } = useSWRConfig();
+  const { commentsData, commentsMutate } = useComments();
   const [deleteComments, { data, loading }] = useMutation<DeleteMutation>({
     url: `/api/community/posts/${postId}/comments`,
     method: "DELETE",
@@ -28,37 +35,34 @@ export default function CommentsMenu() {
 
   const onDeleteValid = () => {
     if (loading) return;
-    deleteComments({ commentsId: comments.commentsId });
+    deleteComments({ commentsId });
   };
 
   const onEditValid = () => {
-    setComments((prev) => ({ ...prev, menuOpen: false, editModalOpen: true }));
+    setEditor((prev) => !prev);
   };
 
   useEffect(() => {
     if (data && data.ok) {
-      setCommentsNav((prev) => ({
-        totalComments: prev.totalComments - 1,
-        limitPage: Math.ceil((prev.totalComments - 1) / 10),
-        currentPage: Math.ceil((prev.totalComments - 1) / 10),
-      }));
-      mutate(
-        `/api/community/posts/${postId}/comments?page=${commentsNav.currentPage}`,
+      commentsMutate(
         (prev) =>
           prev && {
             ...prev,
+            totalComments: prev.totalComments - 1,
             comments: prev.comments.filter(
-              (comment: any) => comment.id !== comments.commentsId
+              (comment: any) => comment.id !== commentsId
             ),
           },
         false
       );
-      setComments((prev) => ({
-        ...prev,
-        menuOpen: false,
-        commentsId: 0,
-        message: "",
-      }));
+      setCommentsNav({
+        currentPage:
+          commentsNav.currentPage >
+          Math.ceil((commentsData.totalComments! - 1) / 10)
+            ? Math.ceil((commentsData.totalComments! - 1) / 10)
+            : commentsNav.currentPage,
+        limitPage: Math.ceil((commentsData.totalComments! - 1) / 10),
+      });
     }
   }, [data]);
 

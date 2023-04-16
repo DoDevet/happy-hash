@@ -1,6 +1,6 @@
 import { comuHashsInfo, hashInfo, isOpen } from "@/libs/client/useAtoms";
 import Link from "next/link";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 interface TagFeedProps {
   id: number;
@@ -32,6 +32,7 @@ export default function TagFeed({
   };
 
   const setComuHashs = useSetRecoilState(comuHashsInfo);
+
   return (
     <div className="relative box-border flex w-full flex-col justify-between overflow-hidden rounded-md bg-[#3b62a5] p-4 font-semibold text-white shadow-xl hover:bg-[#2c5398] hover:transition-colors">
       <div className="absolute right-3 space-x-1 font-semibold">
@@ -70,7 +71,7 @@ export default function TagFeed({
                 pathname: `/community/posts`,
                 query: { hashId: hash.id },
               }}
-              onClick={() => setComuHashs(hashtags)}
+              onClick={() => setComuHashs([{ ...hash }])}
             >
               #{hash.name}
             </Link>

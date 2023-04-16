@@ -248,7 +248,7 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
           </div>
         </form>
       </header>
-      <div className="mx-auto mb-40 h-screen  w-full py-4 pt-40 dark:bg-[#1e272e]">
+      <div className="mx-auto mb-40 min-h-screen w-full py-4 pt-40 dark:bg-[#1e272e]">
         {children}
       </div>
     </div>

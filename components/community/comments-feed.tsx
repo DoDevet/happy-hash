@@ -1,5 +1,5 @@
 import getDateTimeFormat from "@/libs/client/getDateTimeFormat";
-import { commentsEditSelector, commentsSelector } from "@/libs/client/useAtoms";
+
 import useImage from "@/libs/client/useImage";
 import { cls } from "@/libs/client/utils";
 import Image from "next/image";
@@ -7,7 +7,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import EditComments from "./comments-editForm";
 import CommentsMenu from "./comments-menu";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 interface CommentsProps {
   commentsId: number;
@@ -18,7 +18,7 @@ interface CommentsProps {
   isMine: boolean;
 }
 
-export default function CommentsFeed({
+function CommentsFeed({
   commentsId,
   imageId,
   username,
@@ -28,20 +28,14 @@ export default function CommentsFeed({
 }: CommentsProps) {
   const imageURL = imageId ? useImage({ imageId, method: "avatar" }) : null;
   const createDate = getDateTimeFormat(createdAt, "short");
-  const [commentsInfo, setCommentsInfo] = useRecoilState(commentsSelector);
-  const editor = useRecoilValue(commentsEditSelector);
-  const onClickEditIcon = (commentsId: number, message: string) => {
-    setCommentsInfo((prev) => ({
-      menuOpen: !prev.menuOpen,
-      commentsId: prev.menuOpen ? 0 : commentsId,
-      message: prev.menuOpen ? "" : message,
-      editModalOpen: false,
-    }));
-  };
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [editor, setEditor] = useState(false);
+  const onClickMenuOpen = () => setMenuOpen((prev) => !prev);
 
-  const COMMENT_MENU =
-    commentsInfo.commentsId === commentsId && commentsInfo.menuOpen;
-  const EDIT = commentsInfo.commentsId === commentsId && editor.editModalOpen;
+  useEffect(() => {
+    if (editor) setMenuOpen(false);
+  }, [editor]);
+
   return (
     <div className="group flex  dark:divide-gray-500 dark:border-gray-500 ">
       <div className="flex w-full max-w-[30%] items-center border-r px-2 text-sm dark:border-gray-500  sm:max-w-[16%]">
@@ -59,8 +53,12 @@ export default function CommentsFeed({
         <span className="ml-2 truncate text-sm">{username}</span>
       </div>
       <div className="relative flex w-full max-w-3xl flex-col justify-center break-all py-1 pb-5">
-        {EDIT ? (
-          <EditComments />
+        {editor ? (
+          <EditComments
+            setEditor={setEditor}
+            commentsId={commentsId}
+            message={message}
+          />
         ) : (
           <>
             <span className="px-1 text-sm">{message}</span>
@@ -73,10 +71,10 @@ export default function CommentsFeed({
           <span
             className={cls(
               "absolute bottom-0 right-3 text-xs text-gray-600",
-              EDIT ? "hidden" : ""
+              editor ? "hidden" : ""
             )}
           >
-            <button onClick={() => onClickEditIcon(commentsId, message)}>
+            <button onClick={onClickMenuOpen}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -85,13 +83,13 @@ export default function CommentsFeed({
                 stroke="currentColor"
                 className={cls(
                   "inline-flex h-6 w-6 rounded-md text-gray-400 transition-colors hover:text-gray-700 focus:text-gray-700 dark:text-gray-500 dark:hover:text-gray-400",
-                  COMMENT_MENU
+                  menuOpen
                     ? "bg-slate-300 text-gray-700 shadow-md dark:border-gray-500 dark:bg-slate-800"
                     : ""
                 )}
               >
                 <path
-                  className={cls(COMMENT_MENU ? "hidden" : "inline-block")}
+                  className={cls(menuOpen ? "hidden" : "inline-block")}
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
@@ -100,7 +98,7 @@ export default function CommentsFeed({
                 <path
                   className={cls(
                     "transition-colors",
-                    COMMENT_MENU ? "inline-block" : "hidden"
+                    menuOpen ? "inline-block" : "hidden"
                   )}
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -108,10 +106,18 @@ export default function CommentsFeed({
                 />
               </svg>
             </button>
-            {COMMENT_MENU && <CommentsMenu />}
+            {menuOpen ? (
+              <CommentsMenu
+                commentsId={commentsId}
+                message={message}
+                setEditor={setEditor}
+              />
+            ) : null}
           </span>
         )}
       </div>
     </div>
   );
 }
+
+export default React.memo(CommentsFeed);

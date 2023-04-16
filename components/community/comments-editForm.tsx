@@ -1,11 +1,10 @@
 import useComments from "@/libs/client/useComments";
 import useMutation from "@/libs/client/useMutation";
-import { commentsSelector } from "@/libs/client/useAtoms";
+
 import { cls } from "@/libs/client/utils";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useRecoilState } from "recoil";
 
 interface EditCommentsProps {
   message: string;
@@ -14,7 +13,15 @@ interface EditResponseData {
   ok: boolean;
   error?: string;
 }
-export default function EditComments() {
+export default function EditComments({
+  commentsId,
+  message,
+  setEditor,
+}: {
+  commentsId: number;
+  message: string;
+  setEditor: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const router = useRouter();
   const {
     query: { postId },
@@ -35,32 +42,27 @@ export default function EditComments() {
       method: "PATCH",
     });
   const { commentsMutate } = useComments();
-  const [editSelector, setEditSelector] = useRecoilState(commentsSelector);
+
   const onClickCancel = () => {
-    setEditSelector({
-      editModalOpen: false,
-      menuOpen: false,
-      message: "",
-      commentsId: 0,
-    });
+    setEditor(false);
     reset();
   };
   const onValid = (data: EditCommentsProps) => {
     if (loading) return;
 
-    if (data.message === editSelector.message) {
+    if (data.message === message) {
       onClickCancel();
     }
     updateComments({
-      commentsId: editSelector.commentsId,
-      message: data.message,
+      commentsId,
+      message,
     });
   };
   useEffect(() => {
-    if (editSelector.message) {
-      setValue("message", editSelector.message);
+    if (message) {
+      setValue("message", message);
     }
-  }, [editSelector, setValue]);
+  }, [message, setValue]);
 
   useEffect(() => {
     if (data && data.ok) {
@@ -69,7 +71,7 @@ export default function EditComments() {
           prev && {
             ...prev,
             comments: prev?.comments.map((comment) => {
-              if (comment.id === editSelector.commentsId) {
+              if (comment.id === commentsId) {
                 return {
                   ...comment,
                   message: getValues("message"),

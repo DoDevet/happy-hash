@@ -41,11 +41,10 @@ export default function CommentSection() {
   useEffect(() => {
     if (createCommentsRespose && createCommentsRespose.ok) {
       commentsMutate();
-      setCommentsNav((prev) => ({
-        totalComments: prev.totalComments + 1,
-        limitPage: Math.ceil((commentsData.totalComments + 1) / 10),
-        currentPage: Math.ceil((prev.totalComments + 1) / 10),
-      }));
+      setCommentsNav({
+        limitPage: Math.ceil((commentsData?.totalComments! + 1) / 10),
+        currentPage: Math.ceil((commentsData?.totalComments! + 1) / 10),
+      });
       reset();
     }
   }, [createCommentsRespose, commentsMutate]);
@@ -57,17 +56,6 @@ export default function CommentSection() {
       setRefreshComments(false);
     }, 1000);
   };
-  useEffect(() => {
-    if (
-      commentsData &&
-      commentsData.totalComments !== commentsNav.totalComments
-    ) {
-      setCommentsNav((prev) => ({
-        ...prev,
-        totalComments: commentsData.totalComments,
-      }));
-    }
-  }, [commentsData, setCommentsNav]);
 
   const onCreateComments = (data: CreateCommentsForm) => {
     if (loading) return;
@@ -117,13 +105,13 @@ export default function CommentSection() {
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke-width="1.5"
+                  strokeWidth="1.5"
                   stroke="currentColor"
                   className="h-5 w-4"
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     d="M15.75 19.5L8.25 12l7.5-7.5"
                   />
                 </svg>
@@ -144,13 +132,13 @@ export default function CommentSection() {
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke-width="1.5"
+                  strokeWidth="1.5"
                   stroke="currentColor"
                   className="h-5 w-4"
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     d="M8.25 4.5l7.5 7.5-7.5 7.5"
                   />
                 </svg>
@@ -160,7 +148,7 @@ export default function CommentSection() {
         </div>
         <div className="divide-y shadow-sm  dark:border-gray-500">
           {commentsLoading
-            ? new Array(10)
+            ? new Array(5)
                 .fill(null)
                 .map((_, index) => <CommentsFeedLoading key={index} />)
             : commentsData?.comments?.map((comment) => (

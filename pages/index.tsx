@@ -1,9 +1,9 @@
 import HomeLayout from "@/components/home/homeLayout";
 import TagFeed from "@/components/home/tagFeed";
-import { isOpen } from "@/libs/client/useAtoms";
+import { comuHashsInfo, hashInfo, isOpen } from "@/libs/client/useAtoms";
 import { shortcutTag } from "@prisma/client";
 import { useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import useSWR from "swr";
 
 interface shorcutWithHashTag extends shortcutTag {
@@ -22,8 +22,9 @@ interface HashForm {
 
 export default function Home() {
   const { data } = useSWR<HashForm>("/api/hashs", null, {});
-
   const [open, setOpen] = useRecoilState(isOpen);
+  const setHashInfo = useSetRecoilState(hashInfo);
+  const setComuHashs = useSetRecoilState(comuHashsInfo);
   useEffect(() => {
     if (open) {
       window.scrollTo({
@@ -35,6 +36,7 @@ export default function Home() {
       document.body.style.overflow = "unset";
     }
   }, [open]);
+
   return (
     <HomeLayout title={"Home"}>
       <div className="mx-auto w-full max-w-7xl  items-center justify-center px-4">
@@ -46,7 +48,10 @@ export default function Home() {
             <TagFeed
               key={tag?.id}
               id={tag?.id}
+              setOpen={setOpen}
+              setHashInfo={setHashInfo}
               customName={tag?.customName}
+              setComuHashs={setComuHashs}
               tags_name={tag?.name}
               hashtags={tag.hashtags}
             />

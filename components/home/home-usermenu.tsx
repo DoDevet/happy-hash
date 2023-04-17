@@ -1,16 +1,13 @@
-import { userMenuOpen } from "@/libs/client/useAtoms";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useSetRecoilState } from "recoil";
 interface LogoutResponse {
   ok: boolean;
 }
 export default function UserMenu() {
   const router = useRouter();
-  const setHomeUserMenu = useSetRecoilState(userMenuOpen);
   const [logoutMutation, { data: logoutResponse }] =
     useMutation<LogoutResponse>({
       url: "/api/user/logout",
@@ -22,8 +19,7 @@ export default function UserMenu() {
 
   useEffect(() => {
     if (logoutResponse && logoutResponse.ok) {
-      router.replace("/");
-      setHomeUserMenu((prev) => !prev);
+      router.replace("/login");
     }
   }, [logoutResponse]);
 
@@ -36,7 +32,6 @@ export default function UserMenu() {
             className={cls(
               "rounded-md px-2 py-2 text-base outline-none transition-colors hover:bg-slate-100 hover:text-[#3b62a5] dark:text-gray-400 dark:hover:bg-slate-900"
             )}
-            onClick={() => setHomeUserMenu((prev) => !prev)}
           >
             Profile
           </Link>

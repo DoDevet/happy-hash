@@ -56,7 +56,7 @@ export default function HashCommunity({
   title,
   comuId,
   hashId,
-
+  ok,
   hashs,
 }: PostProps) {
   const router = useRouter();
@@ -76,7 +76,6 @@ export default function HashCommunity({
         }`,
       null,
       { revalidateFirstPage: false }
-      //{ fallbackData: [{ ok, posts: initialPosts }] }
     );
 
   const isEmpty = data?.[0]?.posts?.length === 0;
@@ -92,42 +91,42 @@ export default function HashCommunity({
       document.body.style.overflow = "hidden";
     }
   }, [postId, mutate]);
-  const posts = data?.flatMap((post) => post.posts);
+  const posts = data?.flatMap((post) => post?.posts);
   const memoList = React.useMemo(
     () =>
       posts?.map((post) => (
         <Link
-          href={`/community/posts?postId=${post.id}&${queryUrl}${
+          href={`/community/posts?postId=${post?.id}&${queryUrl}${
             selectHash ? `&selectHash=${selectHash}` : ""
           }`}
-          as={`/community/posts/${post.id}?${queryUrl}`}
+          as={`/community/posts/${post?.id}?${queryUrl}`}
           shallow
           replace
-          key={post.id}
+          key={post?.id}
           className="cursor-pointer"
           onClick={() => {
             setPostInfo({
               comments: post?._count?.comments,
               title: post?.title,
-              createdAt: post.createdAt,
+              createdAt: post?.createdAt,
               hashtag: post?.hashtag?.name,
               hashId: hashId?.toString(),
               postId: post?.id,
               comuId: comuId?.toString(),
               likes: post?._count?.likes,
               username: post?.user?.name,
-              isLiked: post.likes.length !== 0,
-              views: post.views,
-              avatarId: post.user.avatar,
-              payload: post.payload,
-              image: post.image,
+              isLiked: post?.likes.length !== 0,
+              views: post?.views,
+              avatarId: post?.user.avatar,
+              payload: post?.payload,
+              image: post?.image,
             });
           }}
         >
           <PostFeed
             comments={post?._count?.comments}
             title={post?.title}
-            createdAt={post.createdAt}
+            createdAt={post?.createdAt}
             hashtag={post?.hashtag?.name}
             hashId={hashId?.toString()}
             postId={post?.id}
@@ -253,63 +252,21 @@ export const getServerSideProps = withSsrSession(
           id: true,
         },
       });
+
       if (!scTag) {
         return {
-          props: {
-            ok: false,
-            error: "Unauthorized access",
+          redirect: {
+            permanent: false,
+            destination: "/login",
           },
+          props: {},
         };
       }
 
-      /* const posts = await client.post.findMany({
-        where: {
-          OR: selectHash
-            ? [{ hashtag: { name: selectHash.toString() } }]
-            : scTag?.hashtags.map((hash) => ({ hashtag: hash })),
-        },
-        select: {
-          id: true,
-          title: true,
-          createdAt: true,
-          views: true,
-          payload: true,
-          image: true,
-          user: {
-            select: {
-              name: true,
-              id: true,
-              avatar: true,
-            },
-          },
-          hashtag: {
-            select: {
-              name: true,
-            },
-          },
-          _count: {
-            select: {
-              comments: true,
-              likes: true,
-            },
-          },
-          likes: {
-            where: {
-              userId: +user?.id!,
-            },
-          },
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: 20,
-        skip: page ? (+page - 1) * 20 : 0,
-      }); */
       const title = scTag.customName ? scTag.customName : scTag.name;
       return {
         props: {
           ok: true,
-          /*   posts: JSON.parse(JSON.stringify(posts)), */
           title: JSON.parse(JSON.stringify(title)),
           comuId: JSON.parse(JSON.stringify(scTag?.id)),
           hashs: JSON.parse(
@@ -323,60 +280,28 @@ export const getServerSideProps = withSsrSession(
       });
       if (!hashInfo) {
         return {
-          props: {
-            ok: false,
-            error: "No founded",
+          redirect: {
+            permanent: false,
+            destination: "/login",
           },
+          props: {},
         };
       }
-      const posts = await client.post.findMany({
-        where: {
-          hashtagId: +hashId!,
-        },
-        select: {
-          id: true,
-          title: true,
-          createdAt: true,
-          views: true,
-          payload: true,
-          image: true,
-          user: {
-            select: {
-              name: true,
-              id: true,
-              avatar: true,
-            },
-          },
-          hashtag: {
-            select: {
-              name: true,
-            },
-          },
-          _count: {
-            select: {
-              comments: true,
-              likes: true,
-            },
-          },
-          likes: {
-            where: {
-              userId: +user?.id!,
-            },
-          },
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: 20,
-        skip: page ? (+page - 1) * 20 : 0,
-      });
+
       return {
         props: {
           ok: true,
-          posts: JSON.parse(JSON.stringify(posts)),
           title: JSON.parse(JSON.stringify(hashInfo.name)),
           hashId: JSON.parse(JSON.stringify(hashId)),
         },
+      };
+    } else {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/login",
+        },
+        props: {},
       };
     }
   }

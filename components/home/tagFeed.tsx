@@ -1,6 +1,7 @@
-import { comuHashsInfo, hashInfo, isOpen } from "@/libs/client/useAtoms";
+import { IComuHashsInfo } from "@/libs/client/useAtoms";
 import Link from "next/link";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import React from "react";
+import { SetterOrUpdater } from "recoil";
 
 interface TagFeedProps {
   id: number;
@@ -12,16 +13,24 @@ interface TagFeedProps {
       name: string;
     }
   ];
+  setOpen: SetterOrUpdater<boolean>;
+  setHashInfo: SetterOrUpdater<{
+    hashs: string;
+    customName: string;
+    id: number;
+  }>;
+  setComuHashs: SetterOrUpdater<IComuHashsInfo[]>;
 }
 
-export default function TagFeed({
+function TagFeed({
   customName,
   id,
   tags_name,
   hashtags,
+  setOpen,
+  setHashInfo,
+  setComuHashs,
 }: TagFeedProps) {
-  const setOpen = useSetRecoilState(isOpen);
-  const setHashInfo = useSetRecoilState(hashInfo);
   const onEditTag = () => {
     setOpen(true);
     setHashInfo({
@@ -30,9 +39,6 @@ export default function TagFeed({
       id,
     });
   };
-
-  const setComuHashs = useSetRecoilState(comuHashsInfo);
-
   return (
     <div className="relative box-border flex w-full flex-col justify-between overflow-hidden rounded-md bg-[#3b62a5] p-4 font-semibold text-white shadow-xl hover:bg-[#2c5398] hover:transition-colors">
       <div className="absolute right-3 space-x-1 font-semibold">
@@ -78,7 +84,6 @@ export default function TagFeed({
           ))}
         </div>
       </div>
-
       <Link
         href={{
           pathname: `/community/posts`,
@@ -96,3 +101,5 @@ export default function TagFeed({
     </div>
   );
 }
+
+export default React.memo(TagFeed);

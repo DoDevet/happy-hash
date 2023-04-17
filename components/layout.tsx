@@ -1,4 +1,3 @@
-import getHashTags from "@/libs/client/getHashtags";
 import { postMenuOpen } from "@/libs/client/useAtoms";
 import { cls } from "@/libs/client/utils";
 import Head from "next/head";

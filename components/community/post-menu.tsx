@@ -43,6 +43,7 @@ export default function PostMenu() {
             href={`/community/posts/${postId}/edit?${
               comuId ? `comuId=${comuId}` : `hashId=${hashId}`
             }`}
+            replace
             className={cls(
               "hover:text-darkblue rounded-md px-2 py-2 text-sm outline-none transition-colors hover:bg-slate-100 dark:text-[#3b62a5] dark:hover:bg-slate-900"
             )}

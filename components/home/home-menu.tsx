@@ -1,16 +1,18 @@
-import { homeMenuOpen } from "@/libs/client/useAtoms";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useSetRecoilState } from "recoil";
+
 interface LogoutResponse {
   ok: boolean;
 }
-export default function HomeMenu() {
+export default function HomeMenu({
+  setHomeMenu,
+}: {
+  setHomeMenu: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const router = useRouter();
-  const setOpen = useSetRecoilState(homeMenuOpen);
   const [logoutMutation, { data: logoutResponse }] =
     useMutation<LogoutResponse>({
       url: "/api/user/logout",
@@ -18,8 +20,6 @@ export default function HomeMenu() {
     });
   const onLogout = () => {
     logoutMutation({});
-    router.replace("/");
-    setOpen(false);
   };
   useEffect(() => {
     if (logoutResponse && logoutResponse.ok) {
@@ -28,7 +28,7 @@ export default function HomeMenu() {
   }, [logoutResponse, router]);
 
   return (
-    <div className="absolute z-30 w-full bg-white py-5 shadow-md dark:bg-[#1e272e]">
+    <div className="absolute top-9 z-30 w-full bg-white py-5 shadow-md dark:bg-[#1e272e]">
       <div className="divide-y px-4 font-semibold text-gray-600 dark:divide-gray-500">
         <div className="flex flex-col space-y-3 py-1 outline-none">
           <Link
@@ -39,7 +39,7 @@ export default function HomeMenu() {
                 ? "px-2 py-2 text-[#3b62a5]"
                 : "rounded-md px-2 py-2 transition-colors hover:bg-slate-100 hover:text-[#3b62a5] dark:text-gray-400"
             )}
-            onClick={() => setOpen(false)}
+            onClick={() => setHomeMenu(false)}
           >
             Home
           </Link>
@@ -50,14 +50,14 @@ export default function HomeMenu() {
                 ? "px-2 py-2 text-[#3b62a5]"
                 : "rounded-md px-2 py-2 transition-colors hover:bg-slate-100 hover:text-[#3b62a5] dark:text-gray-400 dark:hover:bg-slate-900"
             )}
-            onClick={() => setOpen(false)}
+            onClick={() => setHomeMenu(false)}
             href="/guide"
           >
             Q&A
           </Link>
           <Link
             href="/profile"
-            onClick={() => setOpen(false)}
+            onClick={() => setHomeMenu(false)}
             className={cls(
               "outline-none",
               router.pathname === "/profile"

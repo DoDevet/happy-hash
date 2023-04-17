@@ -1,7 +1,9 @@
 import HomeLayout from "@/components/home/homeLayout";
+import { comuHashsInfo, hashInfo } from "@/libs/client/useAtoms";
 import { hashtag, Post } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useSetRecoilState } from "recoil";
 import useSWR from "swr";
 
 interface PostExtendInfo extends Post {
@@ -37,6 +39,7 @@ export default function SearchPage() {
     query: { params },
   } = router;
   const { data } = useSWR<ISearchPage>(`/api/search?params=${params}`);
+  const setComuHashs = useSetRecoilState(comuHashsInfo);
 
   return (
     <HomeLayout title="Search">
@@ -49,7 +52,11 @@ export default function SearchPage() {
           <p className="mb-2 px-2 text-2xl font-bold">hashs :</p>
           <div className="grid w-fit gap-3 px-4 ">
             {data?.hashs?.map((hash) => (
-              <Link key={hash.id} href={`/community/posts?hashId=${hash?.id}`}>
+              <Link
+                key={hash.id}
+                onClick={() => setComuHashs([{ ...hash }])}
+                href={`/community/posts?hashId=${hash?.id}`}
+              >
                 <div
                   key={hash?.id}
                   className="rounded-md bg-[#3b62a5] px-5 py-2 text-gray-200 shadow-md transition-colors hover:bg-[#2c5398]"
@@ -77,6 +84,7 @@ export default function SearchPage() {
             <div className="w-full max-w-3xl px-4" key={post?.id}>
               <Link
                 href={`/community/posts/${post.id}?hashId=${post.hashtag.id}`}
+                onClick={() => setComuHashs([{ ...post.hashtag }])}
               >
                 <div className="flex items-center">
                   <span className="text-darkblue mr-2 text-sm font-semibold">{`#${post.hashtag.name}`}</span>

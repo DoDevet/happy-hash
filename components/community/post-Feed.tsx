@@ -1,7 +1,5 @@
 import { cls } from "@/libs/client/utils";
-import Link from "next/link";
 import getDateTimeFormat from "@/libs/client/getDateTimeFormat";
-import getQueryUrl from "@/libs/client/getQueryUrl";
 import React from "react";
 
 export interface PostFeedProps {

@@ -48,6 +48,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           },
         },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
     res.json({ hashs, posts });
   }

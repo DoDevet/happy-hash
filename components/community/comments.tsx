@@ -1,5 +1,4 @@
 import useMutation from "@/libs/client/useMutation";
-import { Comment, User } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Button from "../button";

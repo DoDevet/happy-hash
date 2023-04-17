@@ -61,19 +61,20 @@ export default function HashCommunity({
 }: PostProps) {
   const router = useRouter();
   const { postId, selectHash } = router.query;
+  const [selectPopular, setSelectPopular] = useState(false);
   const url = comuId ? `?comuId=${comuId}` : `?hashId=${hashId}`;
   const queryUrl = getQueryUrl({
     comuId: comuId?.toString(),
     hashId: hashId?.toString(),
   });
-
   const [postInfo, setPostInfo] = useState<PostFeedProps | undefined>();
   const { data, isValidating, mutate, setSize, isLoading } =
     useSWRInfinite<PostProps>(
       (index) =>
         `/api/community/posts${url}&page=${index + 1}${
           selectHash ? `&selectHash=${selectHash}` : ""
-        }`,
+        }${selectPopular ? `&popular=${10}` : ""}
+        `,
       null,
       { revalidateFirstPage: false }
     );
@@ -223,6 +224,29 @@ export default function HashCommunity({
             </svg>
           </FixedButton>
         </div>
+
+        <nav className="fixed bottom-0 z-10 w-full bg-white px-2 py-1 pb-8 text-xs text-gray-700 shadow-md dark:bg-[#1e272e] dark:text-gray-200">
+          <div className="relative mx-auto flex w-full max-w-3xl items-center justify-center space-x-3">
+            <button
+              onClick={() => setSelectPopular(false)}
+              className={cls(
+                "flex-1 border-t-2  pt-3 text-center ",
+                !selectPopular ? "border-[#3b62a5]" : ""
+              )}
+            >
+              ALL
+            </button>
+            <button
+              onClick={() => setSelectPopular(true)}
+              className={cls(
+                "flex-1 border-t-2  pt-3 text-center dark:bg-[#1e272e] dark:text-gray-200",
+                selectPopular ? "border-[#3b62a5]" : ""
+              )}
+            >
+              POPULAR
+            </button>
+          </div>
+        </nav>
       </Layout>
     </div>
   );

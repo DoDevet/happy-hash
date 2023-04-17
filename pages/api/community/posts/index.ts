@@ -5,10 +5,10 @@ import client from "@/libs/server/client";
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     const {
-      query: { comuId, hashId, page, selectHash },
+      query: { comuId, hashId, page, selectHash, popular },
       session: { user },
     } = req;
-    console.log("GET");
+
     if (comuId) {
       const scTag = await client.shortcutTag.findFirst({
         where: { AND: [{ id: +comuId! }, { user: { id: +user?.id! } }] },
@@ -34,7 +34,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
               : scTag?.hashtags.map((hash) => ({
                   hashtag: hash,
                 })),
+            likesNum: {
+              gte: popular ? +popular : 0,
+            },
           },
+
           select: {
             id: true,
             title: true,
@@ -87,6 +91,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       const posts = await client.post.findMany({
         where: {
           hashtagId: +hashId!,
+          likesNum: {
+            gte: popular ? +popular : 0,
+          },
         },
         select: {
           id: true,

@@ -8,42 +8,62 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       session: { user },
       body: { postId },
     } = req;
-
-    const isLiked = await client.like.findFirst({
+    const findPost = await client.post.findFirst({
       where: {
-        user: {
-          id: +user?.id!,
-        },
-        post: {
-          id: +postId!,
+        id: +postId!,
+      },
+      select: {
+        id: true,
+        likes: {
+          select: {
+            id: true,
+          },
+          where: {
+            userId: +user?.id!,
+          },
         },
       },
     });
-
-    if (isLiked) {
-      const disconnectedLike = await client.like.delete({
-        where: {
-          id: +isLiked?.id!,
-        },
-      });
-      return res.json({ ok: true });
-    } else {
-      const connectLike = await client.like.create({
-        data: {
-          post: {
-            connect: {
-              id: +postId!,
+    const toggleFav = findPost?.likes.length === 0;
+    if (findPost) {
+      if (!toggleFav) {
+        await client.like.delete({
+          where: {
+            id: +findPost.likes[0].id!,
+          },
+          select: {
+            post: { select: { _count: { select: { likes: true } } } },
+          },
+        });
+        await client.post.update({
+          where: { id: +findPost.id },
+          data: { likesNum: { decrement: 1 } },
+        });
+      } else {
+        await client.like.create({
+          data: {
+            post: {
+              connect: {
+                id: +postId!,
+              },
+            },
+            user: {
+              connect: {
+                id: +user?.id!,
+              },
             },
           },
-          user: {
-            connect: {
-              id: +user?.id!,
-            },
+          select: {
+            post: { select: { _count: { select: { likes: true } } } },
           },
-        },
-      });
+        });
+        await client.post.update({
+          where: { id: +findPost.id },
+          data: { likesNum: { increment: 1 } },
+        });
+      }
       return res.json({ ok: true });
-    }
+    } else return res.json({ ok: false });
   }
 }
 

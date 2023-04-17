@@ -149,18 +149,7 @@ export default function Layout({
           </div>
         </div>
       ) : null}
-      {bottomTab ? (
-        <nav className="fixed bottom-0 z-10 w-full bg-white px-2 pb-5 text-xs text-gray-700 dark:bg-[#1e272e] dark:text-gray-200">
-          <div className="relative mx-auto flex w-full max-w-3xl items-center justify-center">
-            <button className="flex-1 border-t-2 border-blue-400 bg-white pt-3 text-center dark:bg-[#1e272e] dark:text-gray-200 ">
-              ALL
-            </button>
-            <button className="flex-1 border-t-2 border-gray-200 bg-white pt-3 text-center dark:bg-[#1e272e] dark:text-gray-200 ">
-              POPULAR
-            </button>
-          </div>
-        </nav>
-      ) : null}
+
       <div
         className={cls(
           "min-h-screen bg-white pt-16 dark:bg-[#1e272e] dark:text-gray-200",

@@ -25,18 +25,18 @@ function HashRanking() {
 
   return (
     <div className="relative mx-auto -mt-4 flex max-w-2xl items-center px-8 text-gray-400">
-      <div className="w-[90%] space-y-2">
+      <div className="w-[90%] space-y-1">
         {isExpand ? (
           ranking?.hashRanking?.map((hash, index) => (
             <Link
               href={`/community/posts?hashId=${hash.id}`}
-              className="flex space-x-3 text-gray-700 dark:text-gray-400"
+              className="flex items-center space-x-3 text-gray-700 dark:text-gray-400"
               key={index}
               onClick={() => setComuHashs([{ ...hash }])}
             >
               <span>{index + 1}.</span>
               <span
-                className="rounded-full bg-slate-200 px-1
+                className="rounded-md bg-slate-200 px-2 py-1 
 text-[#3b62a5] dark:bg-slate-900 dark:text-[#5f86c9]"
               >
                 {hash.name}
@@ -53,13 +53,13 @@ text-[#3b62a5] dark:bg-slate-900 dark:text-[#5f86c9]"
                 },
               ])
             }
-            className="w-[90%]"
+            className="flex items-center"
             href={`/community/posts?hashId=${ranking?.hashRanking[count].id}`}
           >
             <div className="space-x-3 text-gray-700 dark:text-gray-400">
               <span>{count + 1}.</span>
               <span
-                className="rounded-full bg-slate-200 px-1 text-[#3b62a5] dark:bg-slate-900
+                className="rounded-md bg-slate-200 px-2 py-1 text-[#3b62a5] dark:bg-slate-900
 dark:text-[#5f86c9]"
               >
                 {ranking?.hashRanking[count]?.name}

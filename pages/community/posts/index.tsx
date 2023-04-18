@@ -81,7 +81,7 @@ export default function HashCommunity({
     if (!postId) {
       document.body.style.overflow = "unset";
       if (getPostInfo) {
-        mutate(async (prev) => {
+        mutate((prev) => {
           return (
             prev &&
             prev.map((prev) => {

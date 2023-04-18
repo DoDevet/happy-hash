@@ -10,6 +10,7 @@ import { cls } from "@/libs/client/utils";
 import useImage from "@/libs/client/useImage";
 import useMutation from "@/libs/client/useMutation";
 import usePostInfo from "@/libs/client/usePostInfo";
+import usePostFeed from "@/libs/client/usePostFeed";
 
 interface PostForm {
   title: string;
@@ -60,6 +61,7 @@ export default function PostInputForm({
     register,
     handleSubmit,
     setValue,
+    getValues,
     setError,
     watch,
     formState: { errors },
@@ -77,10 +79,12 @@ export default function PostInputForm({
   const [imageLoading, setImageLoading] = useState(false);
   const image = watch("image");
   const [mutateSet, setMutateSet] = useState<MutateSetProps>();
-
+  const { mutate: postFeedMutate } = usePostFeed();
   const [postMutation, { data: postMutationResponse, loading }] =
     useMutation<PostMutationResponse>({
-      url: `/api/community/posts?${postId}`,
+      url: edit
+        ? `/api/community/posts/${postId}`
+        : `/api/community/posts?${postId}`,
       method: edit ? "PATCH" : "POST",
     });
 
@@ -172,7 +176,7 @@ export default function PostInputForm({
   }, [image]);
 
   useEffect(() => {
-    if (postMutationResponse && postMutationResponse.ok) {
+    if (postMutationResponse && postMutationResponse.postId) {
       if (edit) {
         mutate(
           (prev) =>
@@ -185,14 +189,15 @@ export default function PostInputForm({
             },
           false
         );
-        router.back();
-      } else {
-        router.replace(
-          `/community/posts/${postMutationResponse?.postId}?${
-            comuId ? `comuId=${comuId}` : `hashId=${hashId}`
-          }`
-        );
       }
+
+      router.replace(
+        `/community/posts/${postMutationResponse.postId}?${
+          comuId ? `comuId=${comuId}` : `hashId=${hashId}`
+        }`,
+        undefined,
+        { shallow: false }
+      );
     }
   }, [postMutationResponse, router]);
 

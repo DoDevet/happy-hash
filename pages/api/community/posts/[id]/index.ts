@@ -84,8 +84,56 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       return res.json({ ok: true });
     } else return res.json({ ok: false, error: "Validation Error" });
   }
+  if (req.method === "PATCH") {
+    const {
+      session: { user },
+      body: { imageURL, payload, title, selectedHash },
+      query: { id },
+    } = req;
+
+    const prevPostData = await client.post.findUnique({
+      where: { id: +id! },
+    });
+    if (prevPostData && prevPostData.userId !== +user?.id!) {
+      return res.json({ ok: false, error: "InValidate" });
+    }
+    if (!imageURL) {
+      await client.post.update({
+        where: {
+          id: +id!,
+        },
+        data: {
+          payload,
+          title,
+          hashtag: { connect: { name: selectedHash } },
+        },
+      });
+    } else {
+      await fetch(
+        `https://api.cloudflare.com/client/v4/accounts/${process.env.CF_ID}/images/v1/${prevPostData?.image}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${process.env.CF_TOKEN}`,
+          },
+        }
+      );
+      await client.post.update({
+        where: {
+          id: +id!,
+        },
+        data: {
+          payload,
+          title,
+          hashtag: { connect: { name: selectedHash } },
+          image: imageURL,
+        },
+      });
+    }
+    res.json({ ok: true, postId: +id! });
+  }
 }
 
 export default withApiSession(
-  withHandler({ handler, methods: ["GET", "POST", "DELETE"] })
+  withHandler({ handler, methods: ["GET", "POST", "DELETE", "PATCH"] })
 );

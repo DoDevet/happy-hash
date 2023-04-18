@@ -67,7 +67,7 @@ export default function usePostFeed() {
       }${selectPopular ? `&popular=${10}` : ""}
         `,
     null,
-    { revalidateFirstPage: true }
+    { revalidateFirstPage: true, revalidateOnFocus: false }
   );
 
   return { data, mutate, setSize, isValidating };

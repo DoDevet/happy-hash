@@ -171,34 +171,3 @@ export default function SearchPage() {
     </HomeLayout>
   );
 }
-
-/*  <div className="space-y-9">
-        <p className="mb-10 text-3xl font-extrabold">
-          Search By <span className="text-sky-500">"{params}"</span>
-        </p>
-        <p className="text-xl font-semibold text-sky-500">#Posts</p>
-
-        {data?.posts.map((post) => (
-          <Link href={`/community/posts/${post.id}`}>
-            <PostFeed
-              username={post.user.name}
-              title={post.title}
-              hashtag={post.hashtag.name}
-              comments={post._count.comments}
-              likes={post._count.likes}
-              key={post.id}
-              createdAt={post.createdAt}
-              isLiked={false}
-            />
-          </Link>
-        ))}
-        <p className="text-xl font-semibold text-sky-500">#hashtags</p>
-        {data?.hashs?.map((item) => (
-          <TagFeed
-            hashtags={["test"]}
-            customName={item.name}
-            id={item.id}
-            tags_name={item.name}
-          />
-        ))}
-      </div> */

@@ -7,6 +7,8 @@ import usePostInfo from "@/libs/client/usePostInfo";
 import useUser from "@/libs/client/useUser";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { useSetRecoilState } from "recoil";
+import { prevPostInfo } from "@/libs/client/useAtoms";
 
 interface EditPropsWithHashTags extends Post {
   hashtag: {
@@ -25,9 +27,12 @@ export default function EditPost() {
   const { data } = usePostInfo();
   const { user } = useUser();
   const router = useRouter();
+  const setPostInfo = useSetRecoilState(prevPostInfo);
   useEffect(() => {
     if (data && user && data.post.userId !== user.id) {
       router.back();
+    } else if (data && data.ok) {
+      setPostInfo({ ...data });
     }
   }, [data, user]);
 

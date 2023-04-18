@@ -1,5 +1,5 @@
 import { atom, selector } from "recoil";
-
+import { PostForm } from "./usePostInfo";
 interface ICommentsInfo {
   commentsId: number;
   message: string;
@@ -52,4 +52,9 @@ export const CommentsPageNav = atom({
     currentPage: 1,
     limitPage: 1,
   },
+});
+
+export const prevPostInfo = atom<PostForm | undefined>({
+  key: "prevPostInfo",
+  default: undefined,
 });

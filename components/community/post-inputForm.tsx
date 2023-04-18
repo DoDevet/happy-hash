@@ -306,7 +306,7 @@ export default function PostInputForm({
         </div>
         <div>
           <p className="mb-4 ml-1 text-xl font-semibold">Select Hashtag</p>
-          <div className="grid grid-cols-5 place-items-center">
+          <div className="flex flex-wrap space-x-5">
             {hashArr?.map((hash, index) => (
               <div
                 key={index}

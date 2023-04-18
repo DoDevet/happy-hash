@@ -4,11 +4,10 @@ import { useRouter } from "next/router";
 import React from "react";
 interface PostFeedNavProps {
   comuId: string;
-  title: string;
   hashs: string[] | undefined | null;
 }
 
-function PostFeedNav({ comuId, title, hashs }: PostFeedNavProps) {
+function PostFeedNav({ comuId, hashs }: PostFeedNavProps) {
   const router = useRouter();
   const {
     query: { selectHash },

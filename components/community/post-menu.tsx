@@ -1,8 +1,10 @@
+import { postMenuOpen } from "@/libs/client/useAtoms";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useSetRecoilState } from "recoil";
 
 interface DeleteMutation {
   ok: boolean;
@@ -11,6 +13,7 @@ interface DeleteMutation {
 
 export default function PostMenu() {
   const router = useRouter();
+  const setPostMenu = useSetRecoilState(postMenuOpen);
   const {
     query: { comuId, postId, hashId },
   } = router;
@@ -28,6 +31,7 @@ export default function PostMenu() {
 
   useEffect(() => {
     if (deleteResponse && deleteResponse.ok) {
+      setPostMenu((prev) => !prev);
       router.replace(
         `/community/posts?${comuId ? `comuId=${comuId}` : `hashId=${hashId}`}`,
         undefined,
@@ -43,7 +47,7 @@ export default function PostMenu() {
             href={`/community/posts/${postId}/edit?${
               comuId ? `comuId=${comuId}` : `hashId=${hashId}`
             }`}
-            replace
+            onClick={() => setPostMenu((prev) => !prev)}
             className={cls(
               "hover:text-darkblue rounded-md px-2 py-2 text-sm outline-none transition-colors hover:bg-slate-100 dark:text-[#3b62a5] dark:hover:bg-slate-900"
             )}

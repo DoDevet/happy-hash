@@ -1,4 +1,5 @@
 import usePostInfo from "@/libs/client/usePostInfo";
+import useUser from "@/libs/client/useUser";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { PostFeedProps } from "./post-Feed";
@@ -19,8 +20,10 @@ export default function PostModalDetail({
   image,
   payload,
   avatarId,
+  userId,
 }: PostFeedProps) {
   const router = useRouter();
+  const { user } = useUser();
   const { data, mutate } = usePostInfo();
   useEffect(() => {
     if (data && !data.ok) {
@@ -43,7 +46,7 @@ export default function PostModalDetail({
         mutate={mutate}
         isFav={data?.isFav}
         likes={data?.post._count.likes}
-        isMine={data?.isMine}
+        isMine={userId === user?.id}
         hashtagId={data?.post.hashtagId}
       />
     </div>

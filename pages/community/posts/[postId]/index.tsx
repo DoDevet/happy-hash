@@ -1,4 +1,5 @@
 import PostForm, { IPostForm } from "@/components/community/post-form";
+import { prevPostInfo } from "@/libs/client/useAtoms";
 import usePostInfo from "@/libs/client/usePostInfo";
 import client from "@/libs/server/client";
 import { withSsrSession } from "@/libs/server/withSession";

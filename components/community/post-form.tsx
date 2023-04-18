@@ -8,7 +8,7 @@ import { Like, Post, User } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { KeyedMutator } from "swr";
+import { KeyedMutator, useSWRConfig } from "swr";
 
 interface PostWithHashtag extends Post {
   hashtag: {
@@ -78,6 +78,7 @@ export default function PostForm({
     url: `/api/community/posts/${postId}/fav`,
     method: "POST",
   });
+
   const onClickFavBtn = () => {
     mutate(
       (prev) =>
@@ -96,6 +97,7 @@ export default function PostForm({
         },
       false
     );
+
     if (!toggleLoading) {
       toggleFav({ postId });
     }

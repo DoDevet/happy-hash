@@ -2,10 +2,11 @@ import { postMenuOpen } from "@/libs/client/useAtoms";
 import { cls } from "@/libs/client/utils";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import PostMenu from "./community/post-menu";
 import getQueryUrl from "@/libs/client/getQueryUrl";
 import { useEffect } from "react";
+import PostMenuLayout from "./community/layout-postMenu";
 interface LayoutProps {
   hasTabbar?: boolean;
   title?: string | string[] | undefined | null;
@@ -28,40 +29,27 @@ export default function Layout({
   isModal = false,
 }: LayoutProps) {
   const router = useRouter();
-  const {
-    query: { comuId, hashId, selectHash },
-  } = router;
-  const [postMenu, setPostMenu] = useRecoilState(postMenuOpen);
-  const queryUrl = getQueryUrl({ comuId, hashId });
-
-  useEffect(() => {
-    window.history.scrollRestoration = "manual";
-  }, []);
   const onClickBackArrow = () => {
-    router.beforePopState((state) => {
-      state.options.scroll = false;
-      return true;
-    });
-    if (!queryUrl) router.back();
-    if (selectHash!!) {
-      router.replace(
-        `/community/posts?${queryUrl}&selectHash=${selectHash}`,
-        undefined,
-        {
-          shallow: true,
-        }
-      );
-    } else
-      router.replace(`/community/posts?${queryUrl}`, undefined, {
+    const {
+      query: { comuId, hashId, selectHash },
+    } = router;
+
+    if (selectHash) {
+      router.back();
+    }
+    if (comuId) {
+      router.replace(`/community/posts?comuId=${comuId}`, undefined, {
         shallow: true,
       });
-    setPostMenu(false);
+    } else if (hashId) {
+      router.replace(`/community/posts?hashId=${hashId}`, undefined, {
+        shallow: true,
+      });
+    } else router.back();
   };
   const onClickBackHome = () => {
-    setPostMenu(false);
-    router.back();
+    router.push("/");
   };
-
   return (
     <div className="relative mx-auto min-h-screen w-full dark:border-x-gray-700 dark:bg-[#1e272e]  dark:text-gray-200">
       <Head>
@@ -111,40 +99,7 @@ export default function Layout({
                 </svg>
               </button>
             ) : null}
-            {hasPostMenuBar ? (
-              <div className="absolute right-4">
-                <button
-                  onClick={() => setPostMenu((prev) => !prev)}
-                  className={cls(
-                    "inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out focus:outline-none",
-                    postMenu ? "bg-slate-200 dark:bg-slate-800" : ""
-                  )}
-                >
-                  <svg
-                    className="h-6 w-6"
-                    stroke="currentColor"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      className={cls(postMenu ? "hidden" : "inline-flex")}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
-                    ></path>
-                    <path
-                      className={cls(postMenu ? "inline-flex" : "hidden")}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    ></path>
-                  </svg>
-                </button>
-                {hasPostMenuBar && postMenu && <PostMenu />}
-              </div>
-            ) : null}
+            {hasPostMenuBar && <PostMenuLayout />}
             <span>{title}</span>
           </div>
         </div>
@@ -156,9 +111,6 @@ export default function Layout({
           bottomTab ? "pb-16" : "",
           isModal ? "mx-auto max-w-3xl" : ""
         )}
-        onClick={() => {
-          setPostMenu(false);
-        }}
       >
         {children}
       </div>

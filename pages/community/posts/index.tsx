@@ -13,6 +13,9 @@ import { withSsrSession } from "@/libs/server/withSession";
 import client from "@/libs/server/client";
 import { cls } from "@/libs/client/utils";
 import PostFeedNav from "@/components/community/post-Feed-nav";
+import usePostInfo from "@/libs/client/usePostInfo";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { prevPostInfo } from "@/libs/client/useAtoms";
 interface PostForm {
   hashtag: { name: string };
   id: number;
@@ -48,7 +51,6 @@ export interface SSRPostProps {
 interface PostProps {
   ok: boolean;
   posts: PostForm[];
-  hashs: string[] | null | undefined;
   [key: string]: any;
 }
 
@@ -56,11 +58,11 @@ export default function HashCommunity({
   title,
   comuId,
   hashId,
-  ok,
   hashs,
 }: PostProps) {
   const router = useRouter();
   const { postId, selectHash } = router.query;
+  const [getPostInfo, setGetPostInfo] = useRecoilState(prevPostInfo);
   const [selectPopular, setSelectPopular] = useState(false);
   const url = comuId ? `?comuId=${comuId}` : `?hashId=${hashId}`;
   const queryUrl = getQueryUrl({
@@ -68,16 +70,14 @@ export default function HashCommunity({
     hashId: hashId?.toString(),
   });
   const [postInfo, setPostInfo] = useState<PostFeedProps | undefined>();
-  const { data, isValidating, mutate, setSize, isLoading } =
-    useSWRInfinite<PostProps>(
-      (index) =>
-        `/api/community/posts${url}&page=${index + 1}${
-          selectHash ? `&selectHash=${selectHash}` : ""
-        }${selectPopular ? `&popular=${10}` : ""}
+  const { data, isValidating, mutate, setSize } = useSWRInfinite<PostProps>(
+    (index) =>
+      `/api/community/posts${url}&page=${index + 1}${
+        selectHash ? `&selectHash=${selectHash}` : ""
+      }${selectPopular ? `&popular=${10}` : ""}
         `,
-      null,
-      { revalidateFirstPage: false }
-    );
+    null
+  );
 
   const isEmpty = data?.[0]?.posts?.length === 0;
   const isReachingEnd =
@@ -86,12 +86,35 @@ export default function HashCommunity({
   useEffect(() => {
     if (!postId) {
       document.body.style.overflow = "unset";
-      mutate();
+      if (data !== undefined && getPostInfo) {
+        mutate(async (prev) => {
+          return (
+            prev &&
+            prev.map((prev) => {
+              return {
+                ok: true,
+                posts: prev.posts.map((post) => {
+                  if (post.id === getPostInfo.post.id) {
+                    return {
+                      ...getPostInfo.post,
+                      likes: getPostInfo.isFav
+                        ? [{ ...getPostInfo.post.likes }]
+                        : [],
+                    };
+                  }
+                  return post;
+                }),
+              };
+            })
+          );
+        });
+        setGetPostInfo(undefined);
+      }
     }
     if (postId) {
       document.body.style.overflow = "hidden";
     }
-  }, [postId, mutate]);
+  }, [postId, mutate, getPostInfo, data]);
   const posts = data?.flatMap((post) => post?.posts);
   const memoList = React.useMemo(
     () =>
@@ -102,7 +125,6 @@ export default function HashCommunity({
           }`}
           as={`/community/posts/${post?.id}?${queryUrl}`}
           shallow
-          replace
           key={post?.id}
           className="cursor-pointer"
           onClick={() => {
@@ -121,6 +143,7 @@ export default function HashCommunity({
               avatarId: post?.user.avatar,
               payload: post?.payload,
               image: post?.image,
+              userId: post?.user?.id,
             });
           }}
         >
@@ -150,7 +173,7 @@ export default function HashCommunity({
       )}
       <Layout title={title} hasTabbar hasBackHome bottomTab>
         {comuId && hashs?.length! > 1 ? (
-          <PostFeedNav comuId={comuId} hashs={hashs} title={title} />
+          <PostFeedNav comuId={comuId} hashs={hashs} />
         ) : null}
         <div
           className={cls(

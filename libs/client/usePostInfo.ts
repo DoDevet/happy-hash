@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import useSWR from "swr";
-import { CommentsPageNav } from "./useAtoms";
+import { CommentsPageNav, prevPostInfo } from "./useAtoms";
 interface PostWithHashtag extends Post {
   hashtag: {
     name: string;
@@ -16,7 +16,7 @@ interface PostWithHashtag extends Post {
   };
   user: User;
 }
-interface PostForm {
+export interface PostForm {
   ok: boolean;
   post: PostWithHashtag;
   isFav: boolean;
@@ -27,6 +27,7 @@ interface PostForm {
 export default function usePostInfo() {
   const router = useRouter();
   const setCommentsNav = useSetRecoilState(CommentsPageNav);
+  const setPostInfo = useSetRecoilState(prevPostInfo);
   const {
     query: { postId },
   } = router;
@@ -38,6 +39,7 @@ export default function usePostInfo() {
 
   useEffect(() => {
     if (data && data.ok) {
+      setPostInfo({ ...data });
       setCommentsNav((prev) => ({
         currentPage: 1,
         limitPage: Math.ceil(data.post._count.comments / 10),

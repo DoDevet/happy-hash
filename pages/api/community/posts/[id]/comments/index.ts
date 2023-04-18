@@ -33,7 +33,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           },
         },
         take: 10,
-        skip: 10 * (+page! - 1),
+        skip: page ? (+page - 1) * 10 : 0,
       });
       return res.json({
         ok: true,

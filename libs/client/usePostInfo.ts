@@ -27,7 +27,7 @@ export interface PostForm {
 export default function usePostInfo() {
   const router = useRouter();
   const setCommentsNav = useSetRecoilState(CommentsPageNav);
-  const setPostInfo = useSetRecoilState(prevPostInfo);
+
   const {
     query: { postId },
   } = router;
@@ -39,7 +39,6 @@ export default function usePostInfo() {
 
   useEffect(() => {
     if (data && data.ok) {
-      setPostInfo({ ...data });
       setCommentsNav((prev) => ({
         currentPage: 1,
         limitPage: Math.ceil(data.post._count.comments / 10),

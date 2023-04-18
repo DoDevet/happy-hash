@@ -16,6 +16,7 @@ import PostFeedNav from "@/components/community/post-Feed-nav";
 import usePostInfo from "@/libs/client/usePostInfo";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { prevPostInfo } from "@/libs/client/useAtoms";
+import usePostFeed from "@/libs/client/usePostFeed";
 interface PostForm {
   hashtag: { name: string };
   id: number;
@@ -64,29 +65,22 @@ export default function HashCommunity({
   const { postId, selectHash } = router.query;
   const [getPostInfo, setGetPostInfo] = useRecoilState(prevPostInfo);
   const [selectPopular, setSelectPopular] = useState(false);
-  const url = comuId ? `?comuId=${comuId}` : `?hashId=${hashId}`;
+
   const queryUrl = getQueryUrl({
     comuId: comuId?.toString(),
     hashId: hashId?.toString(),
   });
   const [postInfo, setPostInfo] = useState<PostFeedProps | undefined>();
-  const { data, isValidating, mutate, setSize } = useSWRInfinite<PostProps>(
-    (index) =>
-      `/api/community/posts${url}&page=${index + 1}${
-        selectHash ? `&selectHash=${selectHash}` : ""
-      }${selectPopular ? `&popular=${10}` : ""}
-        `,
-    null
-  );
+  const { data, isValidating, mutate, setSize } = usePostFeed();
 
   const isEmpty = data?.[0]?.posts?.length === 0;
   const isReachingEnd =
     isEmpty || (data && data[data.length - 1]?.posts?.length < 20);
-
+  console.log(data);
   useEffect(() => {
     if (!postId) {
       document.body.style.overflow = "unset";
-      if (data !== undefined && getPostInfo) {
+      if (getPostInfo) {
         mutate(async (prev) => {
           return (
             prev &&
@@ -107,14 +101,14 @@ export default function HashCommunity({
               };
             })
           );
-        });
+        }, false);
         setGetPostInfo(undefined);
       }
     }
     if (postId) {
       document.body.style.overflow = "hidden";
     }
-  }, [postId, mutate, getPostInfo, data]);
+  }, [postId, mutate, data, getPostInfo]);
   const posts = data?.flatMap((post) => post?.posts);
   const memoList = React.useMemo(
     () =>

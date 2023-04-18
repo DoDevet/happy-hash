@@ -1,7 +1,9 @@
+import { prevPostInfo } from "@/libs/client/useAtoms";
 import usePostInfo from "@/libs/client/usePostInfo";
 import useUser from "@/libs/client/useUser";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useSetRecoilState } from "recoil";
 import { PostFeedProps } from "./post-Feed";
 import PostForm from "./post-form";
 
@@ -25,9 +27,13 @@ export default function PostModalDetail({
   const router = useRouter();
   const { user } = useUser();
   const { data, mutate } = usePostInfo();
+  const setPostInfo = useSetRecoilState(prevPostInfo);
   useEffect(() => {
     if (data && !data.ok) {
       router.back();
+    }
+    if (data && data.ok) {
+      setPostInfo({ ...data });
     }
   }, [data]);
   return (

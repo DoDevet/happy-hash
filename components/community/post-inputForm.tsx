@@ -61,7 +61,6 @@ export default function PostInputForm({
     handleSubmit,
     setValue,
     setError,
-    getValues,
     watch,
     formState: { errors },
   } = useForm<PostForm>();

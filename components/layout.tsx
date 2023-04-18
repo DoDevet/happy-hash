@@ -1,12 +1,9 @@
-import { postMenuOpen } from "@/libs/client/useAtoms";
 import { cls } from "@/libs/client/utils";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import PostMenu from "./community/post-menu";
-import getQueryUrl from "@/libs/client/getQueryUrl";
-import { useEffect } from "react";
+
 import PostMenuLayout from "./community/layout-postMenu";
+import Link from "next/link";
 interface LayoutProps {
   hasTabbar?: boolean;
   title?: string | string[] | undefined | null;
@@ -29,22 +26,26 @@ export default function Layout({
   isModal = false,
 }: LayoutProps) {
   const router = useRouter();
+  const {
+    query: { comuId, hashId, selectHash, postId },
+  } = router;
   const onClickBackArrow = () => {
-    const {
-      query: { comuId, hashId, selectHash },
-    } = router;
-
     if (selectHash) {
       router.back();
     }
-    if (comuId) {
-      router.replace(`/community/posts?comuId=${comuId}`, undefined, {
-        shallow: true,
-      });
-    } else if (hashId) {
-      router.replace(`/community/posts?hashId=${hashId}`, undefined, {
-        shallow: true,
-      });
+    const url = comuId
+      ? `?comuId=${comuId}`
+      : hashId
+      ? `?hashId=${hashId}`
+      : null;
+    if (url) {
+      postId
+        ? router.replace(`/community/posts${url}`, undefined, {
+            shallow: true,
+          })
+        : router.replace(`/community/posts${url}`, undefined, {
+            shallow: false,
+          });
     } else router.back();
   };
   const onClickBackHome = () => {
@@ -64,7 +65,7 @@ export default function Layout({
         >
           <div className="relative mx-auto flex w-full max-w-3xl items-center justify-center border-b bg-white py-5 pb-3  dark:border-gray-500 dark:bg-[#1e272e]">
             {hasBackArrow ? (
-              <button className="absolute left-4" onClick={onClickBackArrow}>
+              <button onClick={onClickBackArrow} className="absolute left-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

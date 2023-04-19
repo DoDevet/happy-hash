@@ -1,5 +1,6 @@
 import { postMenuOpen } from "@/libs/client/useAtoms";
 import useMutation from "@/libs/client/useMutation";
+import usePostFeed from "@/libs/client/usePostFeed";
 import { cls } from "@/libs/client/utils";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -14,6 +15,7 @@ interface DeleteMutation {
 export default function PostMenu() {
   const router = useRouter();
   const setPostMenu = useSetRecoilState(postMenuOpen);
+  const { mutate } = usePostFeed({});
   const {
     query: { comuId, postId, hashId },
   } = router;
@@ -26,17 +28,28 @@ export default function PostMenu() {
 
   const onDeleteValid = () => {
     if (DeleteLoading) return;
+    mutate((prev) => {
+      return (
+        prev &&
+        prev.map((prev) => {
+          return {
+            ok: true,
+            posts: prev.posts.filter((post) => post.id !== +postId!),
+          };
+        })
+      );
+    }, false);
     deletePost({});
+    setPostMenu((prev) => !prev);
+    router.replace(
+      `/community/posts?${comuId ? `comuId=${comuId}` : `hashId=${hashId}`}`,
+      undefined,
+      { scroll: false, shallow: true }
+    );
   };
 
   useEffect(() => {
     if (deleteResponse && deleteResponse.ok) {
-      setPostMenu((prev) => !prev);
-      router.replace(
-        `/community/posts?${comuId ? `comuId=${comuId}` : `hashId=${hashId}`}`,
-        undefined,
-        { shallow: true }
-      );
     }
   }, [deleteResponse, router]);
   return (

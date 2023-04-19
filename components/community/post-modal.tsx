@@ -1,10 +1,11 @@
 import { prevPostInfo } from "@/libs/client/useAtoms";
+import usePostFeed from "@/libs/client/usePostFeed";
 import usePostInfo from "@/libs/client/usePostInfo";
 import useUser from "@/libs/client/useUser";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
-import { PostFeedProps } from "./post-Feed";
+import postFeed, { PostFeedProps } from "./post-Feed";
 import PostForm from "./post-form";
 
 export default function PostModalDetail({
@@ -28,8 +29,21 @@ export default function PostModalDetail({
   const { user } = useUser();
   const { data, mutate } = usePostInfo();
   const setPostInfo = useSetRecoilState(prevPostInfo);
+  const { mutate: postFeedMutate } = usePostFeed({});
+
   useEffect(() => {
     if (data && !data.ok) {
+      postFeedMutate((prev) => {
+        return (
+          prev &&
+          prev.map((prev) => {
+            return {
+              ok: true,
+              posts: prev.posts.filter((post) => post.id !== +postId!),
+            };
+          })
+        );
+      }, false);
       router.back();
     }
     if (data && data.ok) {

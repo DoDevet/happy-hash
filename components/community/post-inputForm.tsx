@@ -79,7 +79,6 @@ export default function PostInputForm({
   const [imageLoading, setImageLoading] = useState(false);
   const image = watch("image");
   const [mutateSet, setMutateSet] = useState<MutateSetProps>();
-  const { mutate: postFeedMutate } = usePostFeed();
   const [postMutation, { data: postMutationResponse, loading }] =
     useMutation<PostMutationResponse>({
       url: edit

@@ -14,7 +14,7 @@ function PostFeedNav({ comuId, hashs }: PostFeedNavProps) {
   } = router;
 
   return (
-    <div className="fixed top-14 z-40 mx-auto h-12 w-full bg-inherit py-1 ">
+    <div className="fixed top-14 z-20 mx-auto h-12 w-full bg-inherit bg-white py-1 dark:bg-[#1e272e] ">
       <div className="mx-auto flex w-full max-w-3xl items-center space-x-5 overflow-y-hidden   border-b px-4 py-2 dark:border-gray-500">
         <Link
           href={`/community/posts?comuId=${comuId}`}

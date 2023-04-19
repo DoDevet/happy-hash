@@ -64,19 +64,19 @@ export default function HashCommunity({
   const router = useRouter();
   const { postId, selectHash } = router.query;
   const [getPostInfo, setGetPostInfo] = useRecoilState(prevPostInfo);
-  const [selectPopular, setSelectPopular] = useState(false);
+  const [selectFilter, setSelectFilter] = useState(false);
 
   const queryUrl = getQueryUrl({
     comuId: comuId?.toString(),
     hashId: hashId?.toString(),
   });
   const [postInfo, setPostInfo] = useState<PostFeedProps | undefined>();
-  const { data, isValidating, mutate, setSize } = usePostFeed();
+  const { data, isValidating, mutate, setSize } = usePostFeed({ selectFilter });
 
   const isEmpty = data?.[0]?.posts?.length === 0;
   const isReachingEnd =
     isEmpty || (data && data[data.length - 1]?.posts?.length < 20);
-  console.log(data);
+
   useEffect(() => {
     if (!postId) {
       document.body.style.overflow = "unset";
@@ -165,7 +165,7 @@ export default function HashCommunity({
           <PostModalDetail {...(postInfo as PostFeedProps)} />
         </div>
       )}
-      <Layout title={title} hasTabbar hasBackHome bottomTab>
+      <Layout title={title} hasTabbar hasBackHome bottomTab hasFilterMenu>
         {comuId && hashs?.length! > 1 ? (
           <PostFeedNav comuId={comuId} hashs={hashs} />
         ) : null}
@@ -245,22 +245,22 @@ export default function HashCommunity({
         <nav className="fixed bottom-0 z-10 w-full bg-white px-2 py-1 pb-8 text-xs text-gray-700 shadow-md dark:bg-[#1e272e] dark:text-gray-200">
           <div className="relative mx-auto flex w-full max-w-3xl items-center justify-center space-x-3">
             <button
-              onClick={() => setSelectPopular(false)}
+              onClick={() => setSelectFilter(false)}
               className={cls(
                 "flex-1 border-t-2  pt-3 text-center ",
-                !selectPopular ? "border-[#3b62a5]" : ""
+                !selectFilter ? "border-[#3b62a5]" : ""
               )}
             >
               ALL
             </button>
             <button
-              onClick={() => setSelectPopular(true)}
+              onClick={() => setSelectFilter(true)}
               className={cls(
                 "flex-1 border-t-2  pt-3 text-center dark:bg-[#1e272e] dark:text-gray-200",
-                selectPopular ? "border-[#3b62a5]" : ""
+                selectFilter ? "border-[#3b62a5]" : ""
               )}
             >
-              POPULAR
+              FILTER
             </button>
           </div>
         </nav>

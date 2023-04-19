@@ -58,3 +58,12 @@ export const prevPostInfo = atom<PostForm | undefined>({
   key: "prevPostInfo",
   default: undefined,
 });
+
+export const comuFilter = atom({
+  key: "filter",
+  default: {
+    likesNum: 10,
+    viewsNum: 0,
+    commentsNum: 0,
+  },
+});

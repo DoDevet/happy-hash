@@ -15,7 +15,7 @@ import { cls } from "@/libs/client/utils";
 import PostFeedNav from "@/components/community/post-Feed-nav";
 import usePostInfo from "@/libs/client/usePostInfo";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { prevPostInfo } from "@/libs/client/useAtoms";
+import { comuFilter, prevPostInfo } from "@/libs/client/useAtoms";
 
 interface PostForm {
   hashtag: { name: string };
@@ -55,16 +55,21 @@ interface PostProps {
   [key: string]: any;
 }
 
-export default function usePostFeed() {
+export default function usePostFeed({
+  selectFilter,
+}: {
+  selectFilter?: boolean;
+}) {
   const router = useRouter();
+  const getFileterInfo = useRecoilValue(comuFilter);
+
   const { selectHash, comuId, hashId } = router.query;
-  const [selectPopular, setSelectPopular] = useState(false);
   const url = comuId ? `?comuId=${comuId}` : `?hashId=${hashId}`;
   const { data, isValidating, mutate, setSize } = useSWRInfinite<PostProps>(
     (index) =>
       `/api/community/posts${url}&page=${index + 1}${
         selectHash ? `&selectHash=${selectHash}` : ""
-      }${selectPopular ? `&popular=${10}` : ""}
+      }${selectFilter ? `&popular=${getFileterInfo.likesNum}` : ""}
         `,
     null,
     { revalidateFirstPage: true, revalidateOnFocus: false }

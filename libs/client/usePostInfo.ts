@@ -39,7 +39,7 @@ export default function usePostInfo() {
 
   useEffect(() => {
     if (data && data.ok) {
-      setCommentsNav((prev) => ({
+      setCommentsNav(() => ({
         currentPage: 1,
         limitPage: Math.ceil(data.post._count.comments / 10),
         totalComments: data.post._count.comments,

@@ -14,7 +14,6 @@ interface shorcutWithHashTag extends shortcutTag {
     }
   ];
 }
-
 interface HashForm {
   ok: true;
   tags: shorcutWithHashTag[];

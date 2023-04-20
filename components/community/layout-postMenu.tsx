@@ -2,8 +2,8 @@ import { postMenuOpen } from "@/libs/client/useAtoms";
 import { cls } from "@/libs/client/utils";
 import { useRecoilState } from "recoil";
 import PostMenu from "./post-menu";
-
-export default function PostMenuLayout() {
+import React from "react";
+function PostMenuLayout() {
   const [postMenu, setPostMenu] = useRecoilState(postMenuOpen);
   return (
     <div className="absolute right-4">
@@ -40,3 +40,4 @@ export default function PostMenuLayout() {
     </div>
   );
 }
+export default React.memo(PostMenuLayout);

@@ -5,7 +5,7 @@ import useUser from "@/libs/client/useUser";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
-import postFeed, { PostFeedProps } from "./post-Feed";
+import { PostFeedProps } from "./post-Feed";
 import PostForm from "./post-form";
 
 export default function PostModalDetail({
@@ -13,11 +13,6 @@ export default function PostModalDetail({
   hashtag,
   username,
   createdAt,
-  likes,
-  comments,
-  isLiked,
-  comuId,
-  hashId,
   postId,
   views,
   image,
@@ -29,7 +24,7 @@ export default function PostModalDetail({
   const { user } = useUser();
   const { data, mutate } = usePostInfo();
   const setPostInfo = useSetRecoilState(prevPostInfo);
-  const { mutate: postFeedMutate } = usePostFeed({});
+  const { mutate: postFeedMutate } = usePostFeed();
 
   useEffect(() => {
     if (data && !data.ok) {

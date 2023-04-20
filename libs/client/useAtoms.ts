@@ -67,3 +67,8 @@ export const comuFilter = atom({
     commentsNum: 0,
   },
 });
+
+export const selectFilter = atom({
+  key: "selectFilter",
+  default: false,
+});

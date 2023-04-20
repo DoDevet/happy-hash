@@ -1,22 +1,20 @@
 import FixedButton from "@/components/fixed-btn";
 import Layout from "@/components/layout";
 import { useRouter } from "next/router";
-import useSWRInfinite from "swr/infinite";
 import React, { useEffect, useState } from "react";
 import PostFeed, { PostFeedProps } from "@/components/community/post-Feed";
 import PostModalDetail from "@/components/community/post-modal";
 import getQueryUrl from "@/libs/client/getQueryUrl";
 import Link from "next/link";
-import { useInfiniteScroll } from "@/libs/client/useInfiniteScroll";
 import { NextPageContext } from "next";
 import { withSsrSession } from "@/libs/server/withSession";
 import client from "@/libs/server/client";
 import { cls } from "@/libs/client/utils";
 import PostFeedNav from "@/components/community/post-Feed-nav";
-import usePostInfo from "@/libs/client/usePostInfo";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { prevPostInfo } from "@/libs/client/useAtoms";
 import usePostFeed from "@/libs/client/usePostFeed";
+import CommunityBottomTab from "@/components/community/community-bottomTab";
 interface PostForm {
   hashtag: { name: string };
   id: number;
@@ -62,17 +60,15 @@ export default function HashCommunity({
   hashs,
 }: PostProps) {
   const router = useRouter();
-  const { postId, selectHash } = router.query;
-  const [getPostInfo, setGetPostInfo] = useRecoilState(prevPostInfo);
-  const [selectFilter, setSelectFilter] = useState(false);
-
   const queryUrl = getQueryUrl({
     comuId: comuId?.toString(),
     hashId: hashId?.toString(),
   });
+  const { postId, selectHash } = router.query;
+  const [getPostInfo, setGetPostInfo] = useRecoilState(prevPostInfo);
   const [postInfo, setPostInfo] = useState<PostFeedProps | undefined>();
-  const { data, isValidating, mutate, setSize } = usePostFeed({ selectFilter });
-
+  const { data, isValidating, mutate, setSize } = usePostFeed();
+  const posts = data?.flatMap((post) => post?.posts);
   const isEmpty = data?.[0]?.posts?.length === 0;
   const isReachingEnd =
     isEmpty || (data && data[data.length - 1]?.posts?.length < 20);
@@ -109,55 +105,7 @@ export default function HashCommunity({
       document.body.style.overflow = "hidden";
     }
   }, [postId, mutate, data, getPostInfo]);
-  const posts = data?.flatMap((post) => post?.posts);
-  const memoList = React.useMemo(
-    () =>
-      posts?.map((post) => (
-        <Link
-          href={`/community/posts?postId=${post?.id}&${queryUrl}${
-            selectHash ? `&selectHash=${selectHash}` : ""
-          }`}
-          as={`/community/posts/${post?.id}?${queryUrl}`}
-          shallow
-          key={post?.id}
-          className="cursor-pointer"
-          onClick={() => {
-            setPostInfo({
-              comments: post?._count?.comments,
-              title: post?.title,
-              createdAt: post?.createdAt,
-              hashtag: post?.hashtag?.name,
-              hashId: hashId?.toString(),
-              postId: post?.id,
-              comuId: comuId?.toString(),
-              likes: post?._count?.likes,
-              username: post?.user?.name,
-              isLiked: post?.likes.length !== 0,
-              views: post?.views,
-              avatarId: post?.user.avatar,
-              payload: post?.payload,
-              image: post?.image,
-              userId: post?.user?.id,
-            });
-          }}
-        >
-          <PostFeed
-            comments={post?._count?.comments}
-            title={post?.title}
-            createdAt={post?.createdAt}
-            hashtag={post?.hashtag?.name}
-            hashId={hashId?.toString()}
-            postId={post?.id}
-            comuId={comuId?.toString()}
-            likes={post?._count?.likes}
-            username={post?.user?.name}
-            isLiked={post?.likes?.length !== 0}
-            views={post?.views}
-          />
-        </Link>
-      )),
-    [data]
-  );
+
   return (
     <div>
       {postId && (
@@ -166,9 +114,11 @@ export default function HashCommunity({
         </div>
       )}
       <Layout title={title} hasTabbar hasBackHome bottomTab hasFilterMenu>
-        {comuId && hashs?.length! > 1 ? (
-          <PostFeedNav comuId={comuId} hashs={hashs} />
-        ) : null}
+        <PostFeedNav
+          comuId={comuId}
+          hashs={hashs}
+          selectHash={selectHash?.toString()}
+        />
         <div
           className={cls(
             "w-full dark:bg-[#1e272e] dark:text-gray-200",
@@ -180,8 +130,57 @@ export default function HashCommunity({
               "relative mx-auto flex h-full w-full max-w-3xl flex-col divide-y dark:divide-gray-500"
             )}
           >
-            {memoList}
-            {!isReachingEnd && !isValidating ? (
+            {/* {memoList} */}
+            {posts?.map((post) => (
+              <Link
+                href={`/community/posts?postId=${post?.id}&${queryUrl}${
+                  selectHash ? `&selectHash=${selectHash}` : ""
+                }`}
+                as={{
+                  pathname: router.pathname + `/${post?.id}`,
+                  query: {
+                    ...router.query,
+                  },
+                }}
+                shallow
+                key={post?.id}
+                onClick={() => {
+                  setPostInfo({
+                    comments: post?._count?.comments,
+                    title: post?.title,
+                    createdAt: post?.createdAt,
+                    hashtag: post?.hashtag?.name,
+                    hashId: hashId?.toString(),
+                    postId: post?.id,
+                    comuId: comuId?.toString(),
+                    likes: post?._count?.likes,
+                    username: post?.user?.name,
+                    isLiked: post?.likes.length !== 0,
+                    views: post?.views,
+                    avatarId: post?.user.avatar,
+                    payload: post?.payload,
+                    image: post?.image,
+                    userId: post?.user?.id,
+                  });
+                }}
+                className="cursor-pointer"
+              >
+                <PostFeed
+                  comments={post?._count?.comments}
+                  title={post?.title}
+                  createdAt={post?.createdAt}
+                  hashtag={post?.hashtag?.name}
+                  hashId={hashId?.toString()}
+                  postId={post?.id}
+                  comuId={comuId?.toString()}
+                  likes={post?._count?.likes}
+                  username={post?.user?.name}
+                  isLiked={post?.likes?.length !== 0}
+                  views={post?.views}
+                />
+              </Link>
+            ))}
+            {!isReachingEnd && !isValidating && (
               <div
                 className={
                   "text-darkblue flex cursor-pointer flex-col items-center justify-center py-2"
@@ -204,7 +203,7 @@ export default function HashCommunity({
                   />
                 </svg>
               </div>
-            ) : null}
+            )}
             {!isReachingEnd && isValidating ? (
               <div className="flex w-full items-center justify-center space-x-1 py-3">
                 <svg
@@ -241,29 +240,7 @@ export default function HashCommunity({
             </svg>
           </FixedButton>
         </div>
-
-        <nav className="fixed bottom-0 z-10 w-full bg-white px-2 py-1 pb-8 text-xs text-gray-700 shadow-md dark:bg-[#1e272e] dark:text-gray-200">
-          <div className="relative mx-auto flex w-full max-w-3xl items-center justify-center space-x-3">
-            <button
-              onClick={() => setSelectFilter(false)}
-              className={cls(
-                "flex-1 border-t-2  pt-3 text-center ",
-                !selectFilter ? "border-[#3b62a5]" : ""
-              )}
-            >
-              ALL
-            </button>
-            <button
-              onClick={() => setSelectFilter(true)}
-              className={cls(
-                "flex-1 border-t-2  pt-3 text-center dark:bg-[#1e272e] dark:text-gray-200",
-                selectFilter ? "border-[#3b62a5]" : ""
-              )}
-            >
-              FILTER
-            </button>
-          </div>
-        </nav>
+        <CommunityBottomTab />
       </Layout>
     </div>
   );

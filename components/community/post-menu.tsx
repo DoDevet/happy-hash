@@ -15,9 +15,9 @@ interface DeleteMutation {
 export default function PostMenu() {
   const router = useRouter();
   const setPostMenu = useSetRecoilState(postMenuOpen);
-  const { mutate } = usePostFeed({});
+  const { mutate } = usePostFeed();
   const {
-    query: { comuId, postId, hashId },
+    query: { comuId, postId, hashId, selectHash },
   } = router;
 
   const [deletePost, { data: deleteResponse, loading: DeleteLoading }] =
@@ -58,7 +58,11 @@ export default function PostMenu() {
         <div className="flex flex-col space-y-3 py-1 outline-none">
           <Link
             href={`/community/posts/${postId}/edit?${
-              comuId ? `comuId=${comuId}` : `hashId=${hashId}`
+              comuId
+                ? `comuId=${comuId}`
+                : `hashId=${hashId}${
+                    selectHash ? `&selectHash=${selectHash}` : ""
+                  }`
             }`}
             onClick={() => setPostMenu((prev) => !prev)}
             className={cls(

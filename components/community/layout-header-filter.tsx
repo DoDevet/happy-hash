@@ -3,15 +3,14 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import Button from "../button";
-
+import React from "react";
 interface FilterData {
   likesNum: number;
   viewsNum: number;
   commentsNum: number;
 }
-export default function LayoutHeaderFilter() {
+function LayoutHeaderFilter() {
   const { register, handleSubmit, setValue } = useForm<FilterData>();
-
   const [openFilter, setOpenFilter] = useState(false);
   const [getFilter, setFilter] = useRecoilState(comuFilter);
 
@@ -137,3 +136,4 @@ export default function LayoutHeaderFilter() {
     </div>
   );
 }
+export default React.memo(LayoutHeaderFilter);

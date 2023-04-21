@@ -1,16 +1,13 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-
+import React from "react";
 interface BtnProps {
-  comuId: number;
   [key: string]: any;
+  comuId?: string;
+  hashId?: string;
 }
 
-export default function FixedButton({ children }: BtnProps) {
-  const router = useRouter();
-  const {
-    query: { comuId, hashId },
-  } = router;
+function FixedButton({ children, comuId, hashId }: BtnProps) {
   return (
     <Link
       shallow
@@ -23,3 +20,5 @@ export default function FixedButton({ children }: BtnProps) {
     </Link>
   );
 }
+
+export default FixedButton;

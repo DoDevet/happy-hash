@@ -40,4 +40,4 @@ function PostMenuLayout() {
     </div>
   );
 }
-export default React.memo(PostMenuLayout);
+export default PostMenuLayout;

@@ -1,7 +1,9 @@
 import { useRouter } from "next/router";
-import useSWRInfinite from "swr/infinite";
+import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite";
 import { useRecoilValue } from "recoil";
 import { comuFilter, selectFilter } from "@/libs/client/useAtoms";
+import { Arguments } from "swr";
+import { useState } from "react";
 
 interface PostForm {
   hashtag: { name: string };
@@ -11,6 +13,7 @@ interface PostForm {
   views: number;
   image: string;
   payload: string;
+  likesNum: number;
   user: {
     name: string;
     id: number;
@@ -35,7 +38,7 @@ export interface SSRPostProps {
   comuId?: string;
   hashId?: string;
 }
-interface PostProps {
+export interface PostProps {
   ok: boolean;
   posts: PostForm[];
   [key: string]: any;
@@ -44,18 +47,27 @@ interface PostProps {
 export default function usePostFeed() {
   const router = useRouter();
   const getFileterInfo = useRecoilValue(comuFilter);
-  const select = useRecoilValue(selectFilter);
+  const isSelectFilter = useRecoilValue(selectFilter);
   const { selectHash, comuId, hashId } = router.query;
   const url = comuId ? `?comuId=${comuId}` : `?hashId=${hashId}`;
-  const { data, isValidating, mutate, setSize } = useSWRInfinite<PostProps>(
-    (index) =>
-      `/api/community/posts${url}&page=${index + 1}${
-        selectHash ? `&selectHash=${selectHash}` : ""
-      }${select ? `&popular=${getFileterInfo.likesNum}` : ""}
-        `,
-    null,
-    { revalidateFirstPage: true, revalidateOnFocus: false }
-  );
 
-  return { data, mutate, setSize, isValidating };
+  const getKey: SWRInfiniteKeyLoader<any, Arguments> = (
+    pageIndex,
+    previousPageData
+  ) => {
+    if (previousPageData && !previousPageData.posts.length) return null;
+
+    return (
+      previousPageData?.next ||
+      `/api/community/posts${url}&page=${pageIndex + 1}${
+        selectHash ? `&selectHash=${selectHash}` : ""
+      }${isSelectFilter ? `&popular=${getFileterInfo.likesNum}` : ""}
+        `
+    );
+  };
+
+  const { data, isValidating, setSize, mutate, size } =
+    useSWRInfinite<PostProps>(getKey);
+
+  return { data, setSize, isValidating, getKey, mutate };
 }

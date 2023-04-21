@@ -26,9 +26,6 @@ function PostFeed({
   likes,
   comments,
   isLiked,
-  comuId,
-  hashId,
-  postId,
   views,
 }: PostFeedProps) {
   return (

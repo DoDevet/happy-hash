@@ -1,30 +1,36 @@
-import { prevPostInfo } from "@/libs/client/useAtoms";
+import { prevPostInfo, recyclePostInfo } from "@/libs/client/useAtoms";
 import usePostFeed from "@/libs/client/usePostFeed";
 import usePostInfo from "@/libs/client/usePostInfo";
 import useUser from "@/libs/client/useUser";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useSetRecoilState } from "recoil";
-import { PostFeedProps } from "./post-Feed";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import PostForm from "./post-form";
 
-export default function PostModalDetail({
-  title,
-  hashtag,
-  username,
-  createdAt,
-  postId,
-  views,
-  image,
-  payload,
-  avatarId,
-  userId,
-}: PostFeedProps) {
+interface RecycleProps {
+  hashtag: { name: string };
+  id: number;
+  image: string;
+  likesNum: number;
+  payload: string;
+  title: string;
+  user: {
+    name: string;
+    id: number;
+    avatar: string;
+  };
+  views: number;
+  _count: { comments: number; likes: number };
+}
+
+export default function PostModalDetail() {
   const router = useRouter();
-  const { user } = useUser();
+  const {
+    query: { postId },
+  } = router;
   const { data, mutate } = usePostInfo();
-  const setPostInfo = useSetRecoilState(prevPostInfo);
   const { mutate: postFeedMutate } = usePostFeed();
+  const setPostInfo = useSetRecoilState(prevPostInfo);
 
   useEffect(() => {
     if (data && !data.ok) {
@@ -42,28 +48,14 @@ export default function PostModalDetail({
       router.back();
     }
     if (data && data.ok) {
-      setPostInfo({ ...data });
+      setPostInfo(data);
     }
   }, [data]);
   return (
-    <div className="no-scroll dark:bg mx-auto flex h-full w-full max-w-3xl overflow-auto rounded-md bg-white dark:bg-[#1e272e] xl:h-[90%]">
-      <PostForm
-        isModal
-        createdAt={createdAt}
-        hashTagName={hashtag}
-        title={title}
-        views={views + 1}
-        username={username}
-        name={username}
-        avatarId={avatarId}
-        imageId={image}
-        payload={payload}
-        mutate={mutate}
-        isFav={data?.isFav}
-        likes={data?.post._count.likes}
-        isMine={userId === user?.id}
-        hashtagId={data?.post.hashtagId}
-      />
+    <div className="fixed z-50 mx-auto flex h-screen w-full items-center justify-center bg-black bg-opacity-60 ">
+      <div className="no-scroll dark:bg mx-auto flex h-full w-full max-w-3xl overflow-auto rounded-md bg-white dark:bg-[#1e272e] xl:h-[90%]">
+        <PostForm isModal postInfo={data} mutate={mutate} />
+      </div>
     </div>
   );
 }

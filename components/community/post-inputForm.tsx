@@ -10,7 +10,7 @@ import { cls } from "@/libs/client/utils";
 import useImage from "@/libs/client/useImage";
 import useMutation from "@/libs/client/useMutation";
 import usePostInfo from "@/libs/client/usePostInfo";
-import usePostFeed from "@/libs/client/usePostFeed";
+import useUser from "@/libs/client/useUser";
 
 interface PostForm {
   title: string;
@@ -61,7 +61,6 @@ export default function PostInputForm({
     register,
     handleSubmit,
     setValue,
-    getValues,
     setError,
     watch,
     formState: { errors },
@@ -70,7 +69,7 @@ export default function PostInputForm({
     comuId: comuId?.toString(),
     hashId: hashId?.toString(),
   });
-
+  const { user } = useUser();
   const [imagePreview, setImagePreview] = useState("");
   const [selectedHash, setSelectedHash] = useState<{
     id: number;
@@ -111,7 +110,7 @@ export default function PostInputForm({
       setImageLoading(true);
       const { uploadURL } = await (await fetch("/api/files")).json();
       const form = new FormData();
-      form.append("file", image[0], `${postId}-${Date.now()}`);
+      form.append("file", image[0], `post-${user?.id}-${Date.now()}`);
       const {
         result: { id },
       } = await (

@@ -1,9 +1,9 @@
 import { Like, Post, User } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import useSWR from "swr";
-import { CommentsPageNav, prevPostInfo } from "./useAtoms";
+import { CommentsPageNav } from "./useAtoms";
 interface PostWithHashtag extends Post {
   hashtag: {
     name: string;
@@ -61,7 +61,7 @@ export default function usePostInfo() {
     };
   } else {
     return {
-      data: null,
+      data: undefined,
       mutate,
     };
   }

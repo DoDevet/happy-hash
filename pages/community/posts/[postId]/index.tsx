@@ -1,5 +1,5 @@
-import PostForm, { IPostForm } from "@/components/community/post-form";
-import { prevPostInfo } from "@/libs/client/useAtoms";
+import PostInfo from "@/components/community/post-form";
+import { IPostForm } from "@/components/community/post-form";
 import usePostInfo from "@/libs/client/usePostInfo";
 import client from "@/libs/server/client";
 import { withSsrSession } from "@/libs/server/withSession";
@@ -17,25 +17,7 @@ function PostDetail() {
       router.back();
     }
   }, [data]);
-
-  return (
-    <PostForm
-      avatarId={data?.post.user.avatar}
-      createdAt={data?.post.createdAt}
-      hashTagName={data?.post.hashtag.name}
-      hashtagId={data?.post.hashtagId}
-      imageId={data?.post.image}
-      isFav={data?.isFav}
-      isMine={data?.isMine}
-      likes={data?.post._count.likes}
-      mutate={mutate}
-      name={data?.post.user.name}
-      payload={data?.post.payload}
-      title={data?.post.title}
-      username={data?.post.user.name}
-      views={data?.post.views}
-    />
-  );
+  return <PostInfo mutate={mutate} postInfo={data} />;
 }
 
 export default function Page({ post, ok, error, isMine, isFav }: IPostForm) {

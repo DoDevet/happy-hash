@@ -103,6 +103,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           views: true,
           payload: true,
           image: true,
+          likesNum: true,
           user: {
             select: {
               name: true,

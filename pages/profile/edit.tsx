@@ -70,7 +70,7 @@ export default function EditProfile() {
       setCFLoading(true);
       const { uploadURL } = await (await fetch("/api/files")).json();
       const file = new FormData();
-      file.append("file", avatar[0], `${user?.id}-${Date.now()}`);
+      file.append("file", avatar[0], `avatar-${user?.id}-${Date.now()}`);
       const {
         result: { id: avatarID },
       } = await (

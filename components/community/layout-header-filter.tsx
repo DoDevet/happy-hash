@@ -136,4 +136,4 @@ function LayoutHeaderFilter() {
     </div>
   );
 }
-export default React.memo(LayoutHeaderFilter);
+export default LayoutHeaderFilter;

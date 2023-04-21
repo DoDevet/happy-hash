@@ -1,14 +1,19 @@
 import CommentSection from "@/components/community/comments";
 import Layout from "@/components/layout";
 import getDateTimeFormat from "@/libs/client/getDateTimeFormat";
+import { prevPostInfo } from "@/libs/client/useAtoms";
 import useImage from "@/libs/client/useImage";
 import useMutation from "@/libs/client/useMutation";
+import usePostFeed from "@/libs/client/usePostFeed";
+import { PostForm } from "@/libs/client/usePostInfo";
 import { cls } from "@/libs/client/utils";
 import { Like, Post, User } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { KeyedMutator, useSWRConfig } from "swr";
+import { useEffect } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { KeyedMutator } from "swr";
 
 interface PostWithHashtag extends Post {
   hashtag: {
@@ -36,37 +41,13 @@ interface ToggleResponse {
 }
 
 interface PostFormProps {
-  imageId: string | null | undefined;
-  avatarId: string | null | undefined;
-  title: string | null | undefined;
-  name: string | null | undefined;
-  isMine: boolean | null | undefined;
-  username: string | null | undefined;
-  createdAt: Date | null | undefined;
-  payload: string | null | undefined;
-  hashtagId: number | null | undefined;
-  hashTagName: string | null | undefined;
-  views: number | null | undefined;
-  isFav: boolean | null | undefined;
-  likes: number | null | undefined;
-  mutate: KeyedMutator<IPostForm>;
+  postInfo: PostForm | undefined;
   isModal?: boolean;
+  mutate: KeyedMutator<PostForm>;
 }
 
-export default function PostForm({
-  imageId,
-  isMine,
-  title,
-  name,
-  avatarId,
-  username,
-  createdAt,
-  payload,
-  hashtagId,
-  hashTagName,
-  views,
-  isFav,
-  likes,
+export default function PostInfo({
+  postInfo,
   mutate,
   isModal = false,
 }: PostFormProps) {
@@ -78,8 +59,10 @@ export default function PostForm({
     url: `/api/community/posts/${postId}/fav`,
     method: "POST",
   });
+  const setPostInfo = useSetRecoilState(prevPostInfo);
 
   const onClickFavBtn = () => {
+    if (toggleLoading) return;
     mutate(
       (prev) =>
         prev && {
@@ -87,9 +70,13 @@ export default function PostForm({
           isFav: !prev.isFav,
           post: {
             ...prev.post,
+            likesNum: postInfo?.isFav
+              ? prev.post.likesNum - 1
+              : prev.post.likesNum + 1,
+
             _count: {
               ...prev.post._count,
-              likes: isFav
+              likes: postInfo?.isFav
                 ? prev.post._count.likes - 1
                 : prev.post._count.likes + 1,
             },
@@ -97,27 +84,30 @@ export default function PostForm({
         },
       false
     );
-
-    if (!toggleLoading) {
-      toggleFav({ postId });
-    }
+    setPostInfo(postInfo && { ...postInfo, isFav: !postInfo.isFav });
+    toggleFav({ postId });
   };
-  const imageURL = useImage({ imageId });
-  const avatarURL = useImage({ imageId: avatarId, method: "avatar" });
-  const createdAtFormat = getDateTimeFormat(createdAt, "long");
+
+  const imageURL = useImage({ imageId: postInfo?.post.image });
+  const avatarURL = useImage({
+    imageId: postInfo?.post.user.avatar,
+    method: "avatar",
+  });
+  const createdAtFormat = getDateTimeFormat(postInfo?.post.createdAt, "long");
   return (
     <div className="w-full dark:bg-[#1e272e]">
       <Layout
         isModal={isModal}
-        title={`${title}`}
-        hashTitle={name}
+        title={`${postInfo?.post.title}`}
+        hashTitle={postInfo?.post.hashtag.name}
         hasTabbar
         hasBackArrow
-        hasPostMenuBar={!!isMine}
+        hasPostMenuBar={!!postInfo?.isMine}
       >
         <div className="mb-22 mx-auto min-h-screen w-full  max-w-3xl dark:bg-[#1e272e] dark:text-gray-300">
           {imageURL ? (
             <Image
+              quality={75}
               priority
               alt="postImage"
               src={imageURL}
@@ -142,7 +132,7 @@ export default function PostForm({
                 ) : (
                   <div className="h-7 w-7 rounded-full bg-slate-400" />
                 )}
-                <span className="ml-2">{username}</span>
+                <span className="ml-2">{postInfo?.post.user.name}</span>
               </div>
               <span className="text-xs text-gray-700 dark:text-gray-400">
                 {createdAtFormat}
@@ -150,24 +140,34 @@ export default function PostForm({
             </div>
 
             <div className="p-2">
-              <span className="block whitespace-pre-wrap">{payload}</span>
-              <Link href={`/community/posts/?hashId=${hashtagId}`} shallow>
+              <span className="block whitespace-pre-wrap">
+                {postInfo?.post.payload}
+              </span>
+              <Link
+                href={`/community/posts/?hashId=${postInfo?.post.hashtagId}`}
+                shallow
+              >
                 <span className="cursor-pointer font-semibold text-[#3b62a5]">
-                  #{hashTagName}
+                  #{postInfo?.post.hashtag.name}
                 </span>
               </Link>
               <span className="my-1 block text-xs text-gray-600 dark:text-gray-400">
-                {`${views} ${views !== 1 ? "views" : "view"}`}
+                {`${postInfo?.post.views} ${
+                  postInfo?.post.views !== 1 ? "views" : "view"
+                }`}
               </span>
               <div className="mt-4 flex items-center">
                 <button onClick={onClickFavBtn}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    fill={isFav ? "currentColor" : "none"}
+                    fill={postInfo?.isFav ? "currentColor" : "none"}
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
                     stroke="currentColor"
-                    className={cls("h-6 w-6", isFav ? "text-red-400" : "")}
+                    className={cls(
+                      "h-6 w-6",
+                      postInfo?.isFav ? "text-red-400" : ""
+                    )}
                   >
                     <path
                       strokeLinecap="round"
@@ -176,7 +176,7 @@ export default function PostForm({
                     />
                   </svg>
                 </button>
-                <span className="ml-1">{likes}</span>
+                <span className="ml-1">{postInfo?.post.likesNum}</span>
               </div>
             </div>
           </div>

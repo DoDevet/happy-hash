@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import useSWR from "swr";
 import { comuHashsInfo, IComuHashsInfo } from "./useAtoms";
 interface GetHashForm {

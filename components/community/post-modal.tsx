@@ -1,10 +1,9 @@
 import { prevPostInfo, recyclePostInfo } from "@/libs/client/useAtoms";
 import usePostFeed from "@/libs/client/usePostFeed";
 import usePostInfo from "@/libs/client/usePostInfo";
-import useUser from "@/libs/client/useUser";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import PostForm from "./post-form";
 
 interface RecycleProps {

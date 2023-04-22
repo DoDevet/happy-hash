@@ -1,14 +1,12 @@
 import getQueryUrl from "@/libs/client/getQueryUrl";
-import { prevPostInfo } from "@/libs/client/useAtoms";
+import { prevPostInfo, recyclePostInfo } from "@/libs/client/useAtoms";
 import usePostFeed from "@/libs/client/usePostFeed";
 import { cls } from "@/libs/client/utils";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { useSWRConfig } from "swr";
+import React, { useEffect } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import PostFeed from "./post-Feed";
-import { unstable_serialize } from "swr/infinite";
 interface CommunityPostFeed {
   hashs: string[];
   [key: string]: any;
@@ -56,7 +54,7 @@ function CommunityPostFeed({ hashs }: CommunityPostFeed) {
   const isReachingEnd =
     isEmpty || (data && data[data.length - 1]?.posts?.length < 20);
   const [getPostInfo, setPostInfo] = useRecoilState(prevPostInfo);
-
+  const setRecyclePostInfo = useSetRecoilState(recyclePostInfo);
   useEffect(() => {
     if (!postId) {
       document.body.style.overflow = "unset";
@@ -130,6 +128,24 @@ function CommunityPostFeed({ hashs }: CommunityPostFeed) {
               shallow
               key={post?.id}
               className="cursor-pointer"
+              onClick={() =>
+                setRecyclePostInfo({
+                  title: post.title,
+                  _count: post._count,
+                  hashtag: post.hashtag,
+                  id: post.id,
+                  image: post.image,
+                  likesNum: post.likesNum,
+                  payload: post.payload,
+                  user: {
+                    avatar: post.user.avatar,
+                    id: post.user.id,
+                    name: post.user.name,
+                  },
+                  views: post.views,
+                  createdAt: post.createdAt,
+                })
+              }
             >
               <PostFeed
                 comments={post?._count?.comments}

@@ -1,6 +1,6 @@
 import FixedButton from "@/components/fixed-btn";
 import Layout from "@/components/layout";
-import React, { useEffect } from "react";
+import React from "react";
 import PostModalDetail from "@/components/community/post-modal";
 import { NextPageContext } from "next";
 import { withSsrSession } from "@/libs/server/withSession";
@@ -9,9 +9,6 @@ import PostFeedNav from "@/components/community/post-Feed-nav";
 import CommunityBottomTab from "@/components/community/community-bottomTab";
 import CommunityPostFeed from "@/components/community/community-post-feed";
 import { useRouter } from "next/router";
-import usePostFeed from "@/libs/client/usePostFeed";
-import { prevPostInfo } from "@/libs/client/useAtoms";
-import { useRecoilState, useRecoilValue } from "recoil";
 
 interface PostProps {
   ok: boolean;

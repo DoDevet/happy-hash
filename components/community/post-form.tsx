@@ -1,18 +1,16 @@
 import CommentSection from "@/components/community/comments";
 import Layout from "@/components/layout";
 import getDateTimeFormat from "@/libs/client/getDateTimeFormat";
-import { prevPostInfo } from "@/libs/client/useAtoms";
+import { prevPostInfo, recyclePostInfo } from "@/libs/client/useAtoms";
 import useImage from "@/libs/client/useImage";
 import useMutation from "@/libs/client/useMutation";
-import usePostFeed from "@/libs/client/usePostFeed";
 import { PostForm } from "@/libs/client/usePostInfo";
 import { cls } from "@/libs/client/utils";
 import { Like, Post, User } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { KeyedMutator } from "swr";
 
 interface PostWithHashtag extends Post {
@@ -60,7 +58,7 @@ export default function PostInfo({
     method: "POST",
   });
   const setPostInfo = useSetRecoilState(prevPostInfo);
-
+  const getRecyclePostInfo = useRecoilValue(recyclePostInfo);
   const onClickFavBtn = () => {
     if (toggleLoading) return;
     mutate(
@@ -88,18 +86,29 @@ export default function PostInfo({
     toggleFav({ postId });
   };
 
-  const imageURL = useImage({ imageId: postInfo?.post.image });
+  const imageURL = useImage({
+    imageId: postInfo ? postInfo?.post.image : getRecyclePostInfo?.image,
+  });
   const avatarURL = useImage({
-    imageId: postInfo?.post.user.avatar,
+    imageId: postInfo
+      ? postInfo.post.user.avatar
+      : getRecyclePostInfo?.user.avatar,
     method: "avatar",
   });
-  const createdAtFormat = getDateTimeFormat(postInfo?.post.createdAt, "long");
+  const createdAtFormat = getDateTimeFormat(
+    postInfo ? postInfo.post.createdAt : getRecyclePostInfo?.createdAt,
+    "long"
+  );
   return (
     <div className="w-full dark:bg-[#1e272e]">
       <Layout
         isModal={isModal}
-        title={`${postInfo?.post.title}`}
-        hashTitle={postInfo?.post.hashtag.name}
+        title={`${postInfo ? postInfo?.post.title : getRecyclePostInfo?.title}`}
+        hashTitle={
+          postInfo
+            ? postInfo.post.hashtag.name
+            : getRecyclePostInfo?.hashtag.name
+        }
         hasTabbar
         hasBackArrow
         hasPostMenuBar={!!postInfo?.isMine}
@@ -132,7 +141,11 @@ export default function PostInfo({
                 ) : (
                   <div className="h-7 w-7 rounded-full bg-slate-400" />
                 )}
-                <span className="ml-2">{postInfo?.post.user.name}</span>
+                <span className="ml-2">
+                  {postInfo
+                    ? postInfo.post.user.name
+                    : getRecyclePostInfo?.user.name}
+                </span>
               </div>
               <span className="text-xs text-gray-700 dark:text-gray-400">
                 {createdAtFormat}
@@ -141,20 +154,25 @@ export default function PostInfo({
 
             <div className="p-2">
               <span className="block whitespace-pre-wrap">
-                {postInfo?.post.payload}
+                {postInfo
+                  ? postInfo?.post.payload
+                  : getRecyclePostInfo?.payload}
               </span>
               <Link
                 href={`/community/posts/?hashId=${postInfo?.post.hashtagId}`}
-                shallow
+                replace
               >
                 <span className="cursor-pointer font-semibold text-[#3b62a5]">
-                  #{postInfo?.post.hashtag.name}
+                  #
+                  {postInfo
+                    ? postInfo.post.hashtag.name
+                    : getRecyclePostInfo?.hashtag.name}
                 </span>
               </Link>
               <span className="my-1 block text-xs text-gray-600 dark:text-gray-400">
-                {`${postInfo?.post.views} ${
-                  postInfo?.post.views !== 1 ? "views" : "view"
-                }`}
+                {`${
+                  postInfo ? postInfo.post.views : getRecyclePostInfo?.views
+                } ${postInfo?.post.views !== 1 ? "views" : "view"}`}
               </span>
               <div className="mt-4 flex items-center">
                 <button onClick={onClickFavBtn}>
@@ -176,7 +194,11 @@ export default function PostInfo({
                     />
                   </svg>
                 </button>
-                <span className="ml-1">{postInfo?.post.likesNum}</span>
+                <span className="ml-1">
+                  {postInfo
+                    ? postInfo.post.likesNum
+                    : getRecyclePostInfo?.likesNum}
+                </span>
               </div>
             </div>
           </div>

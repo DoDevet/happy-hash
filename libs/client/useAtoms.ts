@@ -1,4 +1,4 @@
-import { atom, selector } from "recoil";
+import { atom } from "recoil";
 import { PostForm } from "./usePostInfo";
 interface ICommentsInfo {
   commentsId: number;
@@ -16,8 +16,9 @@ interface RecycleProps {
   user: {
     name: string;
     id: number;
-    avatar: string;
+    avatar: string | null;
   };
+  createdAt: Date;
   views: number;
   _count: { comments: number; likes: number };
 }

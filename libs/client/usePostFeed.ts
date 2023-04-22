@@ -3,7 +3,6 @@ import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite";
 import { useRecoilValue } from "recoil";
 import { comuFilter, selectFilter } from "@/libs/client/useAtoms";
 import { Arguments } from "swr";
-import { useState } from "react";
 
 interface PostForm {
   hashtag: { name: string };

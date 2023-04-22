@@ -1,5 +1,5 @@
 import HomeLayout from "@/components/home/homeLayout";
-import { comuHashsInfo, hashInfo } from "@/libs/client/useAtoms";
+import { comuHashsInfo } from "@/libs/client/useAtoms";
 import { hashtag, Post } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";

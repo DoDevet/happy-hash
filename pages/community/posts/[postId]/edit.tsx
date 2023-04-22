@@ -1,6 +1,3 @@
-import { NextPageContext } from "next";
-import { withSsrSession } from "@/libs/server/withSession";
-import client from "@/libs/server/client";
 import { Post } from "@prisma/client";
 import PostInputForm from "@/components/community/post-inputForm";
 import usePostInfo from "@/libs/client/usePostInfo";

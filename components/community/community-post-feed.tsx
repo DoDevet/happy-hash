@@ -187,8 +187,8 @@ function CommunityPostFeed({ hashs }: CommunityPostFeed) {
           </svg>
         </div>
       )}
-      {!isReachingEnd && isValidating ? (
-        <div className="flex w-full items-center justify-center space-x-1 py-3">
+      {isValidating ? (
+        <div className="flex w-full items-center justify-center space-x-1 py-5">
           <svg
             fill="currentColor"
             viewBox="0 0 20 20"
@@ -208,4 +208,4 @@ function CommunityPostFeed({ hashs }: CommunityPostFeed) {
     </div>
   );
 }
-export default CommunityPostFeed;
+export default React.memo(CommunityPostFeed);

@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        nunito: ["Nunito", "Gowun Dodum", "sans-serif"],
+        nunito: ["Nunito", "Noto Sans KR", "sans-serif"],
         play: ["Play", "sans-serif"],
       },
     },

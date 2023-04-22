@@ -49,7 +49,6 @@ export default function usePostFeed() {
   const isSelectFilter = useRecoilValue(selectFilter);
   const { selectHash, comuId, hashId } = router.query;
   const url = comuId ? `?comuId=${comuId}` : `?hashId=${hashId}`;
-
   const getKey: SWRInfiniteKeyLoader<any, Arguments> = (
     pageIndex,
     previousPageData
@@ -65,7 +64,7 @@ export default function usePostFeed() {
     );
   };
 
-  const { data, isValidating, setSize, mutate, size } =
+  const { data, isValidating, setSize, mutate } =
     useSWRInfinite<PostProps>(getKey);
 
   return { data, setSize, isValidating, getKey, mutate };

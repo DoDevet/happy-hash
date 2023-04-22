@@ -177,4 +177,4 @@ function HomeNav() {
     </div>
   );
 }
-export default React.memo(HomeNav);
+export default HomeNav;

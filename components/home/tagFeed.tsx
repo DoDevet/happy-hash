@@ -40,8 +40,8 @@ function TagFeed({
     });
   };
   return (
-    <div className="relative box-border flex w-full flex-col justify-between overflow-hidden rounded-md bg-[#3b62a5] p-4 font-semibold text-white shadow-xl hover:bg-[#2c5398] hover:transition-colors">
-      <div className="absolute right-3 space-x-1 font-semibold">
+    <div className="relative box-border flex w-full flex-col justify-between overflow-hidden rounded-md bg-[#3b62a5] p-4 text-white shadow-xl hover:bg-[#2c5398] hover:transition-colors">
+      <div className="absolute right-3 space-x-1 ">
         <button onClick={onEditTag}>
           <svg
             xmlns="http://www.w3.org/2000/svg"

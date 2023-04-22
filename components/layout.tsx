@@ -134,4 +134,4 @@ function Layout({
     </div>
   );
 }
-export default React.memo(Layout);
+export default Layout;

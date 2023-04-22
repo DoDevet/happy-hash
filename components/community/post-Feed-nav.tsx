@@ -49,4 +49,4 @@ function PostFeedNav({ comuId, hashs }: PostFeedNavProps) {
     </div>
   );
 }
-export default React.memo(PostFeedNav);
+export default PostFeedNav;

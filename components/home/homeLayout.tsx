@@ -8,9 +8,6 @@ import HashRanking from "./home-HashRanking";
 import HomeNav from "./home-nav";
 import SearchForm from "./home-searchForm";
 
-interface SearchForm {
-  search: string;
-}
 interface HomeLayoutProps {
   children: ReactNode;
   title: string;

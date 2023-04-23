@@ -42,25 +42,15 @@ function Layout({
       ? `?hashId=${hashId}`
       : null;
     if (url) {
-      postId
-        ? router.replace(
-            `/community/posts${url}${
-              selectHash ? `&selectHash=${selectHash}` : ""
-            }`,
-            undefined,
-            {
-              shallow: true,
-            }
-          )
-        : router.replace(
-            `/community/posts${url}${
-              selectHash ? `&selectHash=${selectHash}` : ""
-            }`,
-            undefined,
-            {
-              shallow: false,
-            }
-          );
+      router.replace(
+        `/community/posts${url}${
+          selectHash ? `&selectHash=${selectHash}` : ""
+        }`,
+        undefined,
+        {
+          shallow: true,
+        }
+      );
     } else router.back();
   };
   const onClickBackHome = () => {

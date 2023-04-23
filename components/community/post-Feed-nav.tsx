@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 interface PostFeedNavProps {
-  comuId: string;
+  comuId: string | undefined;
   hashs: string[] | undefined | null;
 }
 

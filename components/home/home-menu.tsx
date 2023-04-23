@@ -37,7 +37,7 @@ export default function HomeMenu({
               "outline-none",
               router.pathname === "/"
                 ? "px-2 py-2 text-[#3b62a5]"
-                : "rounded-md px-2 py-2 transition-colors hover:bg-slate-100 hover:text-[#3b62a5] dark:text-gray-400"
+                : "rounded-md px-2 py-2 transition-colors hover:bg-slate-100 hover:text-[#3b62a5] dark:text-gray-400 dark:hover:bg-slate-900"
             )}
             onClick={() => setHomeMenu(false)}
           >
@@ -62,7 +62,7 @@ export default function HomeMenu({
               "outline-none",
               router.pathname === "/profile"
                 ? "px-2 py-2 text-[#3b62a5]"
-                : "rounded-md px-2 py-2 transition-colors hover:text-[#3b62a5] dark:text-gray-400 dark:hover:bg-slate-900"
+                : "rounded-md px-2 py-2 transition-colors hover:bg-slate-100 hover:text-[#3b62a5] dark:text-gray-400 dark:hover:bg-slate-900"
             )}
           >
             Profile

@@ -9,7 +9,7 @@ import PostFeedNav from "@/components/community/post-Feed-nav";
 import CommunityBottomTab from "@/components/community/community-bottomTab";
 import CommunityPostFeed from "@/components/community/community-post-feed";
 import { useRouter } from "next/router";
-
+import useSWR, { SWRConfig } from "swr";
 interface PostProps {
   ok: boolean;
   hashs: string[];
@@ -18,25 +18,41 @@ interface PostProps {
   [key: string]: any;
 }
 
-export default function HashCommunity({
-  title,
-  comuId,
-  hashId,
-  hashs,
-}: PostProps) {
+interface ComuInfoForm {
+  ok: boolean;
+  title: string | undefined;
+  hashArr: [{ name: string; id: number }];
+}
+
+function HashCommunity() {
   const router = useRouter();
   const {
-    query: { postId },
+    query: { postId, comuId, hashId },
   } = router;
+  const { data } = useSWR<ComuInfoForm>(
+    `/api/community?${comuId ? `comuId=${comuId}` : `hashId=${hashId}`}`
+  );
+  const hashs = data?.hashArr?.map((hash) => hash.name);
+
   return (
     <div>
       {postId ? <PostModalDetail /> : null}
-      <Layout title={title} hasTabbar hasBackHome bottomTab hasFilterMenu>
+      <Layout
+        title={
+          data?.title
+            ? data.title
+            : hashs?.map((hash, index) => (index === 0 ? hash : ", " + hash))
+        }
+        hasTabbar
+        hasBackHome
+        bottomTab
+        hasFilterMenu
+      >
         {hashs && hashs.length > 1 ? (
-          <PostFeedNav comuId={comuId!} hashs={hashs} />
+          <PostFeedNav comuId={comuId?.toString()} hashs={hashs} />
         ) : null}
         <CommunityPostFeed hashs={hashs} />
-        <FixedButton comuId={comuId} hashId={hashId}>
+        <FixedButton comuId={comuId?.toString()} hashId={hashId?.toString()}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill={"none"}
@@ -58,80 +74,93 @@ export default function HashCommunity({
   );
 }
 
+export default function Page({ ok, hashArr, title }: ComuInfoForm) {
+  const router = useRouter();
+  const {
+    query: { comuId, hashId },
+  } = router;
+  return (
+    <SWRConfig
+      value={{
+        fallback: {
+          [`/api/community?${
+            comuId ? `comuId=${comuId}` : `hashId=${hashId}`
+          }`]: {
+            ok,
+            hashArr,
+            title,
+          },
+        },
+      }}
+    >
+      <HashCommunity />
+    </SWRConfig>
+  );
+}
+
 export const getServerSideProps = withSsrSession(
   async (ctx: NextPageContext) => {
+    console.log("SSR");
     const {
       query: { comuId, hashId },
     } = ctx;
     const user = ctx?.req?.session?.user;
     if (comuId) {
-      const scTag = await client.shortcutTag.findFirst({
-        where: {
-          AND: [{ user: { id: +user?.id! } }, { id: +comuId! }],
-        },
+      const scHash = await client.shortcutTag.findFirst({
+        where: { AND: [{ id: +comuId! }, { userId: +user?.id! }] },
         select: {
+          userId: true,
+          customName: true,
           hashtags: {
             select: {
               name: true,
+              id: true,
             },
           },
-          userId: true,
-          customName: true,
-          name: true,
-          id: true,
         },
       });
-
-      if (!scTag) {
+      if (!scHash) {
         return {
           redirect: {
             permanent: false,
-            destination: "/login",
+            destination: "/",
           },
           props: {},
         };
-      }
-
-      const title = scTag.customName ? scTag.customName : scTag.name;
-      return {
-        props: {
-          ok: true,
-          title: JSON.parse(JSON.stringify(title)),
-          comuId: JSON.parse(JSON.stringify(scTag?.id)),
-          hashs: JSON.parse(
-            JSON.stringify(scTag.hashtags.map((hash) => hash?.name))
-          ),
-        },
-      };
-    } else if (hashId) {
-      const hashInfo = await client.hashtag.findUnique({
-        where: { id: +hashId! },
+      } else
+        return {
+          props: {
+            ok: true,
+            hashArr: JSON.parse(JSON.stringify(scHash.hashtags)),
+            title: JSON.parse(JSON.stringify(scHash.customName)),
+          },
+        };
+    }
+    if (hashId) {
+      const hashArr = await client.hashtag.findUnique({
+        where: { id: hashId ? +hashId : undefined },
+        select: { name: true, id: true },
       });
-      if (!hashInfo) {
+      if (!hashArr) {
         return {
           redirect: {
             permanent: false,
-            destination: "/login",
+            destination: "/",
           },
           props: {},
         };
-      }
-
-      return {
-        props: {
-          ok: true,
-          title: JSON.parse(JSON.stringify(hashInfo.name)),
-          hashId: JSON.parse(JSON.stringify(hashId)),
-        },
-      };
-    } else {
-      return {
-        redirect: {
-          permanent: false,
-          destination: "/login",
-        },
-        props: {},
-      };
+      } else
+        return {
+          props: {
+            ok: true,
+            hashArr: JSON.parse(
+              JSON.stringify([{ name: hashArr.name, id: hashArr.id }])
+            ),
+            title: JSON.parse(JSON.stringify(hashArr.name)),
+          },
+        };
     }
   }
 );
+
+export async function getStaticPorps() {}

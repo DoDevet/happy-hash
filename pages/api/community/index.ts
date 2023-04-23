@@ -13,6 +13,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         where: { AND: [{ id: +comuId! }, { userId: +user?.id! }] },
         select: {
           userId: true,
+          customName: true,
           hashtags: {
             select: {
               name: true,
@@ -22,10 +23,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         },
       });
       if (!scHash || user?.id !== scHash?.userId) {
-        return res.status(401).send("BAD REQUEST");
+        return res.json({ ok: false, error: "Nope" });
       }
-      return res.json({ ok: true, hashArr: scHash.hashtags });
-    } else if (hashId) {
+      return res.json({
+        ok: true,
+        hashArr: scHash.hashtags,
+        title: scHash.customName,
+      });
+    }
+    if (hashId) {
       const hashArr = await client.hashtag.findUnique({
         where: { id: hashId ? +hashId : undefined },
         select: { name: true, id: true },

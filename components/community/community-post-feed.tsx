@@ -8,7 +8,7 @@ import React, { useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import PostFeed from "./post-Feed";
 interface CommunityPostFeed {
-  hashs: string[];
+  hashs: string[] | undefined;
   [key: string]: any;
 }
 interface PostForm {

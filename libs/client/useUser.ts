@@ -4,6 +4,7 @@ interface ExtendUserData extends User {
   _count: {
     comments: number;
     posts: number;
+    Like: number;
   };
 }
 interface UserData {

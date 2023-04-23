@@ -64,6 +64,12 @@ export const getServerSideProps = withSsrSession(
         user: true,
       },
     });
+    if (!post) {
+      return {
+        props: { ok: false, error: "No post found" },
+      };
+    }
+
     const isFav = Boolean(
       await client.like.findFirst({
         where: {
@@ -74,11 +80,6 @@ export const getServerSideProps = withSsrSession(
         },
       })
     );
-    if (!post) {
-      return {
-        props: { ok: false, error: "No post found" },
-      };
-    }
 
     return {
       props: {

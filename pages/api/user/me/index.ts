@@ -14,6 +14,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       include: {
         _count: {
           select: {
+            Like: true,
             comments: true,
             posts: true,
           },

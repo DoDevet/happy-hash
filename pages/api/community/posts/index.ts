@@ -11,7 +11,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     if (comuId) {
       const scTag = await client.shortcutTag.findFirst({
-        where: { id: +user?.id! },
+        where: { id: +comuId! },
         select: {
           hashtags: {
             select: {

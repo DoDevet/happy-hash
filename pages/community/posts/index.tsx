@@ -10,13 +10,6 @@ import CommunityBottomTab from "@/components/community/community-bottomTab";
 import CommunityPostFeed from "@/components/community/community-post-feed";
 import { useRouter } from "next/router";
 import useSWR, { SWRConfig } from "swr";
-interface PostProps {
-  ok: boolean;
-  hashs: string[];
-  comuId: string | undefined;
-  hashId: string | undefined;
-  [key: string]: any;
-}
 
 interface ComuInfoForm {
   ok: boolean;
@@ -33,7 +26,6 @@ function HashCommunity() {
     `/api/community?${comuId ? `comuId=${comuId}` : `hashId=${hashId}`}`
   );
   const hashs = data?.hashArr?.map((hash) => hash.name);
-
   return (
     <div>
       {postId ? <PostModalDetail /> : null}
@@ -84,7 +76,7 @@ export default function Page({ ok, hashArr, title }: ComuInfoForm) {
       value={{
         fallback: {
           [`/api/community?${
-            comuId ? `comuId=${comuId}` : `hashId=${hashId}`
+            comuId ? `comuId=${comuId}` : hashId ? `hashId=${hashId}` : null
           }`]: {
             ok,
             hashArr,
@@ -107,7 +99,7 @@ export const getServerSideProps = withSsrSession(
     const user = ctx?.req?.session?.user;
     if (comuId) {
       const scHash = await client.shortcutTag.findFirst({
-        where: { AND: [{ id: +comuId! }, { userId: +user?.id! }] },
+        where: { id: +comuId! },
         select: {
           userId: true,
           customName: true,
@@ -119,7 +111,7 @@ export const getServerSideProps = withSsrSession(
           },
         },
       });
-      if (!scHash) {
+      if (scHash === null || scHash?.userId !== +user?.id!) {
         return {
           redirect: {
             permanent: false,
@@ -135,8 +127,7 @@ export const getServerSideProps = withSsrSession(
             title: JSON.parse(JSON.stringify(scHash.customName)),
           },
         };
-    }
-    if (hashId) {
+    } else if (hashId) {
       const hashArr = await client.hashtag.findUnique({
         where: { id: hashId ? +hashId : undefined },
         select: { name: true, id: true },
@@ -156,11 +147,9 @@ export const getServerSideProps = withSsrSession(
             hashArr: JSON.parse(
               JSON.stringify([{ name: hashArr.name, id: hashArr.id }])
             ),
-            title: JSON.parse(JSON.stringify(hashArr.name)),
+            title: JSON.parse(JSON.stringify("#" + hashArr.name)),
           },
         };
     }
   }
 );
-
-export async function getStaticPorps() {}

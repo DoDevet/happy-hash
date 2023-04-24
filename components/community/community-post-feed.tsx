@@ -55,6 +55,7 @@ function CommunityPostFeed({ hashs }: CommunityPostFeed) {
     isEmpty || (data && data[data.length - 1]?.posts?.length < 20);
   const [getPostInfo, setPostInfo] = useRecoilState(prevPostInfo);
   const setRecyclePostInfo = useSetRecoilState(recyclePostInfo);
+
   useEffect(() => {
     if (!postId) {
       document.body.style.overflow = "unset";
@@ -114,54 +115,56 @@ function CommunityPostFeed({ hashs }: CommunityPostFeed) {
       >
         {data
           ?.flatMap((posts) => posts.posts)
-          .map((post) => (
-            <Link
-              href={`/community/posts?postId=${post?.id}&${queryUrl}${
-                selectHash ? `&selectHash=${selectHash}` : ""
-              }`}
-              as={{
-                pathname: router.pathname + `/${post?.id}`,
-                query: {
-                  ...router.query,
-                },
-              }}
-              shallow
-              key={post?.id}
-              className="cursor-pointer"
-              onClick={() =>
-                setRecyclePostInfo({
-                  title: post.title,
-                  _count: post._count,
-                  hashtag: post.hashtag,
-                  id: post.id,
-                  image: post.image,
-                  likesNum: post.likesNum,
-                  payload: post.payload,
-                  user: {
-                    avatar: post.user.avatar,
-                    id: post.user.id,
-                    name: post.user.name,
+          .map((post, index) => {
+            return (
+              <Link
+                href={`/community/posts?postId=${post?.id}&${queryUrl}${
+                  selectHash ? `&selectHash=${selectHash}` : ""
+                }`}
+                as={{
+                  pathname: router.pathname + `/${post?.id}`,
+                  query: {
+                    ...router.query,
                   },
-                  views: post.views,
-                  createdAt: post.createdAt,
-                })
-              }
-            >
-              <PostFeed
-                comments={post?._count?.comments}
-                title={post?.title}
-                createdAt={post?.createdAt}
-                hashtag={post?.hashtag?.name}
-                hashId={hashId?.toString()}
-                postId={post?.id}
-                comuId={comuId?.toString()}
-                likes={post?.likesNum}
-                username={post?.user?.name}
-                isLiked={post?.likes?.length !== 0}
-                views={post?.views}
-              />
-            </Link>
-          ))}
+                }}
+                shallow
+                key={index}
+                className="cursor-pointer"
+                onClick={() => {
+                  setRecyclePostInfo({
+                    title: post.title,
+                    _count: post._count,
+                    hashtag: post.hashtag,
+                    id: post.id,
+                    image: post.image,
+                    likesNum: post.likesNum,
+                    payload: post.payload,
+                    user: {
+                      avatar: post.user.avatar,
+                      id: post.user.id,
+                      name: post.user.name,
+                    },
+                    views: post.views,
+                    createdAt: post.createdAt,
+                  });
+                }}
+              >
+                <PostFeed
+                  comments={post?._count?.comments}
+                  title={post?.title}
+                  createdAt={post?.createdAt}
+                  hashtag={post?.hashtag?.name}
+                  hashId={hashId?.toString()}
+                  postId={post?.id}
+                  comuId={comuId?.toString()}
+                  likes={post?.likesNum}
+                  username={post?.user?.name}
+                  isLiked={post?.likes?.length !== 0}
+                  views={post?.views}
+                />
+              </Link>
+            );
+          })}
       </ul>
       {!isReachingEnd && !isValidating && (
         <div

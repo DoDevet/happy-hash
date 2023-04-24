@@ -41,6 +41,7 @@ export default function PostMenu() {
     }, false);
     deletePost({});
     setPostMenu((prev) => !prev);
+
     router.replace(
       `/community/posts?${comuId ? `comuId=${comuId}` : `hashId=${hashId}`}`,
       undefined,

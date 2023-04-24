@@ -11,7 +11,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     if (comuId) {
       const scTag = await client.shortcutTag.findFirst({
-        where: { AND: [{ id: +comuId! }, { user: { id: +user?.id! } }] },
+        where: { id: +user?.id! },
         select: {
           hashtags: {
             select: {
@@ -24,7 +24,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           id: true,
         },
       });
-      if (scTag === undefined || scTag?.userId !== user?.id) {
+      if (scTag === null || scTag?.userId !== user?.id) {
         return res.status(401).json({ ok: false });
       } else {
         const posts = await client.post.findMany({

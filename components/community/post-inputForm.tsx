@@ -188,14 +188,14 @@ export default function PostInputForm({
           false
         );
       }
-
-      router.replace(
+      router.back();
+      /*  router.replace(
         `/community/posts/${postMutationResponse.postId}?${
           comuId ? `comuId=${comuId}` : `hashId=${hashId}`
         }`,
         undefined,
-        { shallow: false }
-      );
+        { shallow: true }
+      ); */
     }
   }, [postMutationResponse, router]);
 
@@ -313,7 +313,7 @@ export default function PostInputForm({
               <div
                 key={index}
                 className={cls(
-                  "bg-darkerblue w-fit cursor-pointer rounded-full px-2 py-1 shadow-md transition-colors hover:text-white",
+                  "bg-darkerblue w-fit cursor-pointer rounded-md px-2 py-1 shadow-md transition-colors hover:text-white",
                   selectedHash?.name === hash.name
                     ? "bg-darkblue text-white"
                     : "bg-slate-300 text-gray-100"

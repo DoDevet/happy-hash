@@ -33,7 +33,10 @@ export default function Profile() {
         </div>
 
         <div className="my-16 flex items-center justify-center space-x-10">
-          <div className="flex flex-col items-center justify-center">
+          <Link
+            href={`/profile/favs`}
+            className="flex flex-col items-center justify-center"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -43,16 +46,19 @@ export default function Profile() {
               className="bg-darkblue h-12 w-12 rounded-full px-2 text-white shadow-sm"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0120.25 6v12A2.25 2.25 0 0118 20.25H6A2.25 2.25 0 013.75 18V6A2.25 2.25 0 016 3.75h1.5m9 0h-9"
               />
             </svg>
             <span className="mt-1 font-semibold text-gray-700 dark:text-gray-400">
               {user?._count?.Like}
             </span>
-          </div>
-          <div className="flex flex-col items-center justify-center">
+          </Link>
+          <Link
+            href={`/profile/posts`}
+            className="flex flex-col items-center justify-center"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -70,8 +76,11 @@ export default function Profile() {
             <span className="mt-1 font-semibold text-gray-700 dark:text-gray-400">
               {user?._count?.posts}
             </span>
-          </div>
-          <div className="flex flex-col items-center justify-center">
+          </Link>
+          <Link
+            href={`/profile/comments`}
+            className="flex flex-col items-center justify-center"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -89,7 +98,7 @@ export default function Profile() {
             <span className="mt-1 font-semibold text-gray-700 dark:text-gray-400">
               {user?._count?.comments}
             </span>
-          </div>
+          </Link>
         </div>
       </div>
     </Layout>

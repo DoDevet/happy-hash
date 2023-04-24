@@ -42,15 +42,17 @@ function Layout({
       ? `?hashId=${hashId}`
       : null;
     if (url) {
-      router.replace(
-        `/community/posts${url}${
-          selectHash ? `&selectHash=${selectHash}` : ""
-        }`,
-        undefined,
-        {
-          shallow: true,
-        }
-      );
+      router.pathname === "/community/posts"
+        ? router.replace(
+            `/community/posts${url}${
+              selectHash ? `&selectHash=${selectHash}` : ""
+            }`,
+            undefined,
+            {
+              shallow: true,
+            }
+          )
+        : router.back();
     } else router.back();
   };
   const onClickBackHome = () => {

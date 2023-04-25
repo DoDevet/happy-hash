@@ -113,9 +113,10 @@ function CommunityPostFeed({ hashs }: CommunityPostFeed) {
         {data?.map((data) =>
           data.posts.map((post) => (
             <Link
-              href={`/community/posts?postId=${post?.id}&${queryUrl}${
-                selectHash ? `&selectHash=${selectHash}` : ""
-              }`}
+              href={{
+                pathname: router.pathname,
+                query: { ...router.query, postId: post.id },
+              }}
               as={{
                 pathname: router.pathname + `/${post?.id}`,
                 query: {

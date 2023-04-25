@@ -46,26 +46,26 @@ export interface PostProps {
 export default function usePostFeed() {
   const router = useRouter();
   const getFileterInfo = useRecoilValue(comuFilter);
-  const isSelectFilter = useRecoilValue(selectFilter);
-  const { selectHash, comuId, hashId } = router.query;
+  const { selectHash, comuId, hashId, mode } = router.query;
   const url = comuId ? `?comuId=${comuId}` : `?hashId=${hashId}`;
   const getKey: SWRInfiniteKeyLoader<any, Arguments> = (
     pageIndex,
     previousPageData
   ) => {
     if (previousPageData && !previousPageData.posts.length) return null;
-
-    return (
-      previousPageData?.next ||
-      `/api/community/posts${url}&page=${pageIndex + 1}${
-        selectHash ? `&selectHash=${selectHash}` : ""
-      }${isSelectFilter ? `&popular=${getFileterInfo.likesNum}` : ""}
-        `
-    );
+    return `/api/community/posts${url}&page=${pageIndex + 1}${
+      selectHash ? `&selectHash=${selectHash}` : ""
+    }${mode ? `&popular=${getFileterInfo.likesNum}` : ""}
+        `;
   };
-
-  const { data, isValidating, setSize, mutate } =
-    useSWRInfinite<PostProps>(getKey);
+  const { data, isValidating, setSize, mutate } = useSWRInfinite<PostProps>(
+    getKey,
+    null,
+    {
+      initialSize: 1,
+      parallel: true,
+    }
+  );
 
   return { data, setSize, isValidating, getKey, mutate };
 }

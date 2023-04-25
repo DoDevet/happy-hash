@@ -8,12 +8,10 @@ interface BtnProps {
 }
 
 function FixedButton({ children, comuId, hashId }: BtnProps) {
+  const router = useRouter();
   return (
     <Link
-      shallow
-      href={`/community/posts/write?${
-        comuId ? `comuId=${comuId}` : `hashId=${hashId}`
-      }`}
+      href={{ pathname: router.pathname + "/write", query: router.query }}
       className="bg-darkblue bg-darkerblue fixed bottom-24 right-[10%] flex h-14 w-14 cursor-pointer items-center justify-center rounded-full border-none text-white shadow-md transition-colors  xl:right-[30%]"
     >
       {children}

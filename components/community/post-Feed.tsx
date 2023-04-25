@@ -85,4 +85,4 @@ function PostFeed({
     </div>
   );
 }
-export default React.memo(PostFeed);
+export default PostFeed;

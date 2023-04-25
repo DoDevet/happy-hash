@@ -29,31 +29,29 @@ function Layout({
 }: LayoutProps) {
   const router = useRouter();
   const {
-    query: { comuId, hashId, selectHash, postId },
+    query: { postId },
   } = router;
 
   const onClickBackArrow = () => {
-    if (selectHash) {
+    if (postId) {
+      const deleteQuery = { ...router.query };
+      delete deleteQuery.postId;
+      if (router.pathname === "/community/posts") {
+        router.replace(
+          {
+            pathname: router.pathname,
+            query: deleteQuery,
+          },
+          undefined,
+          {
+            shallow: true,
+            scroll: false,
+          }
+        );
+      } else router.back();
+    } else {
       router.back();
     }
-    const url = comuId
-      ? `?comuId=${comuId}`
-      : hashId
-      ? `?hashId=${hashId}`
-      : null;
-    if (url) {
-      router.pathname === "/community/posts"
-        ? router.replace(
-            `/community/posts${url}${
-              selectHash ? `&selectHash=${selectHash}` : ""
-            }`,
-            undefined,
-            {
-              shallow: true,
-            }
-          )
-        : router.back();
-    } else router.back();
   };
   const onClickBackHome = () => {
     router.push("/");

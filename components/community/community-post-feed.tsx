@@ -64,12 +64,12 @@ function CommunityPostFeed({ hashs }: CommunityPostFeed) {
           (prev) => {
             return (
               prev &&
-              prev.map((prev, first) => {
+              prev.map((prev, index) => {
                 return {
                   ok: true,
                   posts: prev.posts.map((post) => {
                     if (post.id === getPostInfo.post.id) {
-                      setSize(first + 1);
+                      setSize(index + 1);
                       return {
                         ...getPostInfo.post,
                         likesNum: getPostInfo.post.likesNum,
@@ -87,9 +87,6 @@ function CommunityPostFeed({ hashs }: CommunityPostFeed) {
             );
           },
           {
-            populateCache(updateFeed) {
-              return updateFeed!;
-            },
             revalidate: false,
           }
         );
@@ -113,58 +110,56 @@ function CommunityPostFeed({ hashs }: CommunityPostFeed) {
           "relative mx-auto flex h-full w-full max-w-3xl flex-col divide-y dark:divide-gray-500"
         )}
       >
-        {data
-          ?.flatMap((posts) => posts.posts)
-          .map((post, index) => {
-            return (
-              <Link
-                href={`/community/posts?postId=${post?.id}&${queryUrl}${
-                  selectHash ? `&selectHash=${selectHash}` : ""
-                }`}
-                as={{
-                  pathname: router.pathname + `/${post?.id}`,
-                  query: {
-                    ...router.query,
+        {data?.map((data) =>
+          data.posts.map((post) => (
+            <Link
+              href={`/community/posts?postId=${post?.id}&${queryUrl}${
+                selectHash ? `&selectHash=${selectHash}` : ""
+              }`}
+              as={{
+                pathname: router.pathname + `/${post?.id}`,
+                query: {
+                  ...router.query,
+                },
+              }}
+              shallow
+              key={post.id}
+              className="cursor-pointer"
+              onClick={() => {
+                setRecyclePostInfo({
+                  title: post.title,
+                  _count: post._count,
+                  hashtag: post.hashtag,
+                  id: post.id,
+                  image: post.image,
+                  likesNum: post.likesNum,
+                  payload: post.payload,
+                  user: {
+                    avatar: post.user.avatar,
+                    id: post.user.id,
+                    name: post.user.name,
                   },
-                }}
-                shallow
-                key={index}
-                className="cursor-pointer"
-                onClick={() => {
-                  setRecyclePostInfo({
-                    title: post.title,
-                    _count: post._count,
-                    hashtag: post.hashtag,
-                    id: post.id,
-                    image: post.image,
-                    likesNum: post.likesNum,
-                    payload: post.payload,
-                    user: {
-                      avatar: post.user.avatar,
-                      id: post.user.id,
-                      name: post.user.name,
-                    },
-                    views: post.views,
-                    createdAt: post.createdAt,
-                  });
-                }}
-              >
-                <PostFeed
-                  comments={post?._count?.comments}
-                  title={post?.title}
-                  createdAt={post?.createdAt}
-                  hashtag={post?.hashtag?.name}
-                  hashId={hashId?.toString()}
-                  postId={post?.id}
-                  comuId={comuId?.toString()}
-                  likes={post?.likesNum}
-                  username={post?.user?.name}
-                  isLiked={post?.likes?.length !== 0}
-                  views={post?.views}
-                />
-              </Link>
-            );
-          })}
+                  views: post.views,
+                  createdAt: post.createdAt,
+                });
+              }}
+            >
+              <PostFeed
+                comments={post?._count?.comments}
+                title={post?.title}
+                createdAt={post?.createdAt}
+                hashtag={post?.hashtag?.name}
+                hashId={hashId?.toString()}
+                postId={post?.id}
+                comuId={comuId?.toString()}
+                likes={post?.likesNum}
+                username={post?.user?.name}
+                isLiked={post?.likes?.length !== 0}
+                views={post?.views}
+              />
+            </Link>
+          ))
+        )}
       </ul>
       {!isReachingEnd && !isValidating && (
         <div
@@ -211,4 +206,4 @@ function CommunityPostFeed({ hashs }: CommunityPostFeed) {
     </div>
   );
 }
-export default React.memo(CommunityPostFeed);
+export default CommunityPostFeed;

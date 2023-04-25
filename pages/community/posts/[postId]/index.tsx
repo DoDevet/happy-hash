@@ -13,6 +13,9 @@ function PostDetail() {
   const { data, mutate } = usePostInfo();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  useEffect(() => {
     if (data && !data.ok) {
       router.back();
     }

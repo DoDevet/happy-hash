@@ -11,6 +11,9 @@ import useImage from "@/libs/client/useImage";
 import useMutation from "@/libs/client/useMutation";
 import usePostInfo from "@/libs/client/usePostInfo";
 import useUser from "@/libs/client/useUser";
+import usePostFeed from "@/libs/client/usePostFeed";
+import { unstable_serialize } from "swr/infinite";
+import { useSWRConfig } from "swr";
 
 interface PostForm {
   title: string;
@@ -54,6 +57,8 @@ export default function PostInputForm({
 }: PostInputPorps) {
   const router = useRouter();
   const { mutate } = usePostInfo();
+  const { setSize, mutate: postFeedMutate } = usePostFeed();
+
   const {
     query: { comuId, postId, hashId },
   } = router;
@@ -187,15 +192,14 @@ export default function PostInputForm({
             },
           false
         );
+        router.back();
+      } else {
+        router.replace(
+          { pathname: "/community/posts/", query: router.query },
+          undefined,
+          { scroll: true, unstable_skipClientCache: false }
+        );
       }
-      router.back();
-      /*  router.replace(
-        `/community/posts/${postMutationResponse.postId}?${
-          comuId ? `comuId=${comuId}` : `hashId=${hashId}`
-        }`,
-        undefined,
-        { shallow: true }
-      ); */
     }
   }, [postMutationResponse, router]);
 

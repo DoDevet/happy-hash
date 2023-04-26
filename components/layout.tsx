@@ -4,6 +4,7 @@ import PostMenuLayout from "./community/layout-postMenu";
 import LayoutHeaderFilter from "./community/layout-header-filter";
 import React from "react";
 import { useRouter } from "next/router";
+
 interface LayoutProps {
   hasTabbar?: boolean;
   title?: string | string[] | undefined | null;

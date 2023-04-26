@@ -57,7 +57,6 @@ export default function PostInputForm({
 }: PostInputPorps) {
   const router = useRouter();
   const { mutate } = usePostInfo();
-  const { setSize, mutate: postFeedMutate } = usePostFeed();
 
   const {
     query: { comuId, postId, hashId },

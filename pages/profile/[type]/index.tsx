@@ -1,13 +1,12 @@
 import PostFeed from "@/components/community/post-Feed";
 import Layout from "@/components/layout";
 import { comuHashsInfo } from "@/libs/client/useAtoms";
-import { PostProps } from "@/libs/client/usePostFeed";
 import { cls } from "@/libs/client/utils";
 import { Post } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSetRecoilState } from "recoil";
-import useSWR, { Arguments } from "swr";
+import { Arguments } from "swr";
 import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite";
 interface PostExtends extends Post {
   hashtag: {

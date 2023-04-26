@@ -1,9 +1,6 @@
-import getComuUrl from "@/libs/client/getComuUrl";
-import { selectFilter } from "@/libs/client/useAtoms";
 import { cls } from "@/libs/client/utils";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useRecoilState } from "recoil";
 
 export default function CommunityBottomTab() {
   //usePostFeed

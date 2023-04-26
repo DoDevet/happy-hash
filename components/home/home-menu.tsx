@@ -53,7 +53,7 @@ export default function HomeMenu({
             onClick={() => setHomeMenu(false)}
             href="/guide"
           >
-            Q&A
+            Guide
           </Link>
           <Link
             href="/profile"

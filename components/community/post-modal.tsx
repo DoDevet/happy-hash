@@ -6,22 +6,6 @@ import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import PostForm from "./post-form";
 
-interface RecycleProps {
-  hashtag: { name: string };
-  id: number;
-  image: string;
-  likesNum: number;
-  payload: string;
-  title: string;
-  user: {
-    name: string;
-    id: number;
-    avatar: string;
-  };
-  views: number;
-  _count: { comments: number; likes: number };
-}
-
 export default function PostModalDetail() {
   const router = useRouter();
   const {

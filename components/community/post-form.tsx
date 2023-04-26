@@ -1,7 +1,11 @@
 import CommentSection from "@/components/community/comments";
 import Layout from "@/components/layout";
 import getDateTimeFormat from "@/libs/client/getDateTimeFormat";
-import { prevPostInfo, recyclePostInfo } from "@/libs/client/useAtoms";
+import {
+  comuHashsInfo,
+  prevPostInfo,
+  recyclePostInfo,
+} from "@/libs/client/useAtoms";
 import useImage from "@/libs/client/useImage";
 import useMutation from "@/libs/client/useMutation";
 import { PostForm } from "@/libs/client/usePostInfo";
@@ -73,6 +77,7 @@ export default function PostInfo({
     method: "POST",
   });
   const setPostInfo = useSetRecoilState(prevPostInfo);
+  const setComuInfo = useSetRecoilState(comuHashsInfo);
   const getRecyclePostInfo = useRecoilValue(recyclePostInfo);
   const onClickFavBtn = () => {
     if (toggleLoading) return;
@@ -171,6 +176,14 @@ export default function PostInfo({
             <Link
               href={`/community/posts/?hashId=${postInfo?.post.hashtagId}`}
               replace
+              onClick={() =>
+                setComuInfo([
+                  {
+                    name: postInfo?.post.hashtag.name!,
+                    id: postInfo?.post.hashtag.id!,
+                  },
+                ])
+              }
             >
               <span className="cursor-pointer font-semibold text-[#3b62a5]">
                 #

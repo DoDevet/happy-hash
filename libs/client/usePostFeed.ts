@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite";
 import { useRecoilValue } from "recoil";
-import { comuFilter, selectFilter } from "@/libs/client/useAtoms";
+import { comuFilter } from "@/libs/client/useAtoms";
 import { Arguments } from "swr";
 
 interface PostForm {

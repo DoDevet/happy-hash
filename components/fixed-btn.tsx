@@ -7,7 +7,7 @@ interface BtnProps {
   hashId?: string;
 }
 
-function FixedButton({ children, comuId, hashId }: BtnProps) {
+function FixedButton({ children }: BtnProps) {
   const router = useRouter();
   return (
     <Link

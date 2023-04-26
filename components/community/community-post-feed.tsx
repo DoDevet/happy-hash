@@ -2,7 +2,7 @@ import getQueryUrl from "@/libs/client/getQueryUrl";
 import { prevPostInfo, recyclePostInfo } from "@/libs/client/useAtoms";
 import usePostFeed from "@/libs/client/usePostFeed";
 import { cls } from "@/libs/client/utils";
-import Link from "next/link";
+
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -42,13 +42,8 @@ function CommunityPostFeed({ hashs }: CommunityPostFeed) {
   const { data, isValidating, setSize, mutate } = usePostFeed();
   const router = useRouter();
   const {
-    query: { comuId, selectHash, hashId, postId },
+    query: { comuId, hashId, postId },
   } = router;
-
-  const queryUrl = getQueryUrl({
-    comuId: comuId?.toString(),
-    hashId: hashId?.toString(),
-  });
 
   const isEmpty = data?.[0]?.posts?.length === 0;
   const isReachingEnd =
@@ -112,21 +107,9 @@ function CommunityPostFeed({ hashs }: CommunityPostFeed) {
       >
         {data?.map((data) =>
           data.posts.map((post) => (
-            <Link
-              href={{
-                pathname: router.pathname,
-                query: { ...router.query, postId: post.id },
-              }}
-              as={{
-                pathname: router.pathname + `/${post?.id}`,
-                query: {
-                  ...router.query,
-                },
-              }}
-              shallow
+            <div
               key={post.id}
-              className="cursor-pointer"
-              onClick={() => {
+              onClick={() =>
                 setRecyclePostInfo({
                   title: post.title,
                   _count: post._count,
@@ -142,8 +125,8 @@ function CommunityPostFeed({ hashs }: CommunityPostFeed) {
                   },
                   views: post.views,
                   createdAt: post.createdAt,
-                });
-              }}
+                })
+              }
             >
               <PostFeed
                 comments={post?._count?.comments}
@@ -153,12 +136,15 @@ function CommunityPostFeed({ hashs }: CommunityPostFeed) {
                 hashId={hashId?.toString()}
                 postId={post?.id}
                 comuId={comuId?.toString()}
+                image={post.image}
+                payload={post.payload}
+                user={post.user}
                 likes={post?.likesNum}
                 username={post?.user?.name}
                 isLiked={post?.likes?.length !== 0}
                 views={post?.views}
               />
-            </Link>
+            </div>
           ))
         )}
       </ul>

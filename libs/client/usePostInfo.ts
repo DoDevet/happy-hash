@@ -31,7 +31,7 @@ export default function usePostInfo() {
   const {
     query: { postId },
   } = router;
-
+  console.log(router);
   const { data, mutate } = useSWR<PostForm>(
     postId ? `/api/community/posts/${postId}` : null,
     null,

@@ -156,7 +156,7 @@ function HomeNav() {
           )}
           href="/guide"
         >
-          Q&A
+          Guide
         </Link>
         <Link
           href="/profile"

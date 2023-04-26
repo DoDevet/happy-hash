@@ -10,7 +10,6 @@ import CommunityBottomTab from "@/components/community/community-bottomTab";
 import CommunityPostFeed from "@/components/community/community-post-feed";
 import { useRouter } from "next/router";
 import useSWR, { SWRConfig } from "swr";
-import Head from "next/head";
 
 interface ComuInfoForm {
   ok: boolean;
@@ -29,11 +28,6 @@ function HashCommunity() {
   const hashs = data?.hashArr?.map((hash) => hash.name);
   return (
     <div>
-      <Head>
-        <meta httpEquiv="Pragma" content="no-cache" />
-        <meta httpEquiv="Cache-Control" content="no-cache" />
-        <meta httpEquiv="Expires" content="0" />
-      </Head>
       {postId ? <PostModalDetail /> : null}
       <Layout
         title={

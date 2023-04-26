@@ -17,6 +17,6 @@ Edit Profile을 누르게 되면 유저정보를 수정 할 수 있는 페이지
 
 ![Example image](https://imagedelivery.net/x2vrVGmUfxi_qt-pjNxZ6g/212f336d-b27c-4aeb-73c0-738fc1472e00/public)
 
-좌측 메뉴바를 누르면 나오는 메뉴이다.
+Edit Profile에선 email, phone, username, avatar 정보를 변경할 수 있다.
 
-아바타를 클릭했을때 나오는 메뉴인 Profile, Login이 중복되지만, 빼면 허전해서 유지하기로 했다.
+email, phone 둘 중 하나는 입력되어야 하며, Edit post 처럼 이미지 파일이 변경되지 않았다면 텍스트만 빠르게 변경하도록 구현했다.

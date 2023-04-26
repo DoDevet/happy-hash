@@ -3,20 +3,20 @@ import { PrismaClient } from "@prisma/client";
 const client = new PrismaClient();
 
 async function main() {
-  [...Array.from(Array(101).keys())].forEach(async (item) => {
+  [...Array.from(Array(101).keys())].forEach(async (item, index) => {
     const stream = await client.post.create({
       data: {
-        image: "1146c51b-668c-4606-0c16-1f176a4f0c00",
-        payload: "TEST",
-        title: "TEST",
+        image: "dadab751-bd9f-4a4a-ded1-9abb2e203600",
+        payload: `Test${index}`,
+        title: `Test${index}`,
         hashtag: {
           connect: {
-            id: 2,
+            id: 52,
           },
         },
         user: {
           connect: {
-            id: 1,
+            id: 2,
           },
         },
       },

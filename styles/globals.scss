@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 .no-scroll {
   -ms-overflow-style: none; /* IE, Edge */
   scrollbar-width: none; /* Firefox */
@@ -30,6 +31,13 @@
 }
 .border-darkblue {
   @apply border-[#3b62a5];
+}
+
+.container {
+  @apply my-2 box-border px-2;
+  img {
+    @apply h-auto w-full rounded-md shadow-sm;
+  }
 }
 
 @keyframes typing {

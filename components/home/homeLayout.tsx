@@ -7,6 +7,7 @@ import Modal from "./modal";
 import HashRanking from "./home-HashRanking";
 import HomeNav from "./home-nav";
 import SearchForm from "./home-searchForm";
+import Image from "next/image";
 
 interface HomeLayoutProps {
   children: ReactNode;
@@ -22,6 +23,7 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
       )}
     >
       {open && <Modal />}
+
       <Head>
         <title>{`${title} | #happy_hash`}</title>
       </Head>

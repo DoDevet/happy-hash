@@ -13,6 +13,7 @@
     "@types/react": "18.0.31",
     "@types/react-dom": "18.0.11",
     "@vercel/analytics": "^1.0.0",
+    "gray-matter": "^4.0.3",
     "iron-session": "^6.3.1",
     "moment": "^2.29.4",
     "next": "13.2.4",
@@ -21,8 +22,13 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.5",
     "recoil": "^0.7.7",
+    "remark-html": "^15.0.2",
+    "remark-images": "^3.1.0",
+    "remark-parse": "^10.0.1",
+    "sass": "^1.62.1",
     "sharp": "^0.32.0",
-    "swr": "^2.1.0"
+    "swr": "^2.1.0",
+    "unified": "^10.1.2"
   },
   "devDependencies": {
     "@types/node": "^18.16.0",

@@ -150,7 +150,7 @@ function HomeNav() {
         <Link
           className={cls(
             "border-b-2 px-2",
-            router.pathname === "/guide"
+            router.pathname.includes("/guide")
               ? "border-b-2 border-[#3b62a5] px-2 text-[#3b62a5] dark:text-[#3b62a5]"
               : "border-transparent dark:text-gray-400"
           )}

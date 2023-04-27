@@ -94,16 +94,31 @@ function CommunityPostFeed({ hashs }: CommunityPostFeed) {
         comuId && hashs?.length! > 1 ? "pt-11" : ""
       )}
     >
-      <ul
+      <div
         className={cls(
           "relative mx-auto flex h-full w-full max-w-3xl flex-col divide-y dark:divide-gray-500"
         )}
       >
         {data?.map((data) =>
-          data.posts.map((post) => (
+          data?.posts?.map((post) => (
             <div
+              className="cursor-pointer"
               key={post.id}
-              onClick={() =>
+              onClick={() => {
+                router.push(
+                  {
+                    pathname: router.pathname,
+                    query: { postId: post.id, ...router.query },
+                  },
+                  {
+                    pathname: router.pathname + `/${post.id}`,
+                    query: { ...router.query },
+                  },
+                  {
+                    shallow: true,
+                    scroll: false,
+                  }
+                );
                 setRecyclePostInfo({
                   title: post.title,
                   _count: post._count,
@@ -119,8 +134,8 @@ function CommunityPostFeed({ hashs }: CommunityPostFeed) {
                   },
                   views: post.views,
                   createdAt: post.createdAt,
-                })
-              }
+                });
+              }}
             >
               <PostFeed
                 comments={post?._count?.comments}
@@ -141,7 +156,7 @@ function CommunityPostFeed({ hashs }: CommunityPostFeed) {
             </div>
           ))
         )}
-      </ul>
+      </div>
       {!isReachingEnd && !isValidating && (
         <div
           className={

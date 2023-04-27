@@ -58,10 +58,10 @@ export default function usePostFeed() {
     }${mode ? `&popular=${getFileterInfo.likesNum}` : ""}
         `;
   };
+
   const { data, isValidating, setSize, mutate, size } =
     useSWRInfinite<PostProps>(getKey, null, {
       initialSize: 1,
-      parallel: true,
       revalidateOnFocus: false,
     });
   return { data, setSize, isValidating, getKey, mutate, size };

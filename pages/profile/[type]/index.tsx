@@ -54,6 +54,7 @@ export default function RecoardPage() {
     useSWRInfinite<DataResponse>(getKey);
 
   const posts = data?.flatMap((posts) => posts.posts);
+
   return (
     <Layout
       hasBackArrow
@@ -80,11 +81,21 @@ export default function RecoardPage() {
             {posts?.map((post) => (
               <div
                 key={post?.id}
-                onClick={() =>
+                onClick={() => {
                   setComuHashsInfo([
                     { id: +post?.hashtag.id!, name: post?.hashtag.name! },
-                  ])
-                }
+                  ]);
+                  router.push(
+                    {
+                      pathname: `/community/posts` + `/${post?.id}`,
+                      query: { postId: post?.id, ...router.query },
+                    },
+                    undefined,
+                    {
+                      scroll: false,
+                    }
+                  );
+                }}
               >
                 <PostFeed
                   profileFeed

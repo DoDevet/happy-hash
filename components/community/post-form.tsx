@@ -8,14 +8,13 @@ import {
 } from "@/libs/client/useAtoms";
 import useImage from "@/libs/client/useImage";
 import useMutation from "@/libs/client/useMutation";
-import { PostForm } from "@/libs/client/usePostInfo";
 import { cls } from "@/libs/client/utils";
 import { Comment, Like, Post, User } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { KeyedMutator } from "swr";
+import usePostInfo from "@/libs/client/usePostInfo";
 
 interface PostWithHashtag extends Post {
   hashtag: {
@@ -58,16 +57,11 @@ interface ToggleResponse {
 }
 
 interface PostFormProps {
-  postInfo: PostForm | undefined;
   isModal?: boolean;
-  mutate: KeyedMutator<PostForm>;
 }
 
-export default function PostInfo({
-  postInfo,
-  mutate,
-  isModal = false,
-}: PostFormProps) {
+export default function PostInfo({ isModal = false }: PostFormProps) {
+  const { data: postInfo, mutate } = usePostInfo();
   const router = useRouter();
   const {
     query: { postId },
@@ -80,7 +74,6 @@ export default function PostInfo({
   const setComuInfo = useSetRecoilState(comuHashsInfo);
   const getRecyclePostInfo = useRecoilValue(recyclePostInfo);
   const onClickFavBtn = () => {
-    if (toggleLoading) return;
     mutate(
       (prev) =>
         prev && {
@@ -103,7 +96,7 @@ export default function PostInfo({
       false
     );
     setPostInfo(postInfo && { ...postInfo, isFav: !postInfo.isFav });
-    toggleFav({ postId });
+    if (!toggleLoading) toggleFav({ postId });
   };
 
   const imageURL = useImage({

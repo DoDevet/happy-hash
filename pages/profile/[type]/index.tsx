@@ -77,15 +77,9 @@ export default function RecoardPage() {
               "relative mx-auto flex h-full w-full max-w-3xl flex-col divide-y dark:divide-gray-500"
             )}
           >
-            {posts?.map((post, index) => (
-              <Link
-                key={index}
-                href={{
-                  pathname: `/community/posts/${post?.id}`,
-                  query: {
-                    hashId: post?.hashtag.id,
-                  },
-                }}
+            {posts?.map((post) => (
+              <div
+                key={post?.id}
                 onClick={() =>
                   setComuHashsInfo([
                     { id: +post?.hashtag.id!, name: post?.hashtag.name! },
@@ -93,6 +87,7 @@ export default function RecoardPage() {
                 }
               >
                 <PostFeed
+                  profileFeed
                   title={post?.title!}
                   comments={post?._count.comments!}
                   comuId={undefined}
@@ -105,7 +100,7 @@ export default function RecoardPage() {
                   username={post?.user.name!}
                   views={post?.views!}
                 />
-              </Link>
+              </div>
             ))}
           </ul>
           {!isValidating && (

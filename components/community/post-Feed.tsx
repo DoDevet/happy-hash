@@ -17,6 +17,8 @@ export interface PostFeedProps {
   comuId: string | undefined;
   hashId: string | undefined;
   postId: number;
+  profileFeed?: boolean;
+
   [key: string]: any;
 }
 
@@ -29,21 +31,34 @@ function PostFeed({
   comments,
   isLiked,
   postId,
+  hashId,
   views,
+  profileFeed,
 }: PostFeedProps) {
   const router = useRouter();
   return (
     <Link
-      href={{
-        pathname: router.pathname,
-        query: { ...router.query, postId: postId },
-      }}
-      as={{
-        pathname: router.pathname + `/${postId}`,
-        query: {
-          ...router.query,
-        },
-      }}
+      href={
+        !profileFeed
+          ? {
+              pathname: router.pathname,
+              query: { ...router.query, postId: postId },
+            }
+          : {
+              pathname: `/community/posts/${postId}`,
+              query: { hashId },
+            }
+      }
+      as={
+        !profileFeed
+          ? {
+              pathname: router.pathname + `/${postId}`,
+              query: {
+                ...router.query,
+              },
+            }
+          : undefined
+      }
       shallow
       className="cursor-pointer"
     >

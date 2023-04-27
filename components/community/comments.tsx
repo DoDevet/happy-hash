@@ -8,9 +8,10 @@ import { cls } from "@/libs/client/utils";
 import CommentsFeed from "./comments-feed";
 import useUser from "@/libs/client/useUser";
 import useComments from "@/libs/client/useComments";
-import { useRecoilState } from "recoil";
-import { CommentsPageNav } from "@/libs/client/useAtoms";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { CommentsPageNav, prevPostInfo } from "@/libs/client/useAtoms";
 import CommentsFeedLoading from "./comments-feed-loading";
+import { produce } from "immer";
 interface CreateCommentsForm {
   message: string;
 }
@@ -34,12 +35,21 @@ export default function CommentSection() {
       url: `/api/community/posts/${postId}/comments`,
       method: "POST",
     });
-
+  const setPostInfo = useSetRecoilState(prevPostInfo);
   const { user } = useUser();
 
   useEffect(() => {
     if (createCommentsRespose && createCommentsRespose.ok) {
-      commentsMutate();
+      commentsMutate().then(() =>
+        setPostInfo((data) => {
+          if (data) {
+            const draft = produce(data, (draft) => {
+              ++draft.post._count.comments;
+            });
+            return draft;
+          }
+        })
+      );
       setCommentsNav({
         limitPage: Math.ceil((commentsData?.totalComments! + 1) / 10),
         currentPage: Math.ceil((commentsData?.totalComments! + 1) / 10),

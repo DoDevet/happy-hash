@@ -9,18 +9,11 @@ import { useEffect } from "react";
 import { SWRConfig } from "swr";
 
 function PostDetail() {
-  const router = useRouter();
-  const { data, mutate } = usePostInfo();
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  useEffect(() => {
-    if (data && !data.ok) {
-      router.back();
-    }
-  }, [data]);
-  return <PostInfo mutate={mutate} postInfo={data} />;
+
+  return <PostInfo />;
 }
 
 export default function Page({ post, ok, error, isMine, isFav }: IPostForm) {

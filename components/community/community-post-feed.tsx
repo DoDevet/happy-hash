@@ -1,8 +1,8 @@
-import getQueryUrl from "@/libs/client/getQueryUrl";
 import { prevPostInfo, recyclePostInfo } from "@/libs/client/useAtoms";
+import { useInfiniteScroll } from "@/libs/client/useInfiniteScroll";
 import usePostFeed from "@/libs/client/usePostFeed";
 import { cls } from "@/libs/client/utils";
-
+import { produce } from "immer";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -39,7 +39,7 @@ export interface PostProps {
   [key: string]: any;
 }
 function CommunityPostFeed({ hashs }: CommunityPostFeed) {
-  const { data, isValidating, setSize, mutate } = usePostFeed();
+  const { data, isValidating, setSize, mutate, size } = usePostFeed();
   const router = useRouter();
   const {
     query: { comuId, hashId, postId },
@@ -50,41 +50,35 @@ function CommunityPostFeed({ hashs }: CommunityPostFeed) {
     isEmpty || (data && data[data.length - 1]?.posts?.length < 20);
   const [getPostInfo, setPostInfo] = useRecoilState(prevPostInfo);
   const setRecyclePostInfo = useSetRecoilState(recyclePostInfo);
+  useInfiniteScroll({
+    isLoading: isValidating,
+    isEnd: isReachingEnd,
+    setSize,
+  });
 
   useEffect(() => {
     if (!postId) {
       document.body.style.overflow = "unset";
-      if (getPostInfo !== undefined) {
-        mutate(
-          (prev) => {
-            return (
-              prev &&
-              prev.map((prev, index) => {
-                return {
-                  ok: true,
-                  posts: prev.posts.map((post) => {
-                    if (post.id === getPostInfo.post.id) {
-                      setSize(index + 1);
-                      return {
-                        ...getPostInfo.post,
-                        likesNum: getPostInfo.post.likesNum,
-                        likes: getPostInfo.isFav ? [{}] : [],
-                        _count: {
-                          likes: getPostInfo.post.likesNum,
-                          comments: getPostInfo.post._count.comments,
-                        },
-                      };
-                    }
-                    return post;
-                  }),
+      if (getPostInfo !== undefined && data !== undefined) {
+        const draft = produce(data, (draft) => {
+          data.map((prevData, firstIndex) =>
+            prevData.posts.map((post, secondIndex) => {
+              if (post.id === getPostInfo.post.id) {
+                setSize(firstIndex + 1);
+                draft[firstIndex].posts[secondIndex] = {
+                  ...getPostInfo.post,
+                  likesNum: getPostInfo.post.likesNum,
+                  likes: getPostInfo.isFav ? [{}] : [],
+                  _count: {
+                    likes: getPostInfo.post.likesNum,
+                    comments: getPostInfo.post._count.comments,
+                  },
                 };
-              })
-            );
-          },
-          {
-            revalidate: false,
-          }
-        );
+              }
+            })
+          );
+        });
+        mutate(draft, false);
         setPostInfo(undefined);
       }
     }

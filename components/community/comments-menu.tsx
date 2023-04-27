@@ -1,10 +1,11 @@
-import { CommentsPageNav } from "@/libs/client/useAtoms";
+import { CommentsPageNav, prevPostInfo } from "@/libs/client/useAtoms";
 import useComments from "@/libs/client/useComments";
 import useMutation from "@/libs/client/useMutation";
 import { cls } from "@/libs/client/utils";
+import { produce } from "immer";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
 interface DeleteMutation {
   ok: boolean;
@@ -30,7 +31,7 @@ export default function CommentsMenu({
     url: `/api/community/posts/${postId}/comments`,
     method: "DELETE",
   });
-
+  const setPostInfo = useSetRecoilState(prevPostInfo);
   const onDeleteValid = () => {
     if (loading) return;
     deleteComments({ commentsId });
@@ -42,6 +43,15 @@ export default function CommentsMenu({
 
   useEffect(() => {
     if (data && data.ok) {
+      setPostInfo((data) => {
+        if (data) {
+          const draft = produce(data, (draft) => {
+            --draft.post._count.comments;
+          });
+
+          return draft;
+        }
+      });
       commentsMutate(
         (prev) =>
           prev && {

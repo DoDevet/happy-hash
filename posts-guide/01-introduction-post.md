@@ -9,3 +9,11 @@ title: 소개
 SMS 인증 로그인 방식은 현재 닫아놓은 상태이며
 
 Guide 페이지는 getStaticProps, getStaticPath 기능을 사용하여 구현하였습니다.
+
+프레임워크 - Next.js with Typescript,
+
+DB - Prisma ORM, Mysql
+
+스타일 - tailwind css, sass
+
+배포 - Vercel

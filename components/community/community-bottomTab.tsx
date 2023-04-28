@@ -30,6 +30,7 @@ export default function CommunityBottomTab() {
         <Link
           replace
           shallow
+          scroll
           href={{
             pathname: router.pathname,
             query: {

@@ -52,7 +52,7 @@ export default function usePostFeed() {
     pageIndex,
     previousPageData
   ) => {
-    if (previousPageData && !previousPageData.posts.length) return null;
+    if (previousPageData && !previousPageData?.posts?.length) return null;
     return `/api/community/posts${url}&page=${pageIndex + 1}${
       selectHash ? `&selectHash=${selectHash}` : ""
     }${mode ? `&popular=${getFileterInfo.likesNum}` : ""}

@@ -26,6 +26,7 @@ function HashCommunity() {
     `/api/community?${comuId ? `comuId=${comuId}` : `hashId=${hashId}`}`
   );
   const hashs = data?.hashArr?.map((hash) => hash.name);
+
   return (
     <div>
       {postId ? <PostModalDetail /> : null}

@@ -30,7 +30,7 @@ function Layout({
 }: LayoutProps) {
   const router = useRouter();
   const {
-    query: { postId },
+    query: { postId, mode },
   } = router;
 
   const onClickBackArrow = () => {
@@ -107,7 +107,7 @@ function Layout({
               </button>
             ) : null}
             {hasPostMenuBar ? <PostMenuLayout /> : null}
-            {hasFilterMenu ? <LayoutHeaderFilter /> : null}
+            {hasFilterMenu && mode === "Filter" ? <LayoutHeaderFilter /> : null}
             <span>{title}</span>
           </div>
         </div>

@@ -110,7 +110,7 @@ export default function Modal() {
       <div
         onClick={() => setOpen(false)}
         className={cls(
-          "absolute z-30 h-full w-full bg-black bg-opacity-30",
+          "full fixed z-30 h-full w-full bg-black bg-opacity-30",
           open ? "" : "hidden"
         )}
       ></div>

@@ -26,9 +26,6 @@ export default function Home() {
   const setComuHashs = useSetRecoilState(comuHashsInfo);
   useEffect(() => {
     if (open) {
-      window.scrollTo({
-        top: 0,
-      });
       document.body.style.overflow = "hidden";
     }
     if (open === false) {
@@ -38,7 +35,7 @@ export default function Home() {
 
   return (
     <HomeLayout title={"Home"}>
-      <div className="mx-auto w-full max-w-7xl  items-center justify-center px-4">
+      <div className="mx-auto w-full max-w-7xl items-center justify-center px-4">
         <h1 className="mb-5 font-play text-3xl font-semibold text-[#3b62a5] dark:text-[#5f86c9] ">
           #My Hash
         </h1>

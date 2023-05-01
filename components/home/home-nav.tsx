@@ -127,7 +127,7 @@ function HomeNav() {
           <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
         </svg>
       </div>
-      <h1 className="text-center font-semibold text-[#3b62a5] sm:px-10">
+      <h1 className="text-center font-semibold text-[#3b62a5] dark:text-[#5f86c9] sm:px-10">
         <Link
           href={"/"}
           className="font-play text-2xl font-extrabold lg:text-3xl"
@@ -141,7 +141,7 @@ function HomeNav() {
           className={cls(
             "border-b-2 px-2",
             router.pathname === "/"
-              ? "border-b-2 border-[#3b62a5] px-2 text-[#3b62a5] dark:text-[#3b62a5]"
+              ? "border-b-2 border-[#3b62a5] px-2 text-[#3b62a5] dark:text-[#5f86c9]"
               : "border-b-2 border-transparent px-2 dark:text-gray-400"
           )}
         >
@@ -151,7 +151,7 @@ function HomeNav() {
           className={cls(
             "border-b-2 px-2",
             router.pathname.includes("/guide")
-              ? "border-b-2 border-[#3b62a5] px-2 text-[#3b62a5] dark:text-[#3b62a5]"
+              ? "border-b-2 border-[#3b62a5] px-2 text-[#3b62a5] dark:text-[#5f86c9]"
               : "border-transparent dark:text-gray-400"
           )}
           href="/guide"
@@ -163,7 +163,7 @@ function HomeNav() {
           className={cls(
             "border-b-2 px-2 dark:text-gray-400",
             router.pathname === "/profile"
-              ? "border-[#3b62a5] px-2 text-[#3b62a5]  dark:text-[#3b62a5]"
+              ? "border-[#3b62a5] px-2 text-[#3b62a5]  dark:text-[#5f86c9]"
               : "border-transparent dark:text-gray-400"
           )}
         >

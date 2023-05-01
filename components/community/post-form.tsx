@@ -178,7 +178,7 @@ export default function PostInfo({ isModal = false }: PostFormProps) {
                 ])
               }
             >
-              <span className="cursor-pointer font-semibold text-[#3b62a5]">
+              <span className="cursor-pointer font-semibold text-[#3b62a5] dark:text-[#5f86c9] ">
                 #
                 {postInfo
                   ? postInfo.post.hashtag.name

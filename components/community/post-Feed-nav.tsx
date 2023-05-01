@@ -22,7 +22,7 @@ function PostFeedNav({ comuId, hashs }: PostFeedNavProps) {
           className={cls(
             "border-b",
             !selectHash
-              ? "border-[rgb(59,98,165)] text-[#3b62a5]"
+              ? "border-[rgb(59,98,165)] text-[#3b62a5] dark:text-[#5f86c9]"
               : "truncate border-transparent"
           )}
           replace
@@ -42,7 +42,7 @@ function PostFeedNav({ comuId, hashs }: PostFeedNavProps) {
             className={cls(
               "border-b",
               selectHash === hash
-                ? "border-[#3b62a5] text-[#3b62a5]"
+                ? "border-[#3b62a5] text-[#3b62a5] dark:text-[#5f86c9]"
                 : "truncate border-transparent"
             )}
           >

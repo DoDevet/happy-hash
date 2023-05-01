@@ -160,7 +160,7 @@ function CommunityPostFeed({ hashs }: CommunityPostFeed) {
       {!isReachingEnd && !isValidating && (
         <div
           className={
-            "text-darkblue flex cursor-pointer flex-col items-center justify-center py-2"
+            "text-darkblue flex cursor-pointer flex-col items-center justify-center py-2 dark:text-[#5f86c9]"
           }
           onClick={() => setSize((prev) => prev + 1)}
         >

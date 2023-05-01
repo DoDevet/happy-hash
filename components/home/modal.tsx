@@ -106,15 +106,17 @@ export default function Modal() {
   };
 
   return (
-    <div
-      className={cls(
-        "absolute z-50 flex h-full w-full items-center justify-center bg-black bg-opacity-30",
-        open ? "" : "hidden"
-      )}
-    >
-      <div className="relative h-96 w-2/3 max-w-md rounded-md bg-white px-4 py-5 shadow-md dark:bg-[#1e272e]">
+    <>
+      <div
+        onClick={() => setOpen(false)}
+        className={cls(
+          "absolute z-30 h-full w-full bg-black bg-opacity-30",
+          open ? "" : "hidden"
+        )}
+      ></div>
+      <div className="absolute left-1/2 top-1/2 z-50 h-96 w-2/3 max-w-lg -translate-x-1/2 -translate-y-1/2 transform rounded-md bg-white px-4 py-5 shadow-md dark:bg-[#1e272e] ">
         <div className="mb-4 flex w-full items-center justify-between">
-          <h1 className="text-2xl font-semibold text-[#3b62a5]">
+          <h1 className="text-2xl font-semibold text-[#3b62a5] dark:text-[#5f86c9]">
             {EDIT_MODE ? "Edit hash" : "Create hash"}
           </h1>
           <button onClick={onCloseBtn}>
@@ -167,6 +169,6 @@ export default function Modal() {
           </form>
         ) : null}
       </div>
-    </div>
+    </>
   );
 }

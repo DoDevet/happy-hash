@@ -28,7 +28,7 @@ function HashCommunity() {
   const hashs = data?.hashArr?.map((hash) => hash.name);
 
   return (
-    <div>
+    <>
       {postId ? <PostModalDetail /> : null}
       <Layout
         title={
@@ -63,7 +63,7 @@ function HashCommunity() {
         </FixedButton>
         <CommunityBottomTab />
       </Layout>
-    </div>
+    </>
   );
 }
 
@@ -148,7 +148,7 @@ export const getServerSideProps = withSsrSession(
             hashArr: JSON.parse(
               JSON.stringify([{ name: hashArr.name, id: hashArr.id }])
             ),
-            title: JSON.parse(JSON.stringify("#" + hashArr.name)),
+            title: JSON.parse(JSON.stringify(hashArr.name)),
           },
         };
     }

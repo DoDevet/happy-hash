@@ -33,7 +33,7 @@ function PostFeed({
   return (
     <div className="flex items-center justify-between px-4 py-2 dark:bg-[#1e272e] dark:text-gray-200">
       <div>
-        <span className="text-darkblue text-base font-semibold">
+        <span className="text-darkblue text-base font-semibold dark:text-[#5f86c9]">
           #{hashtag}
         </span>
         <span className="ml-2 text-base font-semibold">{title}</span>

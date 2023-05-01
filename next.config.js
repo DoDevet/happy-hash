@@ -2,7 +2,7 @@ const path = require("path");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-
+  plugins: [require("tw-elements/dist/plugin.cjs")],
   experimental: {
     scrollRestoration: true,
   },

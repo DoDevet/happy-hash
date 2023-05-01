@@ -21,7 +21,7 @@ export default function CommunityBottomTab() {
           className={cls(
             "flex-1 border-t-2 py-5 text-center transition-colors ",
             !mode
-              ? "border-[#3b62a5] dark:border-[#3b62a5]"
+              ? "border-[#3b62a5] dark:border-[#5f86c9] "
               : "dark:border-gray-300"
           )}
         >
@@ -41,7 +41,7 @@ export default function CommunityBottomTab() {
           className={cls(
             "transition- flex-1  border-t-2 py-5 text-center  dark:bg-[#1e272e] dark:text-gray-200",
             mode
-              ? "border-[#3b62a5] dark:border-[#3b62a5]"
+              ? "border-[#3b62a5] dark:border-[#5f86c9] "
               : "dark:border-gray-300"
           )}
         >

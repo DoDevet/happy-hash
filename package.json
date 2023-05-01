@@ -13,6 +13,7 @@
     "@types/react": "18.0.31",
     "@types/react-dom": "18.0.11",
     "@vercel/analytics": "^1.0.0",
+    "framer-motion": "^10.12.4",
     "gray-matter": "^4.0.3",
     "immer": "^10.0.1",
     "iron-session": "^6.3.1",
@@ -29,6 +30,7 @@
     "sass": "^1.62.1",
     "sharp": "^0.32.0",
     "swr": "^2.1.0",
+    "tw-elements": "^1.0.0-beta2",
     "unified": "^10.1.2"
   },
   "devDependencies": {

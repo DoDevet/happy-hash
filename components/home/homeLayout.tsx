@@ -22,7 +22,6 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
       )}
     >
       {open && <Modal />}
-
       <Head>
         <title>{`${title} | #happy_hash`}</title>
       </Head>
@@ -31,7 +30,7 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
         <SearchForm />
         <HashRanking />
       </header>
-      <div className="mx-auto mb-40 min-h-screen w-full py-4 pt-44 dark:bg-[#1e272e]">
+      <div className="mx-auto mb-40 w-full py-4 pt-44 dark:bg-[#1e272e]">
         {children}
       </div>
     </div>

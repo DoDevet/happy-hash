@@ -5,7 +5,7 @@ import { RecoilRoot } from "recoil";
 import { SWRConfig } from "swr";
 import { Analytics } from "@vercel/analytics/react";
 
-export default function App({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot>
       <SWRConfig
@@ -24,3 +24,4 @@ export default function App({ Component, pageProps }: AppProps) {
     </RecoilRoot>
   );
 }
+export default App;

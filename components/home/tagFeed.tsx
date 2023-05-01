@@ -2,6 +2,8 @@ import { IComuHashsInfo } from "@/libs/client/useAtoms";
 import Link from "next/link";
 import React from "react";
 import { SetterOrUpdater } from "recoil";
+import { motion } from "framer-motion";
+import { Variants } from "framer-motion";
 
 interface TagFeedProps {
   id: number;
@@ -22,6 +24,8 @@ interface TagFeedProps {
   setComuHashs: SetterOrUpdater<IComuHashsInfo[]>;
 }
 
+const TagVars: Variants = { start: { scale: 0 }, end: { scale: 1 } };
+
 function TagFeed({
   customName,
   id,
@@ -40,7 +44,12 @@ function TagFeed({
     });
   };
   return (
-    <div className="relative box-border flex w-full flex-col justify-between overflow-hidden rounded-md bg-[#3b62a5] p-4 text-white shadow-xl hover:bg-[#2c5398] hover:transition-colors">
+    <motion.div
+      variants={TagVars}
+      initial="start"
+      animate="end"
+      className="relative box-border flex w-full flex-col justify-between  overflow-hidden rounded-md bg-[#3b62a5] p-4 text-white shadow-xl hover:bg-[#2c5398] hover:transition-colors"
+    >
       <div className="absolute right-3 space-x-1 ">
         <button onClick={onEditTag}>
           <svg
@@ -98,7 +107,7 @@ function TagFeed({
           Enter
         </div>
       </Link>
-    </div>
+    </motion.div>
   );
 }
 

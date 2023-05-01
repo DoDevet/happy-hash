@@ -15,7 +15,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import usePostInfo from "@/libs/client/usePostInfo";
-
+import { motion } from "framer-motion";
 interface PostWithHashtag extends Post {
   hashtag: {
     id: number;
@@ -123,7 +123,11 @@ export default function PostInfo({ isModal = false }: PostFormProps) {
       hasBackArrow
       hasPostMenuBar={!!postInfo?.isMine}
     >
-      <div className="mb-22 mx-auto min-h-screen w-full  max-w-3xl dark:bg-[#1e272e] dark:text-gray-300">
+      <motion.div
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        className="mb-22 mx-auto min-h-screen w-full  max-w-3xl dark:bg-[#1e272e] dark:text-gray-300"
+      >
         {imageURL ? (
           <Image
             quality={75}
@@ -219,7 +223,7 @@ export default function PostInfo({ isModal = false }: PostFormProps) {
           </div>
         </div>
         <CommentSection />
-      </div>
+      </motion.div>
     </Layout>
   );
 }

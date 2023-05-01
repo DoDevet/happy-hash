@@ -6,7 +6,7 @@ import { produce } from "immer";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-
+import { motion } from "framer-motion";
 interface DeleteMutation {
   ok: boolean;
   error?: string;
@@ -75,7 +75,11 @@ export default function CommentsMenu({
   }, [data]);
 
   return (
-    <div className="absolute right-0 top-3 z-30 mt-2 w-20 rounded-md border border-t-0 bg-white py-1 shadow-lg  dark:border-gray-500 dark:bg-[#1e272e]">
+    <motion.div
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
+      className="absolute right-0 top-3 z-30 mt-2 w-20 rounded-md border border-t-0 bg-white py-1 shadow-lg  dark:border-gray-500 dark:bg-[#1e272e]"
+    >
       <div className="divide-y px-2 font-semibold text-gray-600 dark:divide-gray-500">
         <div className="flex flex-col space-y-3 py-1 outline-none">
           <button
@@ -96,6 +100,6 @@ export default function CommentsMenu({
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

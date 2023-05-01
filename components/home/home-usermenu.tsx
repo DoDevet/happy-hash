@@ -3,6 +3,7 @@ import { cls } from "@/libs/client/utils";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { motion } from "framer-motion";
 interface LogoutResponse {
   ok: boolean;
 }
@@ -24,7 +25,11 @@ export default function UserMenu() {
   }, [logoutResponse]);
 
   return (
-    <div className="absolute right-5 top-8 z-30 mt-2 w-28 rounded-md border border-t-0 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-[#1e272e]">
+    <motion.div
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
+      className="absolute right-5 top-8 z-30 mt-2 w-28 rounded-md border border-t-0 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-[#1e272e]"
+    >
       <div className="divide-y px-2 font-semibold text-gray-600 dark:divide-gray-500">
         <div className="flex flex-col space-y-3 py-1 outline-none">
           <Link
@@ -45,6 +50,6 @@ export default function UserMenu() {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

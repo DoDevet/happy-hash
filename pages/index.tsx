@@ -5,7 +5,7 @@ import { shortcutTag } from "@prisma/client";
 import { useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import useSWR from "swr";
-
+import { motion } from "framer-motion";
 interface shorcutWithHashTag extends shortcutTag {
   hashtags: [
     {
@@ -39,8 +39,8 @@ export default function Home() {
         <h1 className="mb-5 font-play text-3xl font-semibold text-[#3b62a5] dark:text-[#5f86c9] ">
           #My Hash
         </h1>
-        <div className="2xl:grid-col grid grid-cols-2 flex-wrap gap-3 overflow-y-auto rounded-md sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          {data?.tags?.map((tag) => (
+        <div className="2xl:grid-col grid grid-cols-2 flex-wrap gap-3 overflow-hidden rounded-md sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          {data?.tags.map((tag) => (
             <TagFeed
               key={tag?.id}
               id={tag?.id}

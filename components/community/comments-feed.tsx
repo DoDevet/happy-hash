@@ -105,11 +105,17 @@ function CommentsFeed({
               </svg>
             </button>
             {menuOpen ? (
-              <CommentsMenu
-                commentsId={commentsId}
-                message={message}
-                setEditor={setEditor}
-              />
+              <>
+                <div
+                  className="fixed right-0 top-0 z-30 h-full w-full"
+                  onClick={() => setMenuOpen((prev) => !prev)}
+                />
+                <CommentsMenu
+                  commentsId={commentsId}
+                  message={message}
+                  setEditor={setEditor}
+                />
+              </>
             ) : null}
           </span>
         )}

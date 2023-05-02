@@ -54,38 +54,44 @@ export default function PostMenu() {
     }
   }, [deleteResponse, router]);
   return (
-    <motion.div
-      initial={{ scale: 0 }}
-      animate={{ scale: 1 }}
-      className="absolute right-0 top-8 z-30 mt-2 w-28 rounded-md border border-t-0 bg-white py-1 shadow-lg dark:border-gray-500 dark:bg-[#1e272e]"
-    >
-      <div className="divide-y px-2 font-semibold text-gray-600 dark:divide-gray-500">
-        <div className="flex flex-col space-y-3 py-1 outline-none">
-          <Link
-            href={`/community/posts/${postId}/edit?${
-              comuId
-                ? `comuId=${comuId}`
-                : `hashId=${hashId}${
-                    selectHash ? `&selectHash=${selectHash}` : ""
-                  }`
-            }`}
-            onClick={() => setPostMenu((prev) => !prev)}
-            className={cls(
-              "hover:text-darkblue rounded-md px-2 py-2 text-sm outline-none transition-colors hover:bg-slate-100 dark:text-[#3b62a5] dark:hover:bg-slate-900"
-            )}
-          >
-            Edit Post
-          </Link>
-        </div>
-        <div className="py-1">
-          <div
-            className="cursor-pointer rounded-md px-2 py-2 text-sm text-red-400 transition-colors hover:bg-red-100 dark:hover:bg-slate-900"
-            onClick={onDeleteValid}
-          >
-            {DeleteLoading ? "Deleting..." : "Delete Post"}
+    <>
+      <div
+        className="fixed right-0 top-0 h-full w-full "
+        onClick={() => setPostMenu((prev) => !prev)}
+      />
+      <motion.div
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        className="absolute right-0 top-8 z-30 mt-2 w-28 rounded-md border border-t-0 bg-white py-1 shadow-lg dark:border-gray-500 dark:bg-[#1e272e]"
+      >
+        <div className="divide-y px-2 font-semibold text-gray-600 dark:divide-gray-500">
+          <div className="flex flex-col space-y-3 py-1 outline-none">
+            <Link
+              href={`/community/posts/${postId}/edit?${
+                comuId
+                  ? `comuId=${comuId}`
+                  : `hashId=${hashId}${
+                      selectHash ? `&selectHash=${selectHash}` : ""
+                    }`
+              }`}
+              onClick={() => setPostMenu((prev) => !prev)}
+              className={cls(
+                "hover:text-darkblue rounded-md px-2 py-2 text-sm outline-none transition-colors hover:bg-slate-100 dark:text-gray-400 dark:hover:bg-slate-900 dark:hover:text-[#5f86c9]"
+              )}
+            >
+              Edit Post
+            </Link>
+          </div>
+          <div className="py-1">
+            <div
+              className="cursor-pointer rounded-md px-2 py-2 text-sm text-red-400 transition-colors hover:bg-red-100 dark:hover:bg-slate-900"
+              onClick={onDeleteValid}
+            >
+              {DeleteLoading ? "Deleting..." : "Delete Post"}
+            </div>
           </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </>
   );
 }

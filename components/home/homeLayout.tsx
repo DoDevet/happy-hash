@@ -20,7 +20,7 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
       {open && <Modal />}
       <div
         className={cls(
-          "box-border h-full w-full overflow-auto bg-white dark:bg-[#1e272e] dark:text-gray-300"
+          "z-50 box-border h-full w-full overflow-auto bg-white dark:bg-[#1e272e] dark:text-gray-300"
         )}
       >
         <Head>

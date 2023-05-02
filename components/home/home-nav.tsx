@@ -39,8 +39,8 @@ function HomeNav() {
   }, [logoutResponse, router]);
 
   return (
-    <div className="relative mx-auto flex max-w-7xl items-center justify-center">
-      <div className="absolute -top-0 left-5 z-50 lg:hidden ">
+    <div className="relative z-50 mx-auto flex max-w-7xl items-center justify-center">
+      <div className="absolute -top-0 left-5 z-30  lg:hidden ">
         <button
           onClick={() => setHomeMenu((prev) => !prev)}
           className={cls(
@@ -104,7 +104,7 @@ function HomeNav() {
             src={avatarURL}
             width={256}
             height={256}
-            className="h-8 w-8 cursor-pointer rounded-full object-cover shadow-md"
+            className="z-30 h-8 w-8 cursor-pointer rounded-full object-cover shadow-md"
             onClick={() => setHomeUserMenu((prev) => !prev)}
           />
         ) : (
@@ -117,7 +117,15 @@ function HomeNav() {
           />
         )}
 
-        {homeUserMenu && <UserMenu />}
+        {homeUserMenu && (
+          <>
+            <div
+              className="fixed right-0 top-0 z-20 mx-0 h-full w-full"
+              onClick={() => setHomeUserMenu((prev) => !prev)}
+            />
+            <UserMenu />
+          </>
+        )}
         <svg
           className="h-5 w-5 dark:text-gray-400"
           fill="currentColor"
@@ -127,7 +135,7 @@ function HomeNav() {
           <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
         </svg>
       </div>
-      <h1 className="text-center font-semibold text-[#3b62a5] dark:text-[#5f86c9] sm:px-10">
+      <h1 className="z-30 text-center font-semibold text-[#3b62a5] dark:text-[#5f86c9] sm:px-10">
         <Link
           href={"/"}
           className="font-play text-2xl font-extrabold lg:text-3xl"
@@ -173,7 +181,15 @@ function HomeNav() {
           Logout
         </li>
       </nav>
-      {homeMenu && <HomeMenu setHomeMenu={setHomeMenu} />}
+      {homeMenu && (
+        <>
+          <div
+            className="fixed right-0 top-16  h-full w-full bg-black opacity-30"
+            onClick={() => setHomeMenu((prev) => !prev)}
+          />
+          <HomeMenu setHomeMenu={setHomeMenu} />
+        </>
+      )}
     </div>
   );
 }

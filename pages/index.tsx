@@ -40,7 +40,7 @@ export default function Home() {
           #My Hash
         </h1>
         <div className="2xl:grid-col grid grid-cols-2 flex-wrap gap-3 overflow-hidden rounded-md sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          {data?.tags.map((tag) => (
+          {data?.tags?.map((tag) => (
             <TagFeed
               key={tag?.id}
               id={tag?.id}

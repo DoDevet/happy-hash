@@ -9,7 +9,7 @@ import { useSWRConfig } from "swr";
 import { shortcutTag } from "@prisma/client";
 import { useRecoilState } from "recoil";
 import { hashInfo, isOpen } from "@/libs/client/useAtoms";
-
+import { motion } from "framer-motion";
 interface HashForm {
   hash: string;
   shName: string;
@@ -114,7 +114,11 @@ export default function Modal() {
           open ? "" : "hidden"
         )}
       ></div>
-      <div className="fixed left-1/2 top-1/2 z-50 h-96 w-2/3 max-w-lg -translate-x-1/2 -translate-y-1/2 transform rounded-md bg-white px-4 py-5 shadow-md dark:bg-[#1e272e] ">
+      <motion.div
+        initial={{ scale: 0, translateX: "-50%", translateY: "-50%" }}
+        animate={{ scale: 1, translateX: "-50%", translateY: "-50%" }}
+        className="fixed left-1/2 top-1/2 z-50 h-96 w-2/3 max-w-lg -translate-x-1/2 -translate-y-1/2 transform rounded-md bg-white px-4 py-5 shadow-md dark:bg-[#1e272e] "
+      >
         <div className="mb-4 flex w-full items-center justify-between">
           <h1 className="text-2xl font-semibold text-[#3b62a5] dark:text-[#5f86c9]">
             {EDIT_MODE ? "Edit hash" : "Create hash"}
@@ -168,7 +172,7 @@ export default function Modal() {
             />
           </form>
         ) : null}
-      </div>
+      </motion.div>
     </>
   );
 }

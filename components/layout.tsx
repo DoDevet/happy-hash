@@ -108,7 +108,7 @@ function Layout({
             ) : null}
             {hasPostMenuBar ? <PostMenuLayout /> : null}
             {hasFilterMenu && mode === "Filter" ? <LayoutHeaderFilter /> : null}
-            <span>{title}</span>
+            <span className="max-w-sm truncate">{title}</span>
           </div>
         </div>
       ) : null}

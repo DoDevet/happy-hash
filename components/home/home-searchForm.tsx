@@ -26,6 +26,7 @@ function SearchForm() {
     >
       <div className="relative w-11/12 ">
         <Input
+          isfocus={true}
           type="text"
           placeholder="Search #hash OR Post"
           register={register("search", {

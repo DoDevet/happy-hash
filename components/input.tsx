@@ -7,7 +7,7 @@ interface InputProps {
   placeholder: string;
   register?: UseFormRegisterReturn;
   type: "text" | "number" | "email" | "textArea";
-
+  isfocus?: boolean;
   errorMessage?: string | undefined | null;
   [key: string]: any;
 }
@@ -18,6 +18,7 @@ export default function Input({
   type,
   register,
   errorMessage,
+  isfocus = false,
 }: InputProps) {
   return (
     <div className="dark:bg-[#1e272e]">
@@ -51,7 +52,7 @@ export default function Input({
           placeholder={placeholder}
           {...register}
           type={type}
-          autoFocus
+          autoFocus={isfocus}
         />
       )}
       {errorMessage ? (

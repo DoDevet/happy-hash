@@ -37,9 +37,7 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
             <HashRanking />
           )}
         </header>
-        <div className="mx-auto mb-40 w-full py-4 pt-44 dark:bg-[#1e272e]">
-          {children}
-        </div>
+        <div className="mx-auto w-full pt-40 dark:bg-[#1e272e]">{children}</div>
       </div>
     </>
   );

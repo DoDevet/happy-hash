@@ -50,7 +50,7 @@ export default function Home() {
   return (
     <HomeLayout title={"Home"}>
       <div className="mx-auto w-full max-w-7xl items-center justify-center px-4">
-        <div className="relative my-5 flex w-fit items-center">
+        <div className="relative mb-5 flex w-fit items-center">
           <h1 className=" font-play text-3xl font-semibold text-[#3b62a5] dark:text-[#5f86c9] ">
             #My Hash
           </h1>

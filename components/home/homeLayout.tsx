@@ -8,6 +8,7 @@ import HashRanking from "./home-HashRanking";
 import HomeNav from "./home-nav";
 import SearchForm from "./home-searchForm";
 import { AnimatePresence } from "framer-motion";
+import { useRouter } from "next/router";
 
 interface HomeLayoutProps {
   children: ReactNode;
@@ -15,6 +16,7 @@ interface HomeLayoutProps {
 }
 
 export default function HomeLayout({ children, title }: HomeLayoutProps) {
+  const router = useRouter();
   const open = useRecoilValue(isOpen);
   return (
     <>
@@ -29,8 +31,11 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
         </Head>
         <header className="fixed top-0 z-10 w-full bg-inherit pb-2 pt-8 shadow dark:bg-[#1e272e]">
           <HomeNav />
-          <SearchForm />
-          <HashRanking />
+          {router.pathname.startsWith("/search") ? (
+            <SearchForm />
+          ) : (
+            <HashRanking />
+          )}
         </header>
         <div className="mx-auto mb-40 w-full py-4 pt-44 dark:bg-[#1e272e]">
           {children}

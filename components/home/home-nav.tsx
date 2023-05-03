@@ -156,6 +156,17 @@ function HomeNav() {
           Home
         </Link>
         <Link
+          href="/search"
+          className={cls(
+            "border-b-2 px-2",
+            router.pathname.includes("/search")
+              ? "border-b-2 border-[#3b62a5] px-2 text-[#3b62a5] dark:text-[#5f86c9]"
+              : "border-b-2 border-transparent px-2 dark:text-gray-400"
+          )}
+        >
+          Search
+        </Link>
+        <Link
           className={cls(
             "border-b-2 px-2",
             router.pathname.includes("/guide")

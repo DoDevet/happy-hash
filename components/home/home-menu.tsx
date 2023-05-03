@@ -50,6 +50,18 @@ export default function HomeMenu({
             Home
           </Link>
           <Link
+            href="/search"
+            className={cls(
+              "outline-none",
+              router.pathname.includes("/search")
+                ? "px-2 py-2 text-[#3b62a5] dark:text-[#5f86c9]"
+                : "rounded-md px-2 py-2 transition-colors hover:bg-slate-100 hover:text-[#3b62a5] dark:text-gray-400 dark:hover:bg-slate-900"
+            )}
+            onClick={() => setHomeMenu(false)}
+          >
+            Search
+          </Link>
+          <Link
             className={cls(
               "outline-none",
               router.pathname.includes("/guide")

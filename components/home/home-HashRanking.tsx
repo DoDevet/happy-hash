@@ -36,11 +36,34 @@ function HashRanking() {
   const setComuHashs = useSetRecoilState(comuHashsInfo);
 
   return (
-    <div className="relative mx-auto -mt-4 flex max-w-2xl items-center overflow-y-hidden px-8 text-gray-400">
+    <div className="relative mx-auto mt-2 flex max-w-2xl flex-col items-center overflow-hidden  px-8 py-2 text-gray-400">
       <AnimatePresence mode="wait">
         {ranking?.ok && (
           <>
-            <div className="w-[90%]">
+            <div className="relative w-[90%] rounded-md bg-gray-50 px-2 py-2 dark:bg-[#141c22]">
+              <div
+                onClick={() => setIsExpand((prev) => !prev)}
+                className="absolute right-2 top-2 cursor-pointer"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="h-5 w-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d={cls(
+                      isExpand
+                        ? "M4.5 15.75l7.5-7.5 7.5 7.5"
+                        : "M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    )}
+                  />
+                </svg>
+              </div>
               {isExpand ? (
                 <motion.div
                   variants={HashRankingVariants}
@@ -52,7 +75,7 @@ function HashRanking() {
                   {ranking.hashRanking.map((hash, index) => (
                     <Link
                       href={`/community/posts?hashId=${hash.id}`}
-                      className="flex items-center space-x-3 text-gray-700 dark:text-gray-400"
+                      className="flex w-2/3 items-center space-x-3  text-gray-700 dark:text-gray-400"
                       key={index}
                       onClick={() => setComuHashs([{ ...hash }])}
                     >
@@ -76,7 +99,7 @@ text-[#3b62a5] dark:bg-slate-900 dark:text-[#5f86c9]"
                       },
                     ])
                   }
-                  className="flex items-center"
+                  className="flex w-2/3 items-center"
                   href={`/community/posts?hashId=${ranking?.hashRanking[count]?.id}`}
                 >
                   <motion.div
@@ -96,31 +119,8 @@ dark:text-[#5f86c9]"
                 </Link>
               )}
             </div>
-            <div
-              onClick={() => setIsExpand((prev) => !prev)}
-              className="absolute right-9 top-0 cursor-pointer"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="h-5 w-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d={cls(
-                    isExpand
-                      ? "M4.5 15.75l7.5-7.5 7.5 7.5"
-                      : "M19.5 8.25l-7.5 7.5-7.5-7.5"
-                  )}
-                />
-              </svg>
-            </div>
           </>
-        )}{" "}
+        )}
       </AnimatePresence>
     </div>
   );

@@ -51,6 +51,7 @@ export default function Input({
           placeholder={placeholder}
           {...register}
           type={type}
+          autoFocus
         />
       )}
       {errorMessage ? (

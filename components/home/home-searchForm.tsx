@@ -10,10 +10,14 @@ function SearchForm() {
   const { handleSubmit, register, reset } = useForm<SearchForm>();
   const onSearchValid = (data: SearchForm) => {
     reset();
-    router.push({
-      pathname: "/search",
-      query: { params: data.search },
-    });
+    router.push(
+      {
+        pathname: "/search",
+        query: { params: data.search },
+      },
+      undefined,
+      { shallow: true }
+    );
   };
   return (
     <form

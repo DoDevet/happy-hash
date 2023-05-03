@@ -5,12 +5,7 @@ import { shortcutTag } from "@prisma/client";
 import { useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import useSWR from "swr";
-import {
-  AnimateSharedLayout,
-  LayoutGroup,
-  motion,
-  Variants,
-} from "framer-motion";
+import { motion, Variants } from "framer-motion";
 interface shorcutWithHashTag extends shortcutTag {
   hashtags: [
     {

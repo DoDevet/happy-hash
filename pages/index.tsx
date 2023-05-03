@@ -5,7 +5,12 @@ import { shortcutTag } from "@prisma/client";
 import { useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import useSWR from "swr";
-import { motion } from "framer-motion";
+import {
+  AnimateSharedLayout,
+  LayoutGroup,
+  motion,
+  Variants,
+} from "framer-motion";
 interface shorcutWithHashTag extends shortcutTag {
   hashtags: [
     {
@@ -18,6 +23,20 @@ interface HashForm {
   ok: true;
   tags: shorcutWithHashTag[];
 }
+
+const tagBoxVariants: Variants = {
+  start: {
+    opacity: 0,
+    scale: 0.5,
+  },
+  end: {
+    scale: 1,
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.3,
+    },
+  },
+};
 
 export default function Home() {
   const { data } = useSWR<HashForm>("/api/hashs", null, {});
@@ -36,23 +55,11 @@ export default function Home() {
   return (
     <HomeLayout title={"Home"}>
       <div className="mx-auto w-full max-w-7xl items-center justify-center px-4">
-        <h1 className="mb-5 font-play text-3xl font-semibold text-[#3b62a5] dark:text-[#5f86c9] ">
-          #My Hash
-        </h1>
-        <div className="2xl:grid-col grid grid-cols-2 flex-wrap gap-3 overflow-hidden rounded-md sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          {data?.tags?.map((tag) => (
-            <TagFeed
-              key={tag?.id}
-              id={tag?.id}
-              setOpen={setOpen}
-              setHashInfo={setHashInfo}
-              customName={tag?.customName}
-              setComuHashs={setComuHashs}
-              tags_name={tag?.name}
-              hashtags={tag.hashtags}
-            />
-          ))}
-          <div className="flex h-full w-full items-center justify-center">
+        <div className="relative my-5 flex w-fit items-center">
+          <h1 className=" font-play text-3xl font-semibold text-[#3b62a5] dark:text-[#5f86c9] ">
+            #My Hash
+          </h1>
+          <div className="absolute -right-16  flex items-center justify-center">
             <button onClick={() => setOpen((prev) => !prev)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -71,6 +78,27 @@ export default function Home() {
             </button>
           </div>
         </div>
+        {data && (
+          <motion.div
+            initial="start"
+            animate="end"
+            variants={tagBoxVariants}
+            className="2xl:grid-col grid grid-cols-2 flex-wrap gap-3 overflow-hidden rounded-md sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+          >
+            {data.tags.map((tag) => (
+              <TagFeed
+                key={tag?.id}
+                id={tag?.id}
+                setOpen={setOpen}
+                setHashInfo={setHashInfo}
+                customName={tag?.customName}
+                setComuHashs={setComuHashs}
+                tags_name={tag?.name}
+                hashtags={tag.hashtags}
+              />
+            ))}
+          </motion.div>
+        )}
       </div>
     </HomeLayout>
   );

@@ -108,7 +108,7 @@ export default function Modal() {
   return (
     <>
       <div
-        onClick={() => setOpen(false)}
+        onClick={() => onCloseBtn()}
         className={cls(
           "full fixed z-30 h-full w-full bg-black bg-opacity-30",
           open ? "" : "hidden"
@@ -117,6 +117,7 @@ export default function Modal() {
       <motion.div
         initial={{ scale: 0, translateX: "-50%", translateY: "-50%" }}
         animate={{ scale: 1, translateX: "-50%", translateY: "-50%" }}
+        exit={{ scale: 0 }}
         className="fixed left-1/2 top-1/2 z-50 h-96 w-2/3 max-w-lg -translate-x-1/2 -translate-y-1/2 transform rounded-md bg-white px-4 py-5 shadow-md dark:bg-[#1e272e] "
       >
         <div className="mb-4 flex w-full items-center justify-between">

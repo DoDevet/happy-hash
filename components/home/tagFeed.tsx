@@ -24,7 +24,15 @@ interface TagFeedProps {
   setComuHashs: SetterOrUpdater<IComuHashsInfo[]>;
 }
 
-const TagVars: Variants = { start: { scale: 0 }, end: { scale: 1 } };
+const TagVars: Variants = {
+  start: { scale: 0 },
+  end: {
+    scale: 1,
+    transition: {
+      type: "spring",
+    },
+  },
+};
 
 function TagFeed({
   customName,
@@ -46,8 +54,6 @@ function TagFeed({
   return (
     <motion.div
       variants={TagVars}
-      initial="start"
-      animate="end"
       className="relative box-border flex w-full flex-col justify-between  overflow-hidden rounded-md bg-[#3b62a5] p-4 text-white shadow-xl hover:bg-[#2c5398] hover:transition-colors"
     >
       <div className="absolute right-3 space-x-1 ">

@@ -3,10 +3,11 @@ import { cls } from "@/libs/client/utils";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 interface LogoutResponse {
   ok: boolean;
 }
+
 export default function HomeMenu({
   setHomeMenu,
 }: {

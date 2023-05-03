@@ -7,6 +7,7 @@ import Modal from "./modal";
 import HashRanking from "./home-HashRanking";
 import HomeNav from "./home-nav";
 import SearchForm from "./home-searchForm";
+import { AnimatePresence } from "framer-motion";
 
 interface HomeLayoutProps {
   children: ReactNode;
@@ -17,7 +18,7 @@ export default function HomeLayout({ children, title }: HomeLayoutProps) {
   const open = useRecoilValue(isOpen);
   return (
     <>
-      {open && <Modal />}
+      <AnimatePresence mode="wait">{open && <Modal />}</AnimatePresence>
       <div
         className={cls(
           "z-50 box-border h-full w-full overflow-auto bg-white dark:bg-[#1e272e] dark:text-gray-300"

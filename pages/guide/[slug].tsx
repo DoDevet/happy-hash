@@ -17,7 +17,7 @@ const Post: NextPage<{ post: string; data: { title: string } }> = ({
   return (
     <HomeLayout title="Guide">
       <div className="relative mx-auto w-full">
-        <div className="fixed -mt-5 w-full border-b bg-white py-5 text-center dark:border-gray-600 dark:bg-[#1e272e]">
+        <div className="fixed -mt-10 w-full border-b bg-white py-5 text-center dark:border-gray-600 dark:bg-[#1e272e]">
           <div className="relative top-1 mx-auto flex max-w-3xl items-center justify-center">
             <button onClick={() => router.back()} className="absolute left-4">
               <svg

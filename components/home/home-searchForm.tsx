@@ -26,7 +26,7 @@ function SearchForm() {
     >
       <div className="relative w-11/12 ">
         <Input
-          isfocus={true}
+          isfocus={router.query.params === undefined ? true : false}
           type="text"
           placeholder="Search #hash OR Post"
           register={register("search", {

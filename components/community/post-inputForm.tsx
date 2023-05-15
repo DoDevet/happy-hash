@@ -316,7 +316,7 @@ export default function PostInputForm({
               <div
                 key={index}
                 className={cls(
-                  "bg-darkerblue w-fit cursor-pointer rounded-md px-2 py-1 shadow-md transition-colors hover:text-white",
+                  "bg-darkerblue my-2 w-fit cursor-pointer rounded-md px-2 py-1 shadow-md transition-colors hover:text-white",
                   selectedHash?.name === hash.name
                     ? "bg-darkblue text-white"
                     : "bg-slate-300 text-gray-100"

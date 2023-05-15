@@ -39,6 +39,17 @@
     @apply h-auto w-full rounded-md shadow-sm;
   }
 }
+.swiper-button-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.swiper-scrollbar-drag {
+  display: none;
+}
+.swiper-scrollbar-horizontal {
+  display: none;
+}
 
 @keyframes typing {
   from {

@@ -1,6 +1,6 @@
 import FixedButton from "@/components/fixed-btn";
 import Layout from "@/components/layout";
-import React from "react";
+import React, { useEffect } from "react";
 import PostModalDetail from "@/components/community/post-modal";
 import { NextPageContext } from "next";
 import { withSsrSession } from "@/libs/server/withSession";

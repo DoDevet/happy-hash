@@ -151,6 +151,11 @@ export default function Login() {
             </>
           )}
         </form>
+        <p>Test Account</p>
+        <div className="text-gray-400">
+          <p>Email : test@test.test</p>
+          <p>Phone : 1234</p>
+        </div>
       </div>
     </div>
   );

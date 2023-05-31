@@ -1,5 +1,5 @@
 import { cls } from "@/libs/client/utils";
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import type { UseFormRegisterReturn} from "react-hook-form";
 
@@ -27,6 +27,12 @@ export default function Input({
     if(!payloadRef || !payloadRef.current) return;
     payloadRef.current.style.height= "auto"
     payloadRef.current.style.height = `${payloadRef.current.scrollHeight >= 112 ? payloadRef.current.scrollHeight : 112}px`
+  },[payloadRef])
+
+  useEffect(()=>{
+    if(payloadRef){
+      handleChangePayload();
+    }
   },[payloadRef])
   return (
     <div className="dark:bg-[#1e272e]">

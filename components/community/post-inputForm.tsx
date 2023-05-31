@@ -214,7 +214,7 @@ export default function PostInputForm({
     setImagePreview("");
     setValue("image", null);
   };
-  console.log(payload)
+  
   return (
     <Layout hasBackArrow hasTabbar title={edit ? "Edit Post" : "Write Post"}>
       <form

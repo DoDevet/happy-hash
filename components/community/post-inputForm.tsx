@@ -70,9 +70,6 @@ export default function PostInputForm({
     formState: { errors },
   } = useForm<PostForm>();
 
-
-  const {ref, ...rest} = register("error")
-  
   const hashArr = getHashTags({
     comuId: comuId?.toString(),
     hashId: hashId?.toString(),
@@ -217,7 +214,7 @@ export default function PostInputForm({
     setImagePreview("");
     setValue("image", null);
   };
-
+  console.log(payload)
   return (
     <Layout hasBackArrow hasTabbar title={edit ? "Edit Post" : "Write Post"}>
       <form
@@ -299,15 +296,16 @@ export default function PostInputForm({
         />
         <div>
           <Input
+            register={register("payload", {
+            required: {
+              value: true,
+              message: "Payload must not be empty",
+            },
+            })}
             label="Payload"
             name="payload"
             type="textArea"
-            register={register("payload", {
-              required: {
-                value: true,
-                message: "Payload must not be empty",
-              },
-            })}
+            
             id="payload"
             placeholder="Write...."
             errorMessage={errors?.payload?.message}

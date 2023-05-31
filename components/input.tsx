@@ -23,11 +23,11 @@ export default function Input({
   isfocus = false,
 }: InputProps) {
   const payloadRef = useRef<HTMLTextAreaElement|null>(null)
-  const handleChangePayload = () =>{
+  const handleChangePayload = useCallback(() =>{
     if(!payloadRef || !payloadRef.current) return;
     payloadRef.current.style.height= "auto"
-    payloadRef.current.style.height = `${payloadRef.current.scrollHeight > 117 ? payloadRef.current.scrollHeight : 117}px`
-  }
+    payloadRef.current.style.height = `${payloadRef.current.scrollHeight >= 112 ? payloadRef.current.scrollHeight : 112}px`
+  },[payloadRef])
   return (
     <div className="dark:bg-[#1e272e]">
       {label && (
@@ -35,12 +35,13 @@ export default function Input({
           {label}
         </label>
       )}
-
       {type === "textArea" ? (
         <textarea
           {...register}
-          ref={(e)=>payloadRef.current=e}
-          onChange={handleChangePayload}
+          ref={(e)=>{
+            register?.ref(e)
+            payloadRef.current=e;}}
+          onInput={handleChangePayload}
           id={name}
           placeholder="Write...."
           className={cls(
@@ -49,8 +50,7 @@ export default function Input({
               ? "border-red-400 focus:border-red-400"
               : "focus:border-[#3b62a5] dark:focus:border-[#2c5398]"
           )}
-          
-         
+
         />
       ) : (
         <input

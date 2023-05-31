@@ -25,6 +25,7 @@ interface DeleteResponse {
 }
 
 export default function Modal() {
+  
   const {
     register,
     handleSubmit,
@@ -120,7 +121,7 @@ export default function Modal() {
         exit={{ scale: 0 }}
         className="fixed left-1/2 top-1/2 z-50 h-96 w-2/3 max-w-lg -translate-x-1/2 -translate-y-1/2 transform rounded-md bg-white px-4 py-5 shadow-md dark:bg-[#1e272e] "
       >
-        <div className="mb-4 flex w-full items-center justify-between">
+        <div className="flex items-center justify-between w-full mb-4">
           <h1 className="text-2xl font-semibold text-[#3b62a5] dark:text-[#5f86c9]">
             {EDIT_MODE ? "Edit hash" : "Create hash"}
           </h1>
@@ -131,7 +132,7 @@ export default function Modal() {
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="currentColor"
-              className="h-6 w-6"
+              className="w-6 h-6"
             >
               <path
                 strokeLinecap="round"
@@ -169,7 +170,7 @@ export default function Modal() {
             <Button
               isLoading={DeleteLoading}
               btnText={"Delete"}
-              className="absolute bottom-5 left-6 rounded-md bg-red-400 px-4 py-2 font-semibold text-white shadow-md ring-red-500 transition-colors hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2"
+              className="absolute px-4 py-2 font-semibold text-white transition-colors bg-red-400 rounded-md shadow-md bottom-5 left-6 ring-red-500 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2"
             />
           </form>
         ) : null}

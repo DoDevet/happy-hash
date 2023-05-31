@@ -49,12 +49,12 @@ export default function Home() {
 
   return (
     <HomeLayout title={"Home"}>
-      <div className="mx-auto w-full max-w-7xl items-center justify-center px-4">
-        <div className="relative mb-5 flex w-fit items-center">
+      <div className="items-center justify-center w-full px-4 mx-auto max-w-7xl">
+        <div className="relative flex items-center mb-5 w-fit">
           <h1 className=" font-play text-3xl font-semibold text-[#3b62a5] dark:text-[#5f86c9] ">
             #My Hash
           </h1>
-          <div className="absolute -right-16  flex items-center justify-center">
+          <div className="absolute flex items-center justify-center -right-16">
             <button onClick={() => setOpen((prev) => !prev)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -62,7 +62,7 @@ export default function Home() {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="h-8 w-8 rounded-full text-gray-500 transition-colors hover:text-gray-700"
+                className="w-8 h-8 text-gray-500 transition-colors rounded-full hover:text-gray-700"
               >
                 <path
                   strokeLinecap="round"
@@ -78,9 +78,9 @@ export default function Home() {
             initial="start"
             animate="end"
             variants={tagBoxVariants}
-            className="2xl:grid-col grid grid-cols-2 flex-wrap gap-3 overflow-hidden rounded-md sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+            className="grid flex-wrap grid-cols-2 gap-3 overflow-hidden rounded-md 2xl:grid-col sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
           >
-            {data.tags.map((tag) => (
+            {data?.tags?.map((tag) => (
               <TagFeed
                 key={tag?.id}
                 id={tag?.id}

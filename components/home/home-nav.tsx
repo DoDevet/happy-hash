@@ -39,8 +39,8 @@ function HomeNav() {
   }, [logoutResponse, router]);
 
   return (
-    <div className="relative z-50 mx-auto flex max-w-7xl items-center justify-center">
-      <div className="absolute -top-0 left-5 z-30  lg:hidden ">
+    <div className="relative z-50 flex items-center justify-center mx-auto max-w-7xl">
+      <div className="absolute z-30 -top-0 left-5 lg:hidden ">
         <button
           onClick={() => setHomeMenu((prev) => !prev)}
           className={cls(
@@ -49,7 +49,7 @@ function HomeNav() {
           )}
         >
           <svg
-            className="h-5 w-5"
+            className="w-5 h-5"
             stroke="currentColor"
             fill="none"
             viewBox="0 0 24 24"
@@ -74,13 +74,13 @@ function HomeNav() {
           </svg>
         </button>
       </div>
-      <div className="absolute right-7 top-0 z-50 flex items-center justify-center space-x-1 text-gray-400 sm:space-x-5 lg:right-1/4 xl:space-x-5">
+      <div className="absolute top-0 z-50 flex items-center justify-center space-x-1 text-gray-400 right-7 sm:space-x-5 lg:right-1/4 xl:space-x-5">
         <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
-            className="h-5 w-5"
+            className="w-5 h-5"
           >
             {theme === "dark" ? (
               <path
@@ -104,7 +104,7 @@ function HomeNav() {
             src={avatarURL}
             width={256}
             height={256}
-            className="z-30 h-8 w-8 cursor-pointer rounded-full object-cover shadow-md"
+            className="z-30 object-cover w-8 h-8 rounded-full shadow-md cursor-pointer"
             onClick={() => setHomeUserMenu((prev) => !prev)}
           />
         ) : (
@@ -120,14 +120,14 @@ function HomeNav() {
         {homeUserMenu && (
           <>
             <div
-              className="fixed right-0 top-0 z-20 mx-0 h-full w-full"
+              className="fixed top-0 right-0 z-20 w-full h-full mx-0"
               onClick={() => setHomeUserMenu((prev) => !prev)}
             />
             <UserMenu />
           </>
         )}
         <svg
-          className="h-5 w-5 dark:text-gray-400"
+          className="w-5 h-5 dark:text-gray-400"
           fill="currentColor"
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"
@@ -138,12 +138,12 @@ function HomeNav() {
       <h1 className="z-30 text-center font-semibold text-[#3b62a5] dark:text-[#5f86c9] sm:px-10">
         <Link
           href={"/"}
-          className="font-play text-2xl font-extrabold lg:text-3xl"
+          className="text-2xl font-extrabold font-play lg:text-3xl"
         >
           #happy_hash
         </Link>
       </h1>
-      <nav className="relative hidden w-full list-none space-x-5 px-4 font-semibold text-gray-600 lg:flex">
+      <nav className="relative hidden w-full px-4 space-x-5 font-semibold text-gray-600 list-none lg:flex">
         <Link
           href="/"
           className={cls(
@@ -195,7 +195,7 @@ function HomeNav() {
       {homeMenu && (
         <>
           <div
-            className="fixed right-0 top-16  h-full w-full bg-black opacity-30"
+            className="fixed right-0 w-full h-full bg-black top-16 opacity-30"
             onClick={() => setHomeMenu((prev) => !prev)}
           />
           <HomeMenu setHomeMenu={setHomeMenu} />

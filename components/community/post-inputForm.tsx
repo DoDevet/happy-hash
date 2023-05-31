@@ -2,7 +2,7 @@ import Input from "@/components/input";
 import Layout from "@/components/layout";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import getHashTags from "@/libs/client/getHashtags";
 import Button from "@/components/button";
@@ -69,6 +69,10 @@ export default function PostInputForm({
     watch,
     formState: { errors },
   } = useForm<PostForm>();
+
+
+  const {ref, ...rest} = register("error")
+  
   const hashArr = getHashTags({
     comuId: comuId?.toString(),
     hashId: hashId?.toString(),
@@ -217,7 +221,7 @@ export default function PostInputForm({
   return (
     <Layout hasBackArrow hasTabbar title={edit ? "Edit Post" : "Write Post"}>
       <form
-        className="mx-auto w-full max-w-3xl space-y-5 px-2 pb-10"
+        className="w-full max-w-3xl px-2 pb-10 mx-auto space-y-5"
         onSubmit={handleSubmit(onValid)}
       >
         {imagePreview ? (
@@ -226,12 +230,12 @@ export default function PostInputForm({
               src={imagePreview}
               width={1024}
               height={1024}
-              className="w-full object-contain"
+              className="object-contain w-full"
               alt="ImageFile"
             />
             <div
               onClick={onClearImagePreview}
-              className="absolute right-5 top-5 cursor-pointer text-white"
+              className="absolute text-white cursor-pointer right-5 top-5"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -239,7 +243,7 @@ export default function PostInputForm({
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="bg-darkblue h-8 w-8 rounded-md"
+                className="w-8 h-8 rounded-md bg-darkblue"
               >
                 <path
                   strokeLinecap="round"
@@ -261,7 +265,7 @@ export default function PostInputForm({
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="h-8 w-8"
+                className="w-8 h-8"
               >
                 <path
                   strokeLinecap="round"
@@ -331,7 +335,7 @@ export default function PostInputForm({
         <Button
           btnText={edit ? "Edit Post" : "Write Post"}
           isLoading={loading || imageLoading}
-          className="bg-darkblue bg-darkerblue w-full rounded-md py-3 text-white shadow-md outline-none transition-colors"
+          className="w-full py-3 text-white transition-colors rounded-md shadow-md outline-none bg-darkblue bg-darkerblue"
         />
       </form>
     </Layout>

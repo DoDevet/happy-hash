@@ -1,10 +1,8 @@
 import PostInfo from "@/components/community/post-form";
 import { IPostForm } from "@/components/community/post-form";
-import usePostInfo from "@/libs/client/usePostInfo";
 import client from "@/libs/server/client";
 import { withSsrSession } from "@/libs/server/withSession";
 import { NextPageContext } from "next";
-import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { SWRConfig } from "swr";
 

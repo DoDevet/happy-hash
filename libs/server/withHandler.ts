@@ -7,7 +7,10 @@ export interface ResponseType {
 type method = "GET" | "POST" | "DELETE" | "PATCH" | "PUT";
 interface ConfigType {
   methods: method[];
-  handler: (req: NextApiRequest, res: NextApiResponse) => void;
+  handler: (
+    req: NextApiRequest,
+    res: NextApiResponse
+  ) => Promise<NextApiResponse<any> | undefined | void>;
   isPrivate?: boolean;
 }
 

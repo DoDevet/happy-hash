@@ -17,8 +17,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       }
     )
   ).json();
-
   res.json({ uploadURL });
 }
-
 export default withApiSession(withHandler({ handler, methods: ["GET"] }));

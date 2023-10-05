@@ -6,13 +6,6 @@ interface GetHashForm {
   hashId?: string | undefined;
 }
 
-interface GetHashResponse {
-  hashtags: {
-    name: string;
-    id: number;
-  };
-}
-
 export default function getHashTags({
   comuId,
   hashId,

@@ -11,9 +11,6 @@ import useImage from "@/libs/client/useImage";
 import useMutation from "@/libs/client/useMutation";
 import usePostInfo from "@/libs/client/usePostInfo";
 import useUser from "@/libs/client/useUser";
-import usePostFeed from "@/libs/client/usePostFeed";
-import { unstable_serialize } from "swr/infinite";
-import { useSWRConfig } from "swr";
 
 interface PostForm {
   title: string;
@@ -88,7 +85,7 @@ export default function PostInputForm({
       url: edit
         ? `/api/community/posts/${postId}`
         : `/api/community/posts?${postId}`,
-      method: edit ? "PATCH" : "POST",
+      method: edit ? "PUT" : "POST",
     });
 
   const onValid = async ({ title, payload, image }: PostForm) => {
@@ -214,11 +211,11 @@ export default function PostInputForm({
     setImagePreview("");
     setValue("image", null);
   };
-  
+
   return (
     <Layout hasBackArrow hasTabbar title={edit ? "Edit Post" : "Write Post"}>
       <form
-        className="w-full max-w-3xl px-2 pb-10 mx-auto space-y-5"
+        className="mx-auto w-full max-w-3xl space-y-5 px-2 pb-10"
         onSubmit={handleSubmit(onValid)}
       >
         {imagePreview ? (
@@ -227,12 +224,12 @@ export default function PostInputForm({
               src={imagePreview}
               width={1024}
               height={1024}
-              className="object-contain w-full"
+              className="w-full object-contain"
               alt="ImageFile"
             />
             <div
               onClick={onClearImagePreview}
-              className="absolute text-white cursor-pointer right-5 top-5"
+              className="absolute right-5 top-5 cursor-pointer text-white"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -240,7 +237,7 @@ export default function PostInputForm({
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="w-8 h-8 rounded-md bg-darkblue"
+                className="bg-darkblue h-8 w-8 rounded-md"
               >
                 <path
                   strokeLinecap="round"
@@ -262,7 +259,7 @@ export default function PostInputForm({
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="w-8 h-8"
+                className="h-8 w-8"
               >
                 <path
                   strokeLinecap="round"
@@ -297,15 +294,14 @@ export default function PostInputForm({
         <div>
           <Input
             register={register("payload", {
-            required: {
-              value: true,
-              message: "Payload must not be empty",
-            },
+              required: {
+                value: true,
+                message: "Payload must not be empty",
+              },
             })}
             label="Payload"
             name="payload"
             type="textArea"
-            
             id="payload"
             placeholder="Write...."
             errorMessage={errors?.payload?.message}
@@ -333,7 +329,7 @@ export default function PostInputForm({
         <Button
           btnText={edit ? "Edit Post" : "Write Post"}
           isLoading={loading || imageLoading}
-          className="w-full py-3 text-white transition-colors rounded-md shadow-md outline-none bg-darkblue bg-darkerblue"
+          className="bg-darkblue bg-darkerblue w-full rounded-md py-3 text-white shadow-md outline-none transition-colors"
         />
       </form>
     </Layout>

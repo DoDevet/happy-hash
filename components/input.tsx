@@ -30,10 +30,10 @@ export default function Input({
   },[payloadRef])
 
   useEffect(()=>{
-    if(payloadRef){
+    if(payloadRef && type==="textArea" && register){
       handleChangePayload();
     }
-  },[payloadRef])
+  },[payloadRef,type])
   return (
     <div className="dark:bg-[#1e272e]">
       {label && (

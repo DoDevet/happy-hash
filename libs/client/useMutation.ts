@@ -7,7 +7,7 @@ interface UseMutationState<T> {
 }
 interface UseMutationProps {
   url: string;
-  method: "POST" | "GET" | "DELETE" | "PUT" | "PATCH";
+  method: "POST" | "DELETE" | "PUT" | "DELETE" | "PATCH";
 }
 
 type UseMutationResult<T> = [(data: any) => any, UseMutationState<T>];

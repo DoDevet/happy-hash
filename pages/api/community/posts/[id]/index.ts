@@ -84,7 +84,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       return res.json({ ok: true });
     } else return res.json({ ok: false, error: "Validation Error" });
   }
-  if (req.method === "PATCH") {
+  if (req.method === "PUT") {
     const {
       session: { user },
       body: { imageURL, payload, title, selectedHash },
@@ -135,5 +135,5 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 export default withApiSession(
-  withHandler({ handler, methods: ["GET", "POST", "DELETE", "PATCH"] })
+  withHandler({ handler, methods: ["GET", "POST", "DELETE", "PUT"] })
 );
